@@ -1,17 +1,17 @@
 package xyz.oribuin.lilori.commands.moderation;
 
-import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.ChannelType;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import xyz.oribuin.lilori.utilities.command.Command;
 import xyz.oribuin.lilori.utilities.command.CommandEvent;
-import xyz.oribuin.lilori.persist.Settings;
-import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.Permission;
 import xyz.oribuin.lilori.utilities.commons.waiter.EventWaiter;
 
-import java.awt.*;
 import java.time.OffsetDateTime;
-import java.util.*;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -26,7 +26,7 @@ public class CmdPurge extends Command {
         this.cooldown = 2;
         this.category = new Category("Moderation");
         this.guildOnly = true;
-        this.arguments = "[Msgs/User/Channel] [Number/#Channel/@User]";
+        this.arguments = "[Channel/Msgs/User] [#Channel/Number/@User]";
 
         this.botPermissions = new Permission[]{Permission.MESSAGE_MANAGE, Permission.MANAGE_PERMISSIONS, Permission.MANAGE_CHANNEL};
         this.userPermissions = new Permission[]{Permission.MESSAGE_MANAGE, Permission.MANAGE_PERMISSIONS, Permission.MANAGE_CHANNEL};
@@ -45,7 +45,7 @@ public class CmdPurge extends Command {
 
         if (args.length < 2) {
             event.deleteCmd(10, TimeUnit.SECONDS);
-            event.timedReply(event.getAuthor().getAsMention() + ", Correct Format: ;purge [Msgs/User/Channel] [Number/#Channel/@User]", 10, TimeUnit.SECONDS);
+            event.timedReply(event.getAuthor().getAsMention() + ", Correct Format: ;purge " + this.getArguments(), 10, TimeUnit.SECONDS);
             return;
         }
 
@@ -90,6 +90,7 @@ public class CmdPurge extends Command {
             }
 
             if (args[2].equalsIgnoreCase(event.getMessage().getMentionedChannels().get(0).getAsMention())) {
+
                 TextChannel textChannel = event.getMessage().getMentionedChannels().get(0);
 
                 if (textChannel == null) {
@@ -98,11 +99,12 @@ public class CmdPurge extends Command {
                     return;
                 }
 
-                if (!event.getGuild().getMember(event.getAuthor()).hasPermission(textChannel)) {
-                    event.timedReply(event.getAuthor().getAsMention() + ", You cannot purge this channel.", 10, TimeUnit.SECONDS);
-                    event.deleteCmd(10, TimeUnit.SECONDS);
-                    return;
-                }
+                if (event.getGuild().getMember(event.getAuthor()) != null)
+                    if (!event.getGuild().getMember(event.getAuthor()).hasPermission(textChannel)) {
+                        event.timedReply(event.getAuthor().getAsMention() + ", You cannot purge this channel.", 10, TimeUnit.SECONDS);
+                        event.deleteCmd(10, TimeUnit.SECONDS);
+                        return;
+                    }
 
                 event.timedReply(event.getAuthor().getAsMention() + ", You are about to purge " + textChannel.getAsMention() + ", Please type **confirm** to continue. (Note: This deletes existing webhooks)", 2, TimeUnit.MINUTES);
                 event.deleteCmd(10, TimeUnit.SECONDS);
@@ -110,35 +112,38 @@ public class CmdPurge extends Command {
                 String getWeek = time.getDayOfWeek().name().substring(0, 1).toUpperCase() + time.getDayOfWeek().name().substring(1).toLowerCase();
                 waiter.waitForEvent(GuildMessageReceivedEvent.class,
                         predicate -> predicate.getAuthor().equals(event.getMessage().getAuthor())
-                                && event.getMessage().getContentRaw().toLowerCase().contains("confirm"),
+                                && predicate.getMessage().getContentRaw().toLowerCase().contains("confirm")
+                                || predicate.getMessage().getContentRaw().toLowerCase().contains("cancel"),
                         consumer -> {
+                            if (consumer.getMessage().getContentRaw().toLowerCase().contains("confirm")) {
 
-                            EmbedBuilder embedBuilder = new EmbedBuilder()
-                                    .setAuthor("Successfully Purged Channel")
-                                    .setDescription("**Channel:** #" + textChannel.getName() + "\n" +
-                                            "**Purged By:** " + event.getAuthor().getAsMention() + "\n" +
-                                            "**Purged on:** " + getWeek + " at " + time.getHour() + ":" + time.getMinute());
+                                EmbedBuilder embedBuilder = new EmbedBuilder()
+                                        .setAuthor("Successfully Purged Channel")
+                                        .setDescription("**Channel:** #" + textChannel.getName() + "\n" +
+                                                "**Purged By:** " + event.getAuthor().getAsMention() + "\n" +
+                                                "**Purged on:** " + getWeek + " at " + time.getHour() + ":" + time.getMinute());
 
-                            consumer.getMessage().delete().queueAfter(2, TimeUnit.MINUTES);
-                            event.getGuild().createTextChannel(textChannel.getName())
-                                    .setNSFW(textChannel.isNSFW())
-                                    .setSlowmode(textChannel.getSlowmode())
-                                    .setTopic(textChannel.getTopic())
-                                    .setParent(textChannel.getParent())
-                                    .setPosition(textChannel.getPosition()).queue(getChannel -> {
-                                getChannel.sendMessage(event.getAuthor().getAsMention()).queue();
-                                getChannel.sendMessage(embedBuilder.build()).queue();
-                            });
-                            textChannel.delete().queue();
-
+                                consumer.getMessage().delete().queueAfter(2, TimeUnit.MINUTES);
+                                event.getGuild().createTextChannel(textChannel.getName())
+                                        .setNSFW(textChannel.isNSFW())
+                                        .setSlowmode(textChannel.getSlowmode())
+                                        .setTopic(textChannel.getTopic())
+                                        .setParent(textChannel.getParent())
+                                        .setPosition(textChannel.getPosition()).queue(getChannel -> {
+                                    getChannel.sendMessage(event.getAuthor().getAsMention()).queue();
+                                    getChannel.sendMessage(embedBuilder.build()).queue();
+                                });
+                                textChannel.delete().queue();
+                            } else {
+                                waiter.shutdown();
+                                consumer.getMessage().addReaction("✅").queue();
+                            }
                         }, 2, TimeUnit.MINUTES, () -> {
                             if (!waiter.isShutdown())
                                 waiter.shutdown();
                         });
             }
-        } else if (args[1].
-
-                equalsIgnoreCase("user")) {
+        } else if (args[1].equalsIgnoreCase("user")) {
 
             if (event.getMessage().getMentionedMembers().size() == 0) {
                 event.timedReply(event.getAuthor().getAsMention() + ", Please include a user to purge.", 10, TimeUnit.SECONDS);

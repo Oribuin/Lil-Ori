@@ -2,14 +2,9 @@ package xyz.oribuin.lilori.commands.moderation;
 
 import xyz.oribuin.lilori.utilities.command.Command;
 import xyz.oribuin.lilori.utilities.command.CommandEvent;
-import xyz.oribuin.lilori.persist.Settings;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Role;
 
-import java.awt.*;
-import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 public class CmdKick extends Command {

@@ -14,7 +14,6 @@ import xyz.oribuin.lilori.commands.moderation.CmdPurge;
 import xyz.oribuin.lilori.commands.music.*;
 import xyz.oribuin.lilori.listeners.EventMentionOri;
 import xyz.oribuin.lilori.listeners.Presence;
-import xyz.oribuin.lilori.persist.Settings;
 import xyz.oribuin.lilori.utilities.command.CommandClient;
 import xyz.oribuin.lilori.utilities.command.CommandClientBuilder;
 import xyz.oribuin.lilori.utilities.commons.waiter.EventWaiter;
