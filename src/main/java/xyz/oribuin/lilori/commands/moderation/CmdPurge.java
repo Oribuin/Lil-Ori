@@ -110,7 +110,7 @@ public class CmdPurge extends Command {
                 String getWeek = time.getDayOfWeek().name().substring(0, 1).toUpperCase() + time.getDayOfWeek().name().substring(1).toLowerCase();
                 waiter.waitForEvent(GuildMessageReceivedEvent.class,
                         predicate -> predicate.getAuthor().equals(event.getMessage().getAuthor())
-                                && event.getMessage().getContentRaw().equalsIgnoreCase("confirm"),
+                                && event.getMessage().getContentRaw().toLowerCase().contains("confirm"),
                         consumer -> {
 
                             EmbedBuilder embedBuilder = new EmbedBuilder()
