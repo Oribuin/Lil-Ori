@@ -48,7 +48,7 @@ public class CmdPause extends Command {
         GuildMusicManager musicManager = musicManagerMap.get(guildId);
 
         if (musicManager == null) {
-            musicManager = new GuildMusicManager(playerManager);
+            musicManager = new GuildMusicManager(guild, playerManager);
             musicManagerMap.put(guildId, musicManager);
         }
 

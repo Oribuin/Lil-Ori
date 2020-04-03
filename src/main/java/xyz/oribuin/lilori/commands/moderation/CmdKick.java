@@ -23,6 +23,7 @@ public class CmdKick extends Command {
     @Override
     protected void execute(CommandEvent event) {
         String[] args = event.getMessage().getContentRaw().split(" ");
+        if (event.getGuildMember(event.getAuthor()) == null) return;
 
         if (args.length <= 2) {
             event.deleteCmd(10, TimeUnit.SECONDS);

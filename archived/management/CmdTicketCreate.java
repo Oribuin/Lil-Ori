@@ -36,7 +36,7 @@ public class CmdTicketCreate extends Command {
         perms.add(Permission.MANAGE_PERMISSIONS);
         perms.add(Permission.MANAGE_ROLES);
 
-        if (!event.getGuild().getSelfMember().getPermissions().containsAll(perms) && !event.getGuild().getMember(event.getAuthor()).getPermissions().containsAll(perms)) {
+        if (!event.getGuild().getSelfMember().getPermissions().containsAll(perms) && !event.getGuildMember(event.getAuthor()).getPermissions().containsAll(perms)) {
             EmbedBuilder Embed = new EmbedBuilder()
                     .setColor(Color.decode("#cca8db"))
                     .setDescription("**Permissions Required:** \n" + perms.toString()
@@ -104,7 +104,7 @@ public class CmdTicketCreate extends Command {
         event.getGuild().getCategoryById("669940814255751168").createTextChannel(channelName).queue(channel -> {
             channel.getManager().setTopic("Your personal ticket channel. - :ticket: - By Ori#0004").queue();
             channel.putPermissionOverride(event.getGuild().getPublicRole()).setDeny(Permission.VIEW_CHANNEL).queue();
-            if (event.getGuild().getMember(event.getAuthor()) != null)
+            if (event.getGuildMember(event.getAuthor()) != null)
                 channel.createPermissionOverride(event.getGuild().getMember(event.getAuthor())).setAllow(Permission.VIEW_CHANNEL).queue();
 
             channel.sendMessage(MessageEmbed.build()).queue();

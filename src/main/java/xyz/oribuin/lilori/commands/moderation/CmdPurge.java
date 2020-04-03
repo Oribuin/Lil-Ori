@@ -41,7 +41,7 @@ public class CmdPurge extends Command {
         String[] args = event.getMessage().getContentRaw().split(" ");
         TextChannel channel = event.getTextChannel();
         OffsetDateTime time = event.getMessage().getTimeCreated();
-        if (event.getGuild().getMember(event.getAuthor()) == null) return;
+        if (event.getGuildMember(event.getAuthor()) == null) return;
 
         if (args.length < 2) {
             event.deleteCmd(10, TimeUnit.SECONDS);
@@ -99,8 +99,8 @@ public class CmdPurge extends Command {
                     return;
                 }
 
-                if (event.getGuild().getMember(event.getAuthor()) != null)
-                    if (!event.getGuild().getMember(event.getAuthor()).hasPermission(textChannel)) {
+                if (event.getGuildMember(event.getAuthor()) != null)
+                    if (!event.getGuildMember(event.getAuthor()).hasPermission(textChannel)) {
                         event.timedReply(event.getAuthor().getAsMention() + ", You cannot purge this channel.", 10, TimeUnit.SECONDS);
                         event.deleteCmd(10, TimeUnit.SECONDS);
                         return;

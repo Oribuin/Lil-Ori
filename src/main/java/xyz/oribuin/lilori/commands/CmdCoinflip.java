@@ -15,7 +15,6 @@ public class CmdCoinflip extends Command {
         this.aliases = new String[]{"flip"};
         this.arguments = "[None]";
         this.help = "Flip a coin.";
-        this.userPermissions = new Permission[]{Permission.ADMINISTRATOR};
     }
 
     @Override

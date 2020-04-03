@@ -54,7 +54,6 @@ public class CmdEightball extends Command {
         int randomAnswer = new Random().nextInt(ballAnswers.length);
 
         final String input;
-
         if (event.getMessage().getContentRaw().substring(args[0].length() + 1).endsWith("?"))
             input = event.getMessage().getContentRaw().substring(args[0].length() + 1);
         else
@@ -63,7 +62,7 @@ public class CmdEightball extends Command {
         EmbedBuilder embedBuilder = new EmbedBuilder()
                 .setAuthor("Ori's Magic 8Ball")
                 .setThumbnail("https://imgur.com/FAfsGzj.png")
-                .setDescription("**Question**\n`" + input + "`\n**Answer**\n`" + ballAnswers[randomAnswer] + "`")
+                .setDescription("**Question**\n" + input + "\n**Answer**\n" + ballAnswers[randomAnswer] + "")
                 .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png");
 
         event.reply(embedBuilder.build());

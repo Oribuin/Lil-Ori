@@ -4,7 +4,7 @@ plugins {
     id 'application'
 }
 
-group 'me.oribuin.lilori'
+group 'me.oribuin'
 version '1.0'
 compileJava.options.encoding = 'UTF-8'
 
@@ -20,7 +20,7 @@ application {
 }
 dependencies {
     shadow 'org.json:json:20180813'
-    implementation 'net.dv8tion:JDA:4.1.1_113'
+    implementation 'net.dv8tion:JDA:4.1.1_127'
     implementation 'com.sedmelluq:lavaplayer:1.3.34'
 }
 

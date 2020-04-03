@@ -57,7 +57,7 @@ public class CmdHelp extends Command {
             }
         }
 
-        //Arrays.asList(command.getUserPermissions()).containsAll(event.getGuild().getMember(event.getAuthor()).getPermissions()))
+        //Arrays.asList(command.getUserPermissions()).containsAll(event.getGuildMember(event.getAuthor()).getPermissions()))
 
         pbuilder.clearItems();
         event.getClient().getCommands().stream()

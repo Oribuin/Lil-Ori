@@ -34,7 +34,7 @@ public class CmdStop extends Command {
     protected void execute(CommandEvent event) {
         GuildMusicManager musicManager = getGuildAudioPlayer(event.getGuild());
 
-        if (event.getGuild().getMember(event.getAuthor()).getVoiceState() != null && event.getGuild().getMember(event.getAuthor()).getVoiceState().inVoiceChannel()) {
+        if (event.getGuildMember(event.getAuthor()).getVoiceState() != null && event.getGuildMember(event.getAuthor()).getVoiceState().inVoiceChannel()) {
             musicManager.player.stopTrack();
             musicManager.player.destroy();
             event.getGuild().getAudioManager().closeAudioConnection();
@@ -49,7 +49,7 @@ public class CmdStop extends Command {
         GuildMusicManager musicManager = musicManagerMap.get(guildId);
 
         if (musicManager == null) {
-            musicManager = new GuildMusicManager(playerManager);
+            musicManager = new GuildMusicManager(guild, playerManager);
             musicManagerMap.put(guildId, musicManager);
         }
 

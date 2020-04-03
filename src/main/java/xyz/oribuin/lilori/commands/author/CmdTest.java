@@ -26,7 +26,7 @@ public class CmdTest extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
-        event.reply(String.valueOf(event.getGuild().getMember(event.getAuthor()).getPermissions().toString()));
+        event.reply(String.valueOf(event.getGuildMember(event.getAuthor()).getPermissions().toString()));
         event.react(event.getMessage(), "a:eyes_blink:646521182715379722");
     }
 }

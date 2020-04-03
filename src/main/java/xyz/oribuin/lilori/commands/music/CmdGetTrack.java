@@ -33,6 +33,8 @@ public class CmdGetTrack extends Command {
     @Override
     protected void execute(CommandEvent event) {
         GuildMusicManager musicManager = getGuildAudioPlayer(event.getGuild());
+
+        event.reply(String.valueOf(musicManager.player.getVolume()));
     }
 
     private synchronized GuildMusicManager getGuildAudioPlayer(Guild guild) {
@@ -40,7 +42,7 @@ public class CmdGetTrack extends Command {
         GuildMusicManager musicManager = musicManagerMap.get(guildId);
 
         if (musicManager == null) {
-            musicManager = new GuildMusicManager(playerManager);
+            musicManager = new GuildMusicManager(guild, playerManager);
             musicManagerMap.put(guildId, musicManager);
         }
 

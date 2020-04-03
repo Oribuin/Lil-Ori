@@ -443,6 +443,14 @@ public class CommandEvent {
         guild.getMember(user).ban(days, reason).queue();
     }
 
+    public Member getGuildMember(@NotNull User user) {
+        return event.getGuild().getMember(user);
+    }
+
+    public Member getGuildAuthor() {
+        return event.getGuild().getMember(event.getAuthor());
+    }
+
     /**
      * public void banMember(@@NotNull User user, int days, String reason) {
      * event.getGuild().getMember(user).ban(days, reason).queue();

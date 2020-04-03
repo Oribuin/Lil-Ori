@@ -139,7 +139,7 @@ public abstract class Command {
                 return;
             }
 
-            if (event.getGuild().getMember(event.getAuthor()) != null && !event.getGuild().getMember(event.getAuthor()).getPermissions().containsAll(Arrays.asList(userPermissions))) {
+            if (event.getGuildMember(event.getAuthor()) != null && !event.getGuildMember(event.getAuthor()).getPermissions().containsAll(Arrays.asList(userPermissions))) {
                 embedTerminate(event, userEmbed);
                 return;
             }

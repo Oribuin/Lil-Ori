@@ -43,7 +43,7 @@ public class CmdPlay extends Command {
         GuildMusicManager musicManager = musicManagerMap.get(guildId);
 
         if (musicManager == null) {
-            musicManager = new GuildMusicManager(playerManager);
+            musicManager = new GuildMusicManager(guild, playerManager);
             musicManagerMap.put(guildId, musicManager);
         }
 
@@ -62,7 +62,7 @@ public class CmdPlay extends Command {
             return;
         }
 
-        if (event.getGuild().getMember(event.getAuthor()).getVoiceState() == null && !event.getGuild().getMember(event.getAuthor()).getVoiceState().inVoiceChannel()) {
+        if (event.getGuildMember(event.getAuthor()).getVoiceState() == null && !event.getGuildMember(event.getAuthor()).getVoiceState().inVoiceChannel()) {
             event.deleteCmd(10, TimeUnit.SECONDS);
             event.timedReply(event.getAuthor().getAsMention() + ", You must be in a voice channel to execute this command.", 10, TimeUnit.SECONDS);
             return;
@@ -74,7 +74,7 @@ public class CmdPlay extends Command {
             skip(event.getTextChannel());
 
 
-        event.getGuild().getAudioManager().openAudioConnection(event.getGuild().getMember(event.getAuthor()).getVoiceState().getChannel());
+        event.getGuild().getAudioManager().openAudioConnection(event.getGuildMember(event.getAuthor()).getVoiceState().getChannel());
         loadAndPlay(event.getTextChannel(), input);
     }
 

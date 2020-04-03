@@ -47,7 +47,7 @@ public class CmdMute extends Command {
             Role role = event.getGuild().getRolesByName("Muted", true).get(0);
             Member mentioned = event.getMessage().getMentionedMembers().get(0);
 
-            if (mentioned.isOwner() || event.isHigher(mentioned, event.getGuild().getMember(event.getAuthor())) || event.isBot(mentioned)) {
+            if (mentioned.isOwner() || event.isHigher(mentioned, event.getGuildAuthor()) || event.isBot(mentioned)) {
                 event.deleteCmd(10, TimeUnit.SECONDS);
                 event.timedReply(event.getAuthor().getAsMention() + ", You cannot kick this user due to rank hierarchy.", 10, TimeUnit.SECONDS);
                 return;
@@ -60,7 +60,7 @@ public class CmdMute extends Command {
             }
 
 
-            event.muteMember(event.getGuild().getMember(event.getAuthor()), role);
+            event.muteMember(event.getGuildMember(event.getAuthor()), role);
             event.deleteCmd(10, TimeUnit.SECONDS);
             event.reply(event.getAuthor().getAsMention() + ", You have muted " + mentioned.getUser().getAsTag() + ".");
         }
