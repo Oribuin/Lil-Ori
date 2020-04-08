@@ -1,4 +1,4 @@
-package xyz.oribuin.lilori.commands;
+package xyz.oribuin.lilori.commands.games;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
@@ -16,7 +16,7 @@ public class CmdSlap extends Command {
     public CmdSlap() {
         this.name = "Slap";
         this.category = new Category("Fun");
-        this.arguments = "@User";
+        this.arguments = "[@User]";
         this.help = "Slap a user";
     }
 
@@ -35,7 +35,7 @@ public class CmdSlap extends Command {
             return;
         }
 
-        if (event.getMessage().getMentionedMembers().contains(event.getGuild().getMember(event.getAuthor()))) {
+        if (event.getMessage().getMentionedMembers().contains(event.getMember())) {
             event.reply(event.getAuthor().getAsMention() + ", Why would you slap yourself?");
             return;
         }

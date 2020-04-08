@@ -52,15 +52,21 @@ public abstract class Command {
 
     EmbedBuilder botEmbed = new EmbedBuilder()
             .setAuthor("Missing Permissions!")
-            .setColor(Color.decode("#cca8db"))
+            .setColor(Color.decode("#33539e"))
             .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png")
             .setDescription("I am missing the permissions to execute this command.");
 
     EmbedBuilder userEmbed = new EmbedBuilder()
             .setAuthor("Missing Permissions!")
-            .setColor(Color.decode("#cca8db"))
+            .setColor(Color.decode("#33539e"))
             .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png")
             .setDescription("You are missing the permissions to execute this command.");
+
+    EmbedBuilder nullEmbed = new EmbedBuilder()
+            .setAuthor("Null Issue :(")
+            .setColor(Color.decode("#33539e"))
+            .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png")
+            .setDescription("Oh no! There was an issue where something as returned null, Please contact the developer!");
 
     protected abstract void execute(CommandEvent event);
 
@@ -107,15 +113,7 @@ public abstract class Command {
         }
 
         if (requiredRole != null)
-            if (!event.isFromType(ChannelType.TEXT) || event.getMember().
-
-                    getRoles().
-
-                    stream().
-
-                    noneMatch(r -> r.getName().
-
-                            equalsIgnoreCase(requiredRole))) {
+            if (!event.isFromType(ChannelType.TEXT) || event.getMember().getRoles().stream().noneMatch(r -> r.getName().equalsIgnoreCase(requiredRole))) {
                 terminate(event, "Sorry! You need **" + requiredRole + "** to use this command!");
                 return;
             }
@@ -139,7 +137,8 @@ public abstract class Command {
                 return;
             }
 
-            if (event.getGuildMember(event.getAuthor()) != null && !event.getGuildMember(event.getAuthor()).getPermissions().containsAll(Arrays.asList(userPermissions))) {
+            if (!event.getMember().hasPermission(event.getTextChannel())
+                    || !event.getMember().getPermissions().containsAll(Arrays.asList(userPermissions))) {
                 embedTerminate(event, userEmbed);
                 return;
             }

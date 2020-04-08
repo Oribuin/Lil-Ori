@@ -16,10 +16,7 @@ public class CmdShutdown extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
-
-        event.reactSuccess();
-        System.out.print("The bot has now been shut offline.");
-        event.getJDA().setAutoReconnect(true);
+        event.reply("Now Shutting Down.");
         event.getJDA().shutdown();
     }
 }

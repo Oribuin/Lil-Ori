@@ -13,7 +13,7 @@ public class EventMentionOri extends ListenerAdapter {
 
         EmbedBuilder embedBuilder = new EmbedBuilder()
                 .setAuthor("Lil' Ori Bot", "https://discordapp.com/oauth2/authorize?client_id=581203970203189269&permissions=121498961&scope=bot")
-                .setColor(Color.decode("#cca8db"))
+                .setColor(Color.decode("#33539e"))
                 .setDescription("» Discord JDA Utility Bot Created by Oribuin «\n" +
                         "\n" +
                         "• Find all my commands using **;help**\n" +
@@ -24,7 +24,7 @@ public class EventMentionOri extends ListenerAdapter {
         if (event.getMessage().getContentRaw().equals("<@!581203970203189269>"))
             event.getChannel().sendMessage(embedBuilder.build()).queue();
 
-        if (event.getMessage().getContentRaw().equals("<@!345406020450779149>"))
+        if (event.getMessage().getContentRaw().contains("<@!345406020450779149>"))
             event.getMessage().addReaction(":AngySnoot1:690641610983079967").queue();
     }
 }

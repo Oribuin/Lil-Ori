@@ -62,7 +62,7 @@ public class CmdPlay extends Command {
             return;
         }
 
-        if (event.getGuildMember(event.getAuthor()).getVoiceState() == null && !event.getGuildMember(event.getAuthor()).getVoiceState().inVoiceChannel()) {
+        if (event.getMember().getVoiceState() == null && !event.getMember().getVoiceState().inVoiceChannel()) {
             event.deleteCmd(10, TimeUnit.SECONDS);
             event.timedReply(event.getAuthor().getAsMention() + ", You must be in a voice channel to execute this command.", 10, TimeUnit.SECONDS);
             return;
@@ -74,7 +74,7 @@ public class CmdPlay extends Command {
             skip(event.getTextChannel());
 
 
-        event.getGuild().getAudioManager().openAudioConnection(event.getGuildMember(event.getAuthor()).getVoiceState().getChannel());
+        event.getGuild().getAudioManager().openAudioConnection(event.getMember().getVoiceState().getChannel());
         loadAndPlay(event.getTextChannel(), input);
     }
 
@@ -92,7 +92,7 @@ public class CmdPlay extends Command {
 
                 EmbedBuilder playEmbed = new EmbedBuilder()
                         .setAuthor("« Lil' Ori Music »")
-                        .setColor(Color.decode("#cca8db"))
+                        .setColor(Color.decode("#33539e"))
                         .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png")
                         .setDescription("Now Playing: " + track.getInfo().title + " (" + minutes + ":" + seconds + ")\n" +
                                 "Url: " + track.getInfo().uri);

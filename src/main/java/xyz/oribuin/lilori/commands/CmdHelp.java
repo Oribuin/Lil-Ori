@@ -57,13 +57,15 @@ public class CmdHelp extends Command {
             }
         }
 
-        //Arrays.asList(command.getUserPermissions()).containsAll(event.getGuildMember(event.getAuthor()).getPermissions()))
+        //Arrays.asList(command.getUserPermissions()).containsAll(event.getMember().getPermissions()))
 
         pbuilder.clearItems();
         event.getClient().getCommands().stream()
                 .filter(command -> !command.isOwnerCommand()
                         && !command.isHidden()
                         && !command.isWhitelisted(event.getGuild().getId())
+                        && event.getMember().getPermissions().containsAll(Arrays.asList(command.getUserPermissions()))
+                        && event.getMember().hasPermission(event.getTextChannel())
                         && event.getSelfMember().getPermissions().containsAll(Arrays.asList(command.getBotPermissions())))
                 .map(command -> "(`" + command.getCategory().getName() + "`) **" + command.getName() + "** " + command.getArguments() + " - " + command.getHelp())
                 .forEach(pbuilder::addItems);
@@ -71,7 +73,7 @@ public class CmdHelp extends Command {
         Paginator p = pbuilder.setColor(event.isFromType(ChannelType.TEXT) ? event.getSelfMember().getColor() : Color.black)
                 .setText(event.getClient().getSuccess() + "**Command List** ")
                 .setUsers(event.getAuthor())
-                .setColor(Color.decode("#cca8db"))
+                .setColor(Color.decode("#33539e"))
                 .build();
         p.paginate(event.getChannel(), page);
     }

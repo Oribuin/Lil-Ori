@@ -5,8 +5,14 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import xyz.oribuin.lilori.commands.*;
 import xyz.oribuin.lilori.commands.administrative.CmdPerms;
+import xyz.oribuin.lilori.commands.administrative.CmdQuote;
+import xyz.oribuin.lilori.commands.author.CmdEval;
 import xyz.oribuin.lilori.commands.author.CmdShutdown;
 import xyz.oribuin.lilori.commands.author.CmdTest;
+import xyz.oribuin.lilori.commands.games.CmdCoinflip;
+import xyz.oribuin.lilori.commands.games.CmdEightball;
+import xyz.oribuin.lilori.commands.games.CmdGay;
+import xyz.oribuin.lilori.commands.games.CmdSlap;
 import xyz.oribuin.lilori.commands.moderation.CmdBan;
 import xyz.oribuin.lilori.commands.moderation.CmdKick;
 import xyz.oribuin.lilori.commands.moderation.CmdMute;
@@ -23,22 +29,19 @@ import java.io.PrintStream;
 
 public class LilOri extends ListenerAdapter {
     public static void main(String[] args) throws LoginException {
-
         EventWaiter waiter = new EventWaiter();
-        CommandClientBuilder CmdBuilder = new CommandClientBuilder();
+        CommandClientBuilder cmdBuilder = new CommandClientBuilder();
 
-        CmdBuilder.setOwnerId("345406020450779149");
-        CmdBuilder.setPrefix(";");
-        CmdBuilder.useHelpBuilder(false);
-        CmdBuilder.setEmojis("<:tick:682145393898815536>", ":warning: ", "<cross:682145379281666049>");
+        cmdBuilder.setOwnerId("345406020450779149");
+        cmdBuilder.setPrefix(";");
+        cmdBuilder.useHelpBuilder(false);
+        cmdBuilder.setEmojis("<:tick:682145393898815536>", ":warning: ", "<cross:682145379281666049>");
 
 
-        CmdBuilder.addCommands(
-
+        cmdBuilder.addCommands(
+                new CmdQuote(),
+                new CmdEval(),
                 new CmdTest(waiter),
-                /*
-                 * Info Commands
-                 */
 
                 new CmdHelp(waiter),
                 new CmdPerms(waiter),
@@ -48,9 +51,6 @@ public class LilOri extends ListenerAdapter {
                 new CmdEightball(),
                 new CmdGay(waiter),
                 new CmdSlap(),
-                /*
-                 * Music Commands
-                 */
 
                 new CmdVolume(),
                 new CmdPause(),
@@ -59,24 +59,19 @@ public class LilOri extends ListenerAdapter {
                 new CmdClear(),
                 new CmdPlay(),
                 new CmdStop(),
-                /*
-                 * Moderation Commands
-                 */
+
                 new CmdBan(),
                 new CmdKick(),
                 new CmdMute(),
                 new CmdPurge(waiter),
 
-                /*
-                 * Author
-                 */
                 new CmdShutdown()
         );
 
 
-        CommandClient Client = CmdBuilder.build();
+        CommandClient client = cmdBuilder.build();
         JDA jda = JDABuilder.createDefault(Settings.TOKEN)
-                .addEventListeners(waiter, Client).addEventListeners(
+                .addEventListeners(waiter, client,
                         new Presence(),
                         new EventMentionOri()
 

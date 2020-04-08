@@ -64,7 +64,7 @@ public class CmdPerms extends Command {
         Paginator p = pbuilder.setColor(event.isFromType(ChannelType.TEXT) ? event.getSelfMember().getColor() : Color.black)
                 .setText(event.getClient().getSuccess() + " **Lil' Ori Permissions | Total:** " + event.getGuild().getSelfMember().getPermissions().size())
                 .setUsers(event.getAuthor())
-                .setColor(Color.decode("#cca8db"))
+                .setColor(Color.decode("#33539e"))
                 .build();
         p.paginate(event.getChannel(), page);
     }

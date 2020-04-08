@@ -23,7 +23,7 @@ public class CmdKick extends Command {
     @Override
     protected void execute(CommandEvent event) {
         String[] args = event.getMessage().getContentRaw().split(" ");
-        if (event.getGuildMember(event.getAuthor()) == null) return;
+        if (event.getMember() == null) return;
 
         if (args.length <= 2) {
             event.deleteCmd(10, TimeUnit.SECONDS);
@@ -39,7 +39,7 @@ public class CmdKick extends Command {
 
         Member mentioned = event.getMessage().getMentionedMembers().get(0);
 
-        if (mentioned.isOwner() || event.isHigher(mentioned, event.getGuild().getMember(event.getAuthor())) || event.isBot(mentioned)) {
+        if (mentioned.isOwner() || event.isHigher(mentioned, event.getMember()) || event.isBot(mentioned)) {
             event.deleteCmd(10, TimeUnit.SECONDS);
             event.timedReply(event.getAuthor().getAsMention() + ", You cannot kick this user due to rank hierarchy.", 10, TimeUnit.SECONDS);
             return;

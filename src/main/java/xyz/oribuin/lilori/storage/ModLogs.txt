@@ -1,5 +1,5 @@
             EmbedBuilder ModLog = new EmbedBuilder()
-                    .setColor(Color.decode("#cca8db"))
+                    .setColor(Color.decode("#33539e"))
                     .setAuthor("User Kicked")
                     .setDescription("Kicked User: " + event.getMessage().getMentionedMembers().get(0).getUser().getAsTag() + "\n" +
                             "Kicked By: " + event.getMessage().getAuthor().getAsTag() + "\n" +

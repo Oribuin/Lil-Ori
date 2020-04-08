@@ -39,7 +39,7 @@ public class CmdBan extends Command {
 
         Member mentioned = event.getMessage().getMentionedMembers().get(0);
 
-        if (mentioned.isOwner() || event.isHigher(mentioned, event.getGuild().getMember(event.getAuthor())) || event.isBot(mentioned)) {
+        if (mentioned.isOwner() || event.isHigher(mentioned, mentioned) || event.isBot(mentioned)) {
             event.deleteCmd(10, TimeUnit.SECONDS);
             event.timedReply(event.getAuthor().getAsMention() + ", You cannot ban this user due to rank hierarchy.", 10, TimeUnit.SECONDS);
             return;

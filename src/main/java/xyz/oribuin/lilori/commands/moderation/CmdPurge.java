@@ -23,14 +23,11 @@ public class CmdPurge extends Command {
         this.name = "Purge";
         this.aliases = new String[]{"clear"};
         this.help = "Mass clear server messages.";
-        this.cooldown = 2;
         this.category = new Category("Moderation");
         this.guildOnly = true;
         this.arguments = "[Channel/Msgs/User] [#Channel/Number/@User]";
-
         this.botPermissions = new Permission[]{Permission.MESSAGE_MANAGE, Permission.MANAGE_PERMISSIONS, Permission.MANAGE_CHANNEL};
         this.userPermissions = new Permission[]{Permission.MESSAGE_MANAGE, Permission.MANAGE_PERMISSIONS, Permission.MANAGE_CHANNEL};
-
         this.waiter = waiter;
     }
 
@@ -41,9 +38,9 @@ public class CmdPurge extends Command {
         String[] args = event.getMessage().getContentRaw().split(" ");
         TextChannel channel = event.getTextChannel();
         OffsetDateTime time = event.getMessage().getTimeCreated();
-        if (event.getGuildMember(event.getAuthor()) == null) return;
+        if (event.getMember() == null) return;
 
-        if (args.length < 2) {
+        if (args.length <= 2) {
             event.deleteCmd(10, TimeUnit.SECONDS);
             event.timedReply(event.getAuthor().getAsMention() + ", Correct Format: ;purge " + this.getArguments(), 10, TimeUnit.SECONDS);
             return;
@@ -99,8 +96,8 @@ public class CmdPurge extends Command {
                     return;
                 }
 
-                if (event.getGuildMember(event.getAuthor()) != null)
-                    if (!event.getGuildMember(event.getAuthor()).hasPermission(textChannel)) {
+                if (event.getMember() != null)
+                    if (!event.getMember().hasPermission(textChannel)) {
                         event.timedReply(event.getAuthor().getAsMention() + ", You cannot purge this channel.", 10, TimeUnit.SECONDS);
                         event.deleteCmd(10, TimeUnit.SECONDS);
                         return;
@@ -152,7 +149,7 @@ public class CmdPurge extends Command {
             }
 
             Member member = event.getMessage().getMentionedMembers().get(0);
-            if (member.hasPermission(Permission.ADMINISTRATOR) || member.getUser().isBot() || event.isHigher(member, event.getGuild().getMember(event.getAuthor()))) {
+            if (member.hasPermission(Permission.ADMINISTRATOR) || member.getUser().isBot() || event.isHigher(member, event.getMember())) {
                 event.timedReply(event.getMessage().getAuthor().getAsMention() + ", You cannot purge this user's messages.", 10, TimeUnit.SECONDS);
                 event.deleteCmd(10, TimeUnit.SECONDS);
                 return;

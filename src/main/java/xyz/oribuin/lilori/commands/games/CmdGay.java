@@ -1,18 +1,12 @@
-package xyz.oribuin.lilori.commands;
+package xyz.oribuin.lilori.commands.games;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 import xyz.oribuin.lilori.utilities.command.Command;
 import xyz.oribuin.lilori.utilities.command.CommandEvent;
 import xyz.oribuin.lilori.utilities.commons.waiter.EventWaiter;
 
 import java.awt.*;
-import java.sql.Time;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -75,26 +69,25 @@ public class CmdGay extends Command {
             // define the embed
             EmbedBuilder embedBuilder = new EmbedBuilder()
                     .setAuthor("Gay Calculator")
-                    .setColor(Color.decode("#cca8db"))
+                    .setColor(Color.decode("#33539e"))
                     .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png")
                     .setDescription("**You are " + randomAmount + "% Gay** :rainbow_flag:");
 
             event.getChannel().sendMessage(embedBuilder.build()).queueAfter(2, TimeUnit.SECONDS);
-            // TODO: Have the bot reset the number every time the dice is pressed.
 
             /*
             // Send the embed after 2 seconds and add the appropriate reaction
             event.getChannel().sendMessage(embedBuilder.build()).queueAfter(2, TimeUnit.SECONDS, msg -> {
                 msg.addReaction("\uD83C\uDFB2").queue();
                 // Wait for a GuildMessageReactionAddEvent, Check for if the member is right and if the emoji is the right one
-                waiter.waitForEvent(GuildMessageReactionAddEvent.class, check -> check.getMember().equals(event.getGuild().getMember(event.getAuthor())), action -> {
+                waiter.waitForEvent(GuildMessageReactionAddEvent.class, check -> check.getMember().equals(event.getMember()), action -> {
                     // Define new number
                     int newRandomAmount = random.nextInt(upperBound - lowerAmount + 1) + lowerAmount;
 
                     // Define new embed.
                     EmbedBuilder newEmbed = new EmbedBuilder()
                             .setAuthor("Gay Calculator")
-                            .setColor(Color.decode("#cca8db"))
+                            .setColor(Color.decode("#33539e"))
                             .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png")
                             .setDescription("**You are " + newRandomAmount + "% Gay** :rainbow_flag:");
 
@@ -108,25 +101,4 @@ public class CmdGay extends Command {
              */
         });
     }
-
-    /*
-    public void onGuildMessageReactionAdd(GuildMessageReactionAddEvent event) {
-        if (event.getMessageId().equals(reactionMessage.getId())) {
-            if (event.getReaction().getReactionEmote().getEmote().equals("\uD83C\uDFB2") && event.getMember().equals(commandEvent.getGuildAuthor())) {
-                int newRandomAmount = random.nextInt(upperBound - lowerAmount + 1) + lowerAmount;
-
-                EmbedBuilder newEmbed = new EmbedBuilder()
-                        .setAuthor("Gay Calculator")
-                        .setColor(Color.decode("#CCA8DB"))
-                        .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png")
-                        .setDescription("**You are " + newRandomAmount + "% Gay** :rainbow_flag:");
-
-                reactionMessage.clearReactions().queue();
-                reactionMessage.editMessage(newEmbed.build()).queue();
-                reactionMessage.addReaction("\uD83C\uDFB2").queueAfter(1, TimeUnit.SECONDS);
-            }
-        }
-    }
-
-     */
 }

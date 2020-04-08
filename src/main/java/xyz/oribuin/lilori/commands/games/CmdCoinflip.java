@@ -1,6 +1,5 @@
-package xyz.oribuin.lilori.commands;
+package xyz.oribuin.lilori.commands.games;
 
-import net.dv8tion.jda.api.Permission;
 import xyz.oribuin.lilori.utilities.command.Command;
 import xyz.oribuin.lilori.utilities.command.CommandEvent;
 

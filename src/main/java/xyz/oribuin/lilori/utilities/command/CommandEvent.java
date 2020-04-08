@@ -117,7 +117,7 @@ public class CommandEvent {
 
     public void reply(Message message) {
         event.getChannel().sendMessage(message).queue(m -> {
-            if (event.isFromType(ChannelType.TEXT))
+            if (event.isFromType( ChannelType.TEXT))
                 linkId(m);
         });
     }
@@ -445,10 +445,6 @@ public class CommandEvent {
 
     public Member getGuildMember(@NotNull User user) {
         return event.getGuild().getMember(user);
-    }
-
-    public Member getGuildAuthor() {
-        return event.getGuild().getMember(event.getAuthor());
     }
 
     /**

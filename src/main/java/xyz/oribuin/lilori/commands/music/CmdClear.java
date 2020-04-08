@@ -33,9 +33,9 @@ public class CmdClear extends Command {
     @Override
     protected void execute(CommandEvent event) {
         GuildMusicManager musicManager = getGuildAudioPlayer(event.getGuild());
-        if (event.getGuildMember(event.getAuthor()) == null) return;
+        if (event.getMember() == null) return;
 
-        if (event.getGuildMember(event.getAuthor()).getVoiceState() != null && event.getGuildMember(event.getAuthor()).getVoiceState().inVoiceChannel()) {
+        if (event.getMember().getVoiceState() != null && event.getMember().getVoiceState().inVoiceChannel()) {
             musicManager.player.stopTrack();
             event.getGuild().getAudioManager().closeAudioConnection();
 
