@@ -34,5 +34,5 @@ hs_err_pid*
 src/main/java/xyz/oribuin/lilori/persist/Settings.java
 src/main/java/xyz/oribuin/lilori/persist/Settings.java
 src/main/java/xyz/oribuin/lilori/Settings.java
-.out
-.archived
+out
+archived
