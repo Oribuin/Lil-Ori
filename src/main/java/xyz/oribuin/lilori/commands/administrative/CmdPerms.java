@@ -1,5 +1,6 @@
 package xyz.oribuin.lilori.commands.administrative;
 
+import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import xyz.oribuin.lilori.utilities.command.Command;
@@ -19,7 +20,7 @@ public class CmdPerms extends Command {
         this.help = "List of permissions the bot has.";
         this.guildOnly = true;
         this.category = new Category("Info");
-        this.arguments = "[Page-Number]";
+        this.arguments = "<Page>";
 
 
         pbuilder = new Paginator.Builder().setColumns(1)

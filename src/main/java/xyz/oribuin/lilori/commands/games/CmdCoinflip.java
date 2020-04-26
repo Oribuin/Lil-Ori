@@ -10,9 +10,9 @@ public class CmdCoinflip extends Command {
 
     public CmdCoinflip() {
         this.name = "Coinflip";
-        this.category = new Category("Fun");
+        this.category = new Category("Games");
         this.aliases = new String[]{"flip"};
-        this.arguments = "[None]";
+        this.arguments = "";
         this.help = "Flip a coin.";
     }
 

@@ -1,20 +1,28 @@
-package xyz.oribuin.lilori.commands.administrative;
+package xyz.oribuin.lilori.commands.author;
 
 import com.google.gson.Gson;
-import xyz.oribuin.lilori.managers.QuoteManager;
+import net.dv8tion.jda.api.EmbedBuilder;
 import xyz.oribuin.lilori.utilities.command.Command;
 import xyz.oribuin.lilori.utilities.command.CommandEvent;
 
+import java.awt.*;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public class CmdQuote extends Command {
+
+    private final static Gson gson = new Gson();
+    private Map<Integer, String> jsonMap = new HashMap<>();
+
     public CmdQuote() {
         this.name = "Quote";
         this.help = "Gain a saved quote..";
         this.category = new Category("Test");
-        this.arguments = "[None]";
+        this.arguments = "";
         this.hidden = true;
         this.ownerCommand = false;
     }
@@ -24,12 +32,23 @@ public class CmdQuote extends Command {
         String[] args = event.getMessage().getContentRaw().split(" ");
         File dataFile = new File("data", "quotes.json");
         createFile();
-        QuoteManager quoteManager = new QuoteManager();
-        Map<Integer, String> jsonMap = quoteManager.jsonMap;
-
 
         if (args.length == 1) {
-            event.reply("soon:tm:");
+
+            if (jsonMap.size() == 0) {
+                event.reply(event.getAuthor().getAsMention() + ", There are no quotes currently saved.");
+                return;
+            }
+
+            int randomInt = new Random().nextInt(jsonMap.size() + 1);
+
+            EmbedBuilder embedBuilder = new EmbedBuilder()
+                    .setAuthor("Quotes")
+                    .setColor(Color.decode("#33539e"))
+                    .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png")
+                    .setDescription("Quote #" + randomInt + 1 + " " + jsonMap.get(randomInt + 1));
+
+            event.reply(embedBuilder.build());
             return;
         }
 
@@ -37,11 +56,11 @@ public class CmdQuote extends Command {
             final String quote = event.getMessage().getContentDisplay().substring(args[0].length() + args[1].length() + 2);
 
             if (args[1].equalsIgnoreCase("add")) {
-                try {
-                    jsonMap.put(1, quote);
+                try (FileWriter fileWriter = new FileWriter(dataFile)) {
+                    jsonMap.put(jsonMap.size() + 1, quote);
+                    gson.toJson(jsonMap, fileWriter);
 
-                    quoteManager.save();
-                    event.reply(event.getAuthor().getAsMention() + ", Added Quote \"" + quote + "\"");
+                    event.reply(event.getAuthor().getAsMention() + ", Added Quote **" + quote + "**");
                     System.out.println(event.getAuthor().getAsTag() + " Just added the quote " + quote + "!");
                 } catch (IOException e) {
                     e.printStackTrace();

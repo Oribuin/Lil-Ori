@@ -1,10 +1,8 @@
 package xyz.oribuin.lilori.commands.games;
 
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.Permission;
 import xyz.oribuin.lilori.utilities.command.Command;
 import xyz.oribuin.lilori.utilities.command.CommandEvent;
-import xyz.oribuin.lilori.utilities.commons.waiter.EventWaiter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,8 +13,8 @@ public class CmdSlap extends Command {
 
     public CmdSlap() {
         this.name = "Slap";
-        this.category = new Category("Fun");
-        this.arguments = "[@User]";
+        this.category = new Category("Games");
+        this.arguments = "<@Users>";
         this.help = "Slap a user";
     }
 

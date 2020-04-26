@@ -2,10 +2,7 @@ package xyz.oribuin.lilori.commands.moderation;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.ChannelType;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import xyz.oribuin.lilori.utilities.command.Command;
 import xyz.oribuin.lilori.utilities.command.CommandEvent;
@@ -25,7 +22,7 @@ public class CmdPurge extends Command {
         this.help = "Mass clear server messages.";
         this.category = new Category("Moderation");
         this.guildOnly = true;
-        this.arguments = "[Channel/Msgs/User] [#Channel/Number/@User]";
+        this.arguments = "<Channel/Msgs/User> <#Channel/Number/@User>";
         this.botPermissions = new Permission[]{Permission.MESSAGE_MANAGE, Permission.MANAGE_PERMISSIONS, Permission.MANAGE_CHANNEL};
         this.userPermissions = new Permission[]{Permission.MESSAGE_MANAGE, Permission.MANAGE_PERMISSIONS, Permission.MANAGE_CHANNEL};
         this.waiter = waiter;
@@ -127,6 +124,8 @@ public class CmdPurge extends Command {
                                         .setTopic(textChannel.getTopic())
                                         .setParent(textChannel.getParent())
                                         .setPosition(textChannel.getPosition()).queue(getChannel -> {
+
+                                    textChannel.getPermissionOverrides().forEach(permissionOverride -> getChannel.createPermissionOverride(permissionOverride.getPermissionHolder()).queue());
                                     getChannel.sendMessage(event.getAuthor().getAsMention()).queue();
                                     getChannel.sendMessage(embedBuilder.build()).queue();
                                 });

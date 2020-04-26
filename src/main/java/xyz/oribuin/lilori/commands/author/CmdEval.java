@@ -2,23 +2,22 @@ package xyz.oribuin.lilori.commands.author;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.OnlineStatus;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Activity;
 import xyz.oribuin.lilori.utilities.command.Command;
 import xyz.oribuin.lilori.utilities.command.CommandEvent;
-import xyz.oribuin.lilori.utilities.commons.waiter.EventWaiter;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import java.awt.*;
-import java.io.PrintStream;
 
 public class CmdEval extends Command {
     public CmdEval() {
         this.name = "Eval";
         this.help = "An evaluation.";
         this.category = new Category("Test");
-        this.arguments = "[Code]";
+        this.arguments = "<Code>";
         this.hidden = true;
         this.ownerCommand = true;
     }
@@ -43,6 +42,12 @@ public class CmdEval extends Command {
         se.put("voice", event.getSelfMember().getVoiceState());
         se.put("watching", Activity.watching(eval));
         se.put("playing", Activity.playing(eval));
+
+        for (Permission permission : Permission.values()) {
+            se.put(permission.getName(), permission);
+            System.out.println(permission.getName() + " " + permission);
+        }
+
         for (OnlineStatus value : OnlineStatus.values())
             se.put(value.name(), value);
 

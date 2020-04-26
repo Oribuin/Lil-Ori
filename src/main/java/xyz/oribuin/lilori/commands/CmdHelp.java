@@ -1,13 +1,10 @@
 package xyz.oribuin.lilori.commands;
 
-import net.dv8tion.jda.api.exceptions.ContextException;
-import net.dv8tion.jda.api.exceptions.ErrorResponseException;
+import net.dv8tion.jda.api.entities.ChannelType;
 import xyz.oribuin.lilori.utilities.command.Command;
 import xyz.oribuin.lilori.utilities.command.CommandEvent;
 import xyz.oribuin.lilori.utilities.commons.waiter.EventWaiter;
 import xyz.oribuin.lilori.utilities.menu.Paginator;
-import net.dv8tion.jda.api.entities.ChannelType;
-import net.dv8tion.jda.api.exceptions.PermissionException;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -15,13 +12,12 @@ import java.util.concurrent.TimeUnit;
 
 public class CmdHelp extends Command {
     private final Paginator.Builder pbuilder;
-    private CommandEvent commandEvent;
 
     public CmdHelp(EventWaiter waiter) {
         this.name = "Help";
         this.help = "Get the list of commands for the bot.";
         this.category = new Category("Info");
-        this.arguments = "[Page-Number]";
+        this.arguments = "<page>";
 
         pbuilder = new Paginator.Builder().setColumns(1)
                 .setItemsPerPage(10)
@@ -57,7 +53,11 @@ public class CmdHelp extends Command {
             }
         }
 
-        //Arrays.asList(command.getUserPermissions()).containsAll(event.getMember().getPermissions()))
+        int cmdCount = (int) event.getClient().getCommands().stream().filter(command -> !command.isOwnerCommand()
+                && !command.isHidden()
+                && !command.isWhitelisted(event.getGuild().getId()) && event.getMember().getPermissions().containsAll(Arrays.asList(command.getUserPermissions()))
+                && event.getMember().hasPermission(event.getTextChannel())
+                && event.getSelfMember().getPermissions().containsAll(Arrays.asList(command.getBotPermissions()))).count();
 
         pbuilder.clearItems();
         event.getClient().getCommands().stream()
@@ -67,11 +67,11 @@ public class CmdHelp extends Command {
                         && event.getMember().getPermissions().containsAll(Arrays.asList(command.getUserPermissions()))
                         && event.getMember().hasPermission(event.getTextChannel())
                         && event.getSelfMember().getPermissions().containsAll(Arrays.asList(command.getBotPermissions())))
-                .map(command -> "(`" + command.getCategory().getName() + "`) **" + command.getName() + "** " + command.getArguments() + " - " + command.getHelp())
+                .map(command -> "(`" + command.getCategory().getName() + "`) **" + command.getName() + "** " + command.getArguments() + " - " + command.getHelp() + "\n")
                 .forEach(pbuilder::addItems);
 
         Paginator p = pbuilder.setColor(event.isFromType(ChannelType.TEXT) ? event.getSelfMember().getColor() : Color.black)
-                .setText(event.getClient().getSuccess() + "**Command List** ")
+                .setText(event.getClient().getSuccess() + "**Command List | " + cmdCount + " Commands**")
                 .setUsers(event.getAuthor())
                 .setColor(Color.decode("#33539e"))
                 .build();

@@ -2,7 +2,6 @@ package xyz.oribuin.lilori.commands.moderation;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.GuildChannel;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import xyz.oribuin.lilori.utilities.command.Command;
@@ -18,7 +17,7 @@ public class CmdMute extends Command {
         this.cooldown = 2;
         this.category = new Command.Category("Moderation");
         this.guildOnly = true;
-        this.arguments = "[Setup/@User]";
+        this.arguments = "<Setup/@User>";
         this.disabled = true;
 
         this.botPermissions = new Permission[]{Permission.MANAGE_ROLES, Permission.MANAGE_CHANNEL, Permission.MANAGE_PERMISSIONS};

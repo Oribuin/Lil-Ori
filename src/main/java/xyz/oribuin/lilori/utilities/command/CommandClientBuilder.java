@@ -27,6 +27,7 @@ public class CommandClientBuilder {
     private final LinkedList<Command> commands = new LinkedList<>();
     private CommandListener listener;
     private boolean useHelp = false;
+    private boolean useStatus = true;
     private boolean shutdownAutomatically = true;
     private Consumer<CommandEvent> helpConsumer;
     private String helpWord;
@@ -37,7 +38,7 @@ public class CommandClientBuilder {
 
     public CommandClient build() {
         CommandClient client = new CommandClientImpl(ownerId, coOwnerIds, prefix, altPrefix, activity, status, serverInvite,
-                success, warning, error, carbonKey, botsKey, new ArrayList<>(commands), useHelp,
+                success, warning, error, carbonKey, botsKey, new ArrayList<>(commands), useHelp, useStatus,
                 shutdownAutomatically, helpConsumer, helpWord, executor, linkedCacheSize, compiler, manager);
         if (listener != null)
             client.setListener(listener);
@@ -56,6 +57,11 @@ public class CommandClientBuilder {
 
     public CommandClientBuilder setPrefix(String prefix) {
         this.prefix = prefix;
+        return this;
+    }
+
+    public CommandClientBuilder useStatus(boolean useStatus) {
+        this.useStatus = useStatus;
         return this;
     }
 

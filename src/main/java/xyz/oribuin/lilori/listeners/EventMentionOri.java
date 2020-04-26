@@ -1,7 +1,6 @@
 package xyz.oribuin.lilori.listeners;
 
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
@@ -24,7 +23,7 @@ public class EventMentionOri extends ListenerAdapter {
         if (event.getMessage().getContentRaw().equals("<@!581203970203189269>"))
             event.getChannel().sendMessage(embedBuilder.build()).queue();
 
-        if (event.getMessage().getContentRaw().contains("<@!345406020450779149>"))
+        if (event.getMessage().getContentRaw().contains("<@!345406020450779149>") && !event.getAuthor().getId().equals("345406020450779149"))
             event.getMessage().addReaction(":AngySnoot1:690641610983079967").queue();
     }
 }

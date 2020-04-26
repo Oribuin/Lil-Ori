@@ -20,8 +20,8 @@ public class CmdGay extends Command {
 
     public CmdGay(EventWaiter waiter) {
         this.name = "Gay";
-        this.category = new Category("Fun");
-        this.arguments = "[None]";
+        this.category = new Category("Games");
+        this.arguments = "";
         this.help = "How gay are you?";
         this.waiter = waiter;
         this.botPermissions = new Permission[]{Permission.MESSAGE_MANAGE, Permission.MESSAGE_ADD_REACTION};

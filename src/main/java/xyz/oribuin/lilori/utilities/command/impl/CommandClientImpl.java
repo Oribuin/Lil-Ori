@@ -56,6 +56,7 @@ public class CommandClientImpl implements CommandClient, EventListener {
     private final HashMap<String, Integer> uses;
     private final FixedSizeCache<Long, Set<Message>> linkMap;
     private final boolean useHelp;
+    private final boolean useStatus;
     private final boolean shutdownAutomatically;
     private final Consumer<CommandEvent> helpConsumer;
     private final String helpWord;
@@ -69,7 +70,7 @@ public class CommandClientImpl implements CommandClient, EventListener {
 
     public CommandClientImpl(String ownerId, String[] coOwnerIds, String prefix, String altPrefix, Activity activity, OnlineStatus status, String serverInvite,
                              String success, String warning, String error, String carbonKey, String botsKey, ArrayList<Command> commands,
-                             boolean useHelp, boolean shutdownAutomatically, Consumer<CommandEvent> helpConsumer, String helpWord, ScheduledExecutorService executor,
+                             boolean useHelp, boolean useStatus, boolean shutdownAutomatically, Consumer<CommandEvent> helpConsumer, String helpWord, ScheduledExecutorService executor,
                              int linkedCacheSize, AnnotatedModuleCompiler compiler, GuildSettingsManager manager) {
         Checks.check(ownerId != null, "Owner ID was set null or not set! Please provide an User ID to register as the owner!");
 
@@ -104,6 +105,7 @@ public class CommandClientImpl implements CommandClient, EventListener {
         this.uses = new HashMap<>();
         this.linkMap = linkedCacheSize > 0 ? new FixedSizeCache<>(linkedCacheSize) : null;
         this.useHelp = useHelp;
+        this.useStatus = useStatus;
         this.shutdownAutomatically = shutdownAutomatically;
         this.helpWord = helpWord == null ? "help" : helpWord;
         this.executor = executor == null ? Executors.newSingleThreadScheduledExecutor() : executor;
@@ -385,6 +387,7 @@ public class CommandClientImpl implements CommandClient, EventListener {
         }
     }
 
+
     private void onReady(ReadyEvent event) {
         if (!event.getJDA().getSelfUser().isBot()) {
             LOG.error("JDA-Utilities does not support CLIENT accounts.");
@@ -392,8 +395,9 @@ public class CommandClientImpl implements CommandClient, EventListener {
             return;
         }
         textPrefix = prefix.equals(DEFAULT_PREFIX) ? "@" + event.getJDA().getSelfUser().getName() + " " : prefix;
-        event.getJDA().getPresence().setPresence(status == null ? OnlineStatus.ONLINE : status,
-                activity == null ? null : "default".equals(activity.getName()) ? Activity.streaming("music", "https://www.youtube.com/watch?v=5qap5aO4i9A") : activity);
+        if (useStatus)
+            event.getJDA().getPresence().setPresence(status == null ? OnlineStatus.ONLINE : status,
+                    activity == null ? null : "default".equals(activity.getName()) ? Activity.watching("FlightTrails") : activity);
 
         // Start SettingsManager if necessary
         GuildSettingsManager<?> manager = getSettingsManager();

@@ -1,9 +1,9 @@
 package xyz.oribuin.lilori.utilities.command;
 
 import net.dv8tion.jda.api.Permission;
-import xyz.oribuin.lilori.utilities.command.annotation.JDACommand;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 

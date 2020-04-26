@@ -15,7 +15,7 @@ public class CmdBan extends Command {
         this.cooldown = 2;
         this.category = new Command.Category("Moderation");
         this.guildOnly = true;
-        this.arguments = "[@User] [Messages] [Reason]";
+        this.arguments = "<@User> <Messages> <Reason>";
 
         this.userPermissions = new Permission[]{Permission.MESSAGE_MANAGE, Permission.BAN_MEMBERS};
         this.botPermissions = new Permission[]{Permission.MESSAGE_MANAGE, Permission.BAN_MEMBERS};

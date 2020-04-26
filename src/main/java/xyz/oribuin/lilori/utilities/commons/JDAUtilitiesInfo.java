@@ -1,7 +1,5 @@
 package xyz.oribuin.lilori.utilities.commons;
 
-import java.text.AttributedString;
-
 public class JDAUtilitiesInfo {
     public static final String VERSION_MAJOR = "@VERSION_MAJOR@";
     public static final String VERSION_MINOR = "@VERSION_MINOR@";

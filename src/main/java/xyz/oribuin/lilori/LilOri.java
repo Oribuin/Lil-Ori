@@ -3,10 +3,12 @@ package xyz.oribuin.lilori;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import xyz.oribuin.lilori.commands.*;
+import xyz.oribuin.lilori.commands.games.CmdFeed;
+import xyz.oribuin.lilori.commands.CmdHelp;
+import xyz.oribuin.lilori.commands.CmdPing;
 import xyz.oribuin.lilori.commands.administrative.CmdPerms;
-import xyz.oribuin.lilori.commands.administrative.CmdQuote;
 import xyz.oribuin.lilori.commands.author.CmdEval;
+import xyz.oribuin.lilori.commands.author.CmdPresence;
 import xyz.oribuin.lilori.commands.author.CmdShutdown;
 import xyz.oribuin.lilori.commands.author.CmdTest;
 import xyz.oribuin.lilori.commands.games.CmdCoinflip;
@@ -20,6 +22,8 @@ import xyz.oribuin.lilori.commands.moderation.CmdPurge;
 import xyz.oribuin.lilori.commands.music.*;
 import xyz.oribuin.lilori.listeners.EventMentionOri;
 import xyz.oribuin.lilori.listeners.Presence;
+import xyz.oribuin.lilori.managers.GuildMusicManager;
+import xyz.oribuin.lilori.managers.TrackManager;
 import xyz.oribuin.lilori.utilities.command.CommandClient;
 import xyz.oribuin.lilori.utilities.command.CommandClientBuilder;
 import xyz.oribuin.lilori.utilities.commons.waiter.EventWaiter;
@@ -36,12 +40,11 @@ public class LilOri extends ListenerAdapter {
         cmdBuilder.setPrefix(";");
         cmdBuilder.useHelpBuilder(false);
         cmdBuilder.setEmojis("<:tick:682145393898815536>", ":warning: ", "<cross:682145379281666049>");
-
+        cmdBuilder.useStatus(false);
 
         cmdBuilder.addCommands(
-                new CmdQuote(),
                 new CmdEval(),
-                new CmdTest(waiter),
+                new CmdTest(),
 
                 new CmdHelp(waiter),
                 new CmdPerms(waiter),
@@ -51,6 +54,7 @@ public class LilOri extends ListenerAdapter {
                 new CmdEightball(),
                 new CmdGay(waiter),
                 new CmdSlap(),
+                new CmdFeed(),
 
                 new CmdVolume(),
                 new CmdPause(),
@@ -65,11 +69,13 @@ public class LilOri extends ListenerAdapter {
                 new CmdMute(),
                 new CmdPurge(waiter),
 
+                new CmdPresence(waiter),
                 new CmdShutdown()
         );
 
 
         CommandClient client = cmdBuilder.build();
+
         JDA jda = JDABuilder.createDefault(Settings.TOKEN)
                 .addEventListeners(waiter, client,
                         new Presence(),
@@ -77,11 +83,17 @@ public class LilOri extends ListenerAdapter {
 
                 ).build();
 
+        TrackManager trackManager = new TrackManager();
+        GuildMusicManager musicManager = new GuildMusicManager(trackManager.playerManager);
+        musicManager.player.setVolume(100);
+
         PrintStream system = System.out;
         system.println("***********************");
+        system.println(" ");
         system.println("Bot Loaded: Lil' Ori");
         system.println("Version: v1.0.0");
         system.println("Author: Oribuin");
+        system.println(" ");
         system.println("***********************");
 
     }

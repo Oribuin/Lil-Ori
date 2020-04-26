@@ -1,9 +1,9 @@
 package xyz.oribuin.lilori.commands.moderation;
 
-import xyz.oribuin.lilori.utilities.command.Command;
-import xyz.oribuin.lilori.utilities.command.CommandEvent;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
+import xyz.oribuin.lilori.utilities.command.Command;
+import xyz.oribuin.lilori.utilities.command.CommandEvent;
 
 import java.util.concurrent.TimeUnit;
 
@@ -14,7 +14,7 @@ public class CmdKick extends Command {
         this.cooldown = 2;
         this.category = new Command.Category("Moderation");
         this.guildOnly = true;
-        this.arguments = "[@User] [Reason]";
+        this.arguments = "<@User> <Reason>";
 
         this.botPermissions = new Permission[]{Permission.KICK_MEMBERS, Permission.MESSAGE_MANAGE};
         this.userPermissions = new Permission[]{Permission.KICK_MEMBERS, Permission.MESSAGE_MANAGE};

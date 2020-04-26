@@ -1,6 +1,9 @@
 package xyz.oribuin.lilori.utilities.menu;
 
-import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.User;
 import xyz.oribuin.lilori.utilities.commons.waiter.EventWaiter;
 
 import javax.annotation.Nullable;

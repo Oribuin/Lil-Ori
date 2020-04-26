@@ -1,10 +1,8 @@
 package xyz.oribuin.lilori.commands;
 
-import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.EmbedBuilder;
 import xyz.oribuin.lilori.utilities.command.Command;
 import xyz.oribuin.lilori.utilities.command.CommandEvent;
-import net.dv8tion.jda.api.EmbedBuilder;
 
 import java.awt.*;
 
@@ -14,7 +12,7 @@ public class CmdPing extends Command {
         this.aliases = new String[]{"latency"};
         this.help = "Get the latency ping for the bot.";
         this.category = new Category("Info");
-        this.arguments = "[None]";
+        this.arguments = "";
     }
 
     @Override
@@ -26,25 +24,25 @@ public class CmdPing extends Command {
         EmbedBuilder Embed = new EmbedBuilder();
 
         if (ping < 101) {
-            emoji = "<a:PanGLoveG:644305899682398208>";
+            emoji = "<a:PanGLoveG:702322097195712523>";
             Embed.setColor(Color.green);
         }
 
         // If Ping is Higher than 100, Do yellow
         if (ping > 100) {
-            emoji = "<a:PanGLoveY:644305952966967316>";
+            emoji = "<a:PanGLoveY:702322097292181534>";
             Embed.setColor(Color.decode("#ffff00"));
         }
 
         // If Ping is Higher than 200 Do Orange
         if (ping > 199) {
-            emoji = "<a:PanGLoveO:644305938873974784> ";
+            emoji = "<a:PanGLoveO:702322097002643577>";
             Embed.setColor(Color.decode("#ffa500"));
         }
 
         // If Ping is higher than 300, Do Red
         if (ping > 299) {
-            emoji = "<a:PanGLove:644305899292459009>";
+            emoji = "<a:PanGLove:702322097979916298>";
             Embed.setColor(Color.red);
         }
 
