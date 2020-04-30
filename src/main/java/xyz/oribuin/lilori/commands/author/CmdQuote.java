@@ -26,7 +26,7 @@ public class CmdQuote extends Command {
         this.category = new Category("Test");
         this.arguments = "";
         this.hidden = true;
-        this.ownerCommand = false;
+        this.ownerCommand = true;
     }
 
     @Override
