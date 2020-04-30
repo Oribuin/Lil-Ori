@@ -1,8 +1,7 @@
 package xyz.oribuin.lilori.commands.music;
 
-import xyz.oribuin.lilori.managers.GuildMusicManager;
-import xyz.oribuin.lilori.managers.TrackManager;
-import xyz.oribuin.lilori.managers.TrackScheduler;
+import xyz.oribuin.lilori.managers.music.GuildMusicManager;
+import xyz.oribuin.lilori.managers.music.TrackManager;
 import xyz.oribuin.lilori.utilities.command.Command;
 import xyz.oribuin.lilori.utilities.command.CommandEvent;
 

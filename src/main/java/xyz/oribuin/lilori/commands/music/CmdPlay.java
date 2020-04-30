@@ -1,7 +1,7 @@
 package xyz.oribuin.lilori.commands.music;
 
 import net.dv8tion.jda.api.Permission;
-import xyz.oribuin.lilori.managers.TrackManager;
+import xyz.oribuin.lilori.managers.music.TrackManager;
 import xyz.oribuin.lilori.utilities.command.Command;
 import xyz.oribuin.lilori.utilities.command.CommandEvent;
 
@@ -37,7 +37,6 @@ public class CmdPlay extends Command {
         }
 
         String input = event.getMessage().getContentRaw().substring(args[0].length() + 1);
-
 
         event.getMessage().delete().queue();
         event.getGuild().getAudioManager().openAudioConnection(event.getMember().getVoiceState().getChannel());

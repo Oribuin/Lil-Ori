@@ -2,6 +2,7 @@ package xyz.oribuin.lilori.commands.author;
 
 import com.google.gson.Gson;
 import net.dv8tion.jda.api.EmbedBuilder;
+import xyz.oribuin.lilori.LilOri;
 import xyz.oribuin.lilori.utilities.command.Command;
 import xyz.oribuin.lilori.utilities.command.CommandEvent;
 
@@ -9,6 +10,7 @@ import java.awt.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.PreparedStatement;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -56,6 +58,7 @@ public class CmdQuote extends Command {
             final String quote = event.getMessage().getContentDisplay().substring(args[0].length() + args[1].length() + 2);
 
             if (args[1].equalsIgnoreCase("add")) {
+                /**
                 try (FileWriter fileWriter = new FileWriter(dataFile)) {
                     jsonMap.put(jsonMap.size() + 1, quote);
                     gson.toJson(jsonMap, fileWriter);
@@ -65,6 +68,22 @@ public class CmdQuote extends Command {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                 */
+
+                LilOri.getInstance().getConnector().connect(connection -> {
+                    String insert = "INSERT INTO quotes_table (quote_id, quote_text, quote_author) VALUES (?, ?)";
+
+                    try (PreparedStatement statement = connection.prepareStatement(insert)) {
+                        statement.setString(1, "test");
+                        statement.setString(2, quote);
+                        statement.setString(3, "ori");
+                        statement.executeUpdate();
+                    }
+
+                    System.out.println(connection.prepareStatement("SELECT * FROM quote_table").toString());
+                });
+
+                System.out.println("Done");
             }
         }
     }

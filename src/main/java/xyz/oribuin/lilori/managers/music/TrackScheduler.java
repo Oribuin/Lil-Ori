@@ -1,4 +1,4 @@
-package xyz.oribuin.lilori.managers;
+package xyz.oribuin.lilori.managers.music;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;

@@ -1,4 +1,4 @@
-package xyz.oribuin.lilori.managers;
+package xyz.oribuin.lilori.managers.music;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
@@ -7,10 +7,12 @@ import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
+import xyz.oribuin.lilori.managers.music.GuildMusicManager;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -96,8 +98,17 @@ public class TrackManager {
 
     public void skipTrack(TextChannel textChannel) {
         GuildMusicManager musicManager = getGuildAudioPlayer(textChannel.getGuild());
-        musicManager.scheduler.nextTrack();;
+        musicManager.scheduler.nextTrack();
         textChannel.sendMessage("Skipped Track").queue();
+    }
+
+    public void loop(final TextChannel textChannel, boolean looping) {
+        Guild guild = textChannel.getGuild();
+        GuildMusicManager musicManager = getGuildAudioPlayer(guild);
+        if (looping) {
+            musicManager.scheduler.onTrackEnd(musicManager.player, musicManager.player.getPlayingTrack(), AudioTrackEndReason.FINISHED);
+            loadAndPlay(textChannel, musicManager.player.getPlayingTrack().getInfo().uri);
+        }
     }
 
     private static void connectChannel(AudioManager audioManager) {
