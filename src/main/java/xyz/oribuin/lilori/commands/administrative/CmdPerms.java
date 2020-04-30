@@ -1,12 +1,11 @@
 package xyz.oribuin.lilori.commands.administrative;
 
-import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
-import xyz.oribuin.lilori.utilities.command.Command;
-import xyz.oribuin.lilori.utilities.command.CommandEvent;
-import xyz.oribuin.lilori.utilities.commons.waiter.EventWaiter;
-import xyz.oribuin.lilori.utilities.menu.Paginator;
+import xyz.oribuin.lilori.managers.commands.command.Command;
+import xyz.oribuin.lilori.managers.commands.command.CommandEvent;
+import xyz.oribuin.lilori.managers.commands.commons.waiter.EventWaiter;
+import xyz.oribuin.lilori.managers.commands.menu.Paginator;
 
 import java.awt.*;
 import java.util.concurrent.TimeUnit;

@@ -1,4 +1,4 @@
-package xyz.oribuin.lilori.utilities.commons.waiter;
+package xyz.oribuin.lilori.managers.commands.commons.waiter;
 
 import net.dv8tion.jda.api.events.Event;
 import net.dv8tion.jda.api.events.GenericEvent;

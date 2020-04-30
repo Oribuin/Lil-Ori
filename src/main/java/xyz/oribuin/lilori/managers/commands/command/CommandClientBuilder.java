@@ -1,9 +1,9 @@
-package xyz.oribuin.lilori.utilities.command;
+package xyz.oribuin.lilori.managers.commands.command;
 
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
-import xyz.oribuin.lilori.utilities.command.impl.AnnotatedModuleCompilerImpl;
-import xyz.oribuin.lilori.utilities.command.impl.CommandClientImpl;
+import xyz.oribuin.lilori.managers.commands.command.impl.AnnotatedModuleCompilerImpl;
+import xyz.oribuin.lilori.managers.commands.command.impl.CommandClientImpl;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

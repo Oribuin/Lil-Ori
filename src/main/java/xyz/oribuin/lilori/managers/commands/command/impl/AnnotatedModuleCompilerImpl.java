@@ -1,12 +1,12 @@
-package xyz.oribuin.lilori.utilities.command.impl;
+package xyz.oribuin.lilori.managers.commands.command.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import xyz.oribuin.lilori.utilities.command.AnnotatedModuleCompiler;
-import xyz.oribuin.lilori.utilities.command.Command;
-import xyz.oribuin.lilori.utilities.command.CommandBuilder;
-import xyz.oribuin.lilori.utilities.command.CommandEvent;
-import xyz.oribuin.lilori.utilities.command.annotation.JDACommand;
+import xyz.oribuin.lilori.managers.commands.command.annotation.JDACommand;
+import xyz.oribuin.lilori.managers.commands.command.AnnotatedModuleCompiler;
+import xyz.oribuin.lilori.managers.commands.command.Command;
+import xyz.oribuin.lilori.managers.commands.command.CommandBuilder;
+import xyz.oribuin.lilori.managers.commands.command.CommandEvent;
 
 import java.lang.reflect.*;
 import java.util.ArrayList;

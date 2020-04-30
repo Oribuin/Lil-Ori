@@ -1,9 +1,8 @@
 package xyz.oribuin.lilori.commands.music;
 
-import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import xyz.oribuin.lilori.managers.music.TrackManager;
-import xyz.oribuin.lilori.utilities.command.Command;
-import xyz.oribuin.lilori.utilities.command.CommandEvent;
+import xyz.oribuin.lilori.managers.commands.command.Command;
+import xyz.oribuin.lilori.managers.commands.command.CommandEvent;
 
 public class CmdClear extends Command {
     private boolean loop;

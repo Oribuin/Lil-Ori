@@ -1,4 +1,4 @@
-package xyz.oribuin.lilori.utilities.commons;
+package xyz.oribuin.lilori.managers.commands.commons;
 
 public final class SafeIdUtil {
 

@@ -1,8 +1,8 @@
 package xyz.oribuin.lilori.commands.games;
 
 import net.dv8tion.jda.api.EmbedBuilder;
-import xyz.oribuin.lilori.utilities.command.Command;
-import xyz.oribuin.lilori.utilities.command.CommandEvent;
+import xyz.oribuin.lilori.managers.commands.command.Command;
+import xyz.oribuin.lilori.managers.commands.command.CommandEvent;
 
 import java.util.ArrayList;
 import java.util.List;

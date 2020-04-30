@@ -1,4 +1,4 @@
-package xyz.oribuin.lilori.utilities.command.impl;
+package xyz.oribuin.lilori.managers.commands.command.impl;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.OnlineStatus;
@@ -19,9 +19,9 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import xyz.oribuin.lilori.utilities.command.*;
-import xyz.oribuin.lilori.utilities.commons.FixedSizeCache;
-import xyz.oribuin.lilori.utilities.commons.SafeIdUtil;
+import xyz.oribuin.lilori.managers.commands.command.*;
+import xyz.oribuin.lilori.managers.commands.commons.FixedSizeCache;
+import xyz.oribuin.lilori.managers.commands.commons.SafeIdUtil;
 
 import java.io.IOException;
 import java.io.Reader;

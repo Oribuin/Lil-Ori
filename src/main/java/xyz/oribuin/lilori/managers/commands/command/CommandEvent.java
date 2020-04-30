@@ -1,4 +1,4 @@
-package xyz.oribuin.lilori.utilities.command;
+package xyz.oribuin.lilori.managers.commands.command;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.*;
@@ -7,7 +7,7 @@ import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.exceptions.PermissionException;
 import net.dv8tion.jda.internal.utils.Checks;
 import org.jetbrains.annotations.NotNull;
-import xyz.oribuin.lilori.utilities.command.impl.CommandClientImpl;
+import xyz.oribuin.lilori.managers.commands.command.impl.CommandClientImpl;
 
 import java.io.File;
 import java.util.ArrayList;

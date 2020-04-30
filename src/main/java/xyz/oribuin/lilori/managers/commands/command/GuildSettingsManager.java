@@ -1,4 +1,4 @@
-package xyz.oribuin.lilori.utilities.command;
+package xyz.oribuin.lilori.managers.commands.command;
 
 import net.dv8tion.jda.api.entities.Guild;
 

@@ -1,4 +1,4 @@
-package xyz.oribuin.lilori.utilities.menu;
+package xyz.oribuin.lilori.managers.commands.menu;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
@@ -10,7 +10,7 @@ import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.exceptions.PermissionException;
 import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.internal.utils.Checks;
-import xyz.oribuin.lilori.utilities.commons.waiter.EventWaiter;
+import xyz.oribuin.lilori.managers.commands.commons.waiter.EventWaiter;
 
 import java.awt.*;
 import java.util.Arrays;

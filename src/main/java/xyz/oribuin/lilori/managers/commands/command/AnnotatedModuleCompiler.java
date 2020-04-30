@@ -1,4 +1,4 @@
-package xyz.oribuin.lilori.utilities.command;
+package xyz.oribuin.lilori.managers.commands.command;
 
 import java.util.List;
 

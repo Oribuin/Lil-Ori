@@ -1,7 +1,7 @@
 package xyz.oribuin.lilori.commands.music;
 
-import xyz.oribuin.lilori.utilities.command.Command;
-import xyz.oribuin.lilori.utilities.command.CommandEvent;
+import xyz.oribuin.lilori.managers.commands.command.Command;
+import xyz.oribuin.lilori.managers.commands.command.CommandEvent;
 
 public class CmdSkip extends Command {
 

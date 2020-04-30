@@ -1,7 +1,7 @@
-package xyz.oribuin.lilori.utilities.command.annotation;
+package xyz.oribuin.lilori.managers.commands.command.annotation;
 
 import net.dv8tion.jda.api.Permission;
-import xyz.oribuin.lilori.utilities.command.Command;
+import xyz.oribuin.lilori.managers.commands.command.Command;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

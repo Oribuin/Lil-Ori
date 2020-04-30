@@ -2,9 +2,9 @@ package xyz.oribuin.lilori.commands.games;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
-import xyz.oribuin.lilori.utilities.command.Command;
-import xyz.oribuin.lilori.utilities.command.CommandEvent;
-import xyz.oribuin.lilori.utilities.commons.waiter.EventWaiter;
+import xyz.oribuin.lilori.managers.commands.command.Command;
+import xyz.oribuin.lilori.managers.commands.command.CommandEvent;
+import xyz.oribuin.lilori.managers.commands.commons.waiter.EventWaiter;
 
 import java.awt.*;
 import java.util.Random;

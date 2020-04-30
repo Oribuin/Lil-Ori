@@ -3,12 +3,11 @@ package xyz.oribuin.lilori.commands.author;
 import com.google.gson.Gson;
 import net.dv8tion.jda.api.EmbedBuilder;
 import xyz.oribuin.lilori.LilOri;
-import xyz.oribuin.lilori.utilities.command.Command;
-import xyz.oribuin.lilori.utilities.command.CommandEvent;
+import xyz.oribuin.lilori.managers.commands.command.Command;
+import xyz.oribuin.lilori.managers.commands.command.CommandEvent;
 
 import java.awt.*;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.util.HashMap;

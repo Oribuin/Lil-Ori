@@ -1,7 +1,7 @@
 package xyz.oribuin.lilori.commands.games;
 
-import xyz.oribuin.lilori.utilities.command.Command;
-import xyz.oribuin.lilori.utilities.command.CommandEvent;
+import xyz.oribuin.lilori.managers.commands.command.Command;
+import xyz.oribuin.lilori.managers.commands.command.CommandEvent;
 
 import java.util.Random;
 import java.util.concurrent.TimeUnit;

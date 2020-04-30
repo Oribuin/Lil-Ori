@@ -2,8 +2,8 @@ package xyz.oribuin.lilori.commands.music;
 
 import xyz.oribuin.lilori.managers.music.GuildMusicManager;
 import xyz.oribuin.lilori.managers.music.TrackManager;
-import xyz.oribuin.lilori.utilities.command.Command;
-import xyz.oribuin.lilori.utilities.command.CommandEvent;
+import xyz.oribuin.lilori.managers.commands.command.Command;
+import xyz.oribuin.lilori.managers.commands.command.CommandEvent;
 
 import java.util.concurrent.TimeUnit;
 

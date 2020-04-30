@@ -1,7 +1,7 @@
 package xyz.oribuin.lilori.commands.author;
 
-import xyz.oribuin.lilori.utilities.command.Command;
-import xyz.oribuin.lilori.utilities.command.CommandEvent;
+import xyz.oribuin.lilori.managers.commands.command.Command;
+import xyz.oribuin.lilori.managers.commands.command.CommandEvent;
 
 public class CmdShutdown extends Command {
 
