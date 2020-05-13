@@ -1,9 +1,9 @@
 package xyz.oribuin.lilori.commands.music;
 
 import net.dv8tion.jda.api.Permission;
-import xyz.oribuin.lilori.managers.music.TrackManager;
 import xyz.oribuin.lilori.managers.commands.command.Command;
 import xyz.oribuin.lilori.managers.commands.command.CommandEvent;
+import xyz.oribuin.lilori.managers.music.TrackManager;
 
 import java.util.concurrent.TimeUnit;
 
@@ -11,7 +11,7 @@ public class CmdPlay extends Command {
 
     public CmdPlay() {
         this.name = "Play";
-        this.help = "Play Music";
+        this.description = "Play Music";
         this.category = new Category("Music");
         this.arguments = "<URL>";
         this.hidden = true;

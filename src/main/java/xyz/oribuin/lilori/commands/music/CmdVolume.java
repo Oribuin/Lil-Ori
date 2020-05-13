@@ -1,16 +1,16 @@
 package xyz.oribuin.lilori.commands.music;
 
-import xyz.oribuin.lilori.managers.music.GuildMusicManager;
-import xyz.oribuin.lilori.managers.music.TrackManager;
 import xyz.oribuin.lilori.managers.commands.command.Command;
 import xyz.oribuin.lilori.managers.commands.command.CommandEvent;
+import xyz.oribuin.lilori.managers.music.GuildMusicManager;
+import xyz.oribuin.lilori.managers.music.TrackManager;
 
 import java.util.concurrent.TimeUnit;
 
 public class CmdVolume extends Command {
     public CmdVolume() {
         this.name = "Volume";
-        this.help = "Change the volume of the music.";
+        this.description = "Change the volume of the music.";
         this.category = new Command.Category("Music");
         this.arguments = "<Volume>";
         this.hidden = true;

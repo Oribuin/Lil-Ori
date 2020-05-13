@@ -15,7 +15,7 @@ public class CmdHelp extends Command {
 
     public CmdHelp(EventWaiter waiter) {
         this.name = "Help";
-        this.help = "Get the list of commands for the bot.";
+        this.description = "Get the list of commands for the bot.";
         this.category = new Category("Info");
         this.arguments = "<page>";
 
@@ -67,7 +67,7 @@ public class CmdHelp extends Command {
                         && event.getMember().getPermissions().containsAll(Arrays.asList(command.getUserPermissions()))
                         && event.getMember().hasPermission(event.getTextChannel())
                         && event.getSelfMember().getPermissions().containsAll(Arrays.asList(command.getBotPermissions())))
-                .map(command -> "(`" + command.getCategory().getName() + "`) **" + command.getName() + "** " + command.getArguments() + " - " + command.getHelp() + "\n")
+                .map(command -> "(`" + command.getCategory().getName() + "`) **" + command.getName() + "** " + command.getArguments() + " - " + command.getDescription() + "\n")
                 .forEach(pbuilder::addItems);
 
         Paginator p = pbuilder.setColor(event.isFromType(ChannelType.TEXT) ? event.getSelfMember().getColor() : Color.black)

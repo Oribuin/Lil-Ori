@@ -8,8 +8,6 @@ import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.emote.EmoteAddedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
-import java.io.File;
-import java.util.List;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -27,7 +25,8 @@ public class Presence extends ListenerAdapter {
         Activity[] activities = {
                 Activity.watching("Ori Code"),
                 Activity.watching("My ram nervously"),
-                Activity.watching("Ori fail at HTML")
+                Activity.watching("Ori fail at MySQL"),
+                Activity.watching("Database")
         };
 
 

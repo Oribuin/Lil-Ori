@@ -6,7 +6,7 @@ import xyz.oribuin.lilori.managers.commands.command.CommandEvent;
 public class CmdGetTrack extends Command {
     public CmdGetTrack() {
         this.name = "Track";
-        this.help = "Get the info about the current track.";
+        this.description = "Get the info about the current track.";
         this.category = new Command.Category("Music");
         this.arguments = "";
         this.hidden = true;

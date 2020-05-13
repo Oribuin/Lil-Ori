@@ -44,6 +44,8 @@ public interface CommandClient {
 
     int getCommandUses(String name);
 
+    Command getCommandByName(String name);
+
     String getOwnerId();
 
     long getOwnerIdLong();

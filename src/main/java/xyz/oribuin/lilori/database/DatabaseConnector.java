@@ -3,10 +3,6 @@ package xyz.oribuin.lilori.database;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-/**
- * @author Esophose
- */
-
 public interface DatabaseConnector {
 
     /**

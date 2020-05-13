@@ -16,7 +16,7 @@ public class CmdPerms extends Command {
     public CmdPerms(EventWaiter waiter) {
         this.name = "Permissions";
         this.aliases = new String[]{"Perms"};
-        this.help = "List of permissions the bot has.";
+        this.description = "List of permissions the bot has.";
         this.guildOnly = true;
         this.category = new Category("Info");
         this.arguments = "<Page>";

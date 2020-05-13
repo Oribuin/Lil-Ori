@@ -14,13 +14,15 @@ import java.util.function.Predicate;
 
 public abstract class Command {
 
-    protected String name = "None";
+    protected String name = "none";
 
-    protected String help = "No Help Available.";
+    protected String description = "No description defined.";
 
     protected Category category;
 
     protected String arguments = null;
+
+    protected boolean enabled = true;
 
     protected boolean guildOnly = false;
 
@@ -43,8 +45,6 @@ public abstract class Command {
     protected boolean usesTopicTags = true;
 
     protected boolean hidden = false;
-
-    protected boolean disabled = false;
 
     protected CooldownScope cooldownScope = CooldownScope.USER;
 
@@ -91,8 +91,8 @@ public abstract class Command {
             return;
         }
 
-        if (disabled) {
-            terminate(event, null);
+        if (!enabled) {
+            terminate(event, "This command is currently disabled.");
             return;
         }
 
@@ -171,16 +171,9 @@ public abstract class Command {
             throw t;
         }
 
-        if (event.getClient().
-
-                getListener() != null)
-            event.getClient().
-
-                    getListener().
-
-                    onCompletedCommand(event, this);
+        if (event.getClient().getListener() != null)
+            event.getClient().getListener().onCompletedCommand(event, this);
     }
-
 
     public boolean isCommandFor(String input) {
         if (name.equalsIgnoreCase(input))
@@ -220,8 +213,12 @@ public abstract class Command {
         return name;
     }
 
-    public String getHelp() {
-        return help;
+    public String getDescription() {
+        return description;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
     }
 
     public Category getCategory() {
@@ -266,10 +263,6 @@ public abstract class Command {
 
     public boolean isHidden() {
         return hidden;
-    }
-
-    public boolean isDisabled() {
-        return disabled;
     }
 
     public boolean isWhitelisted(String id) {

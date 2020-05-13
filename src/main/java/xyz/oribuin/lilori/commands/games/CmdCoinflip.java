@@ -13,7 +13,7 @@ public class CmdCoinflip extends Command {
         this.category = new Category("Games");
         this.aliases = new String[]{"flip"};
         this.arguments = "";
-        this.help = "Flip a coin.";
+        this.description = "Flip a coin.";
     }
 
     @Override

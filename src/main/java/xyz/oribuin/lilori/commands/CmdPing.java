@@ -10,7 +10,7 @@ public class CmdPing extends Command {
     public CmdPing() {
         this.name = "Ping";
         this.aliases = new String[]{"latency"};
-        this.help = "Get the latency ping for the bot.";
+        this.description = "Get the latency ping for the bot.";
         this.category = new Category("Info");
         this.arguments = "";
     }

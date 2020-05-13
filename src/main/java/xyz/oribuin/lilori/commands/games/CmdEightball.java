@@ -14,7 +14,7 @@ public class CmdEightball extends Command {
         this.category = new Category("Games");
         this.aliases = new String[]{"Ball"};
         this.arguments = "<Question>";
-        this.help = "Ask the 8ball any question?";
+        this.description = "Ask the 8ball any question?";
         this.cooldown = 3;
         this.cooldownScope = CooldownScope.CHANNEL;
     }

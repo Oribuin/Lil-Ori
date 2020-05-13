@@ -13,12 +13,11 @@ import java.util.concurrent.TimeUnit;
 public class CmdMute extends Command {
     public CmdMute() {
         this.name = "Mute";
-        this.help = "Mute a member from talking in the guild";
+        this.description = "Mute a member from talking in the guild";
         this.cooldown = 2;
         this.category = new Command.Category("Moderation");
         this.guildOnly = true;
         this.arguments = "<Setup/@User>";
-        this.disabled = true;
 
         this.botPermissions = new Permission[]{Permission.MANAGE_ROLES, Permission.MANAGE_CHANNEL, Permission.MANAGE_PERMISSIONS};
         this.userPermissions = new Permission[]{Permission.MANAGE_ROLES, Permission.MANAGE_CHANNEL, Permission.MANAGE_PERMISSIONS};

@@ -2,6 +2,7 @@ package xyz.oribuin.lilori;
 
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import xyz.oribuin.lilori.commands.CmdCommand;
 import xyz.oribuin.lilori.commands.CmdHelp;
 import xyz.oribuin.lilori.commands.CmdPing;
 import xyz.oribuin.lilori.commands.administrative.CmdPerms;
@@ -16,26 +17,24 @@ import xyz.oribuin.lilori.database.DatabaseConnector;
 import xyz.oribuin.lilori.database.SQLiteConnector;
 import xyz.oribuin.lilori.listeners.EventMentionOri;
 import xyz.oribuin.lilori.listeners.Presence;
-import xyz.oribuin.lilori.managers.DataMigrationManager;
-import xyz.oribuin.lilori.managers.music.GuildMusicManager;
-import xyz.oribuin.lilori.managers.music.TrackManager;
 import xyz.oribuin.lilori.managers.commands.command.CommandClient;
 import xyz.oribuin.lilori.managers.commands.command.CommandClientBuilder;
 import xyz.oribuin.lilori.managers.commands.commons.waiter.EventWaiter;
+import xyz.oribuin.lilori.managers.music.GuildMusicManager;
+import xyz.oribuin.lilori.managers.music.TrackManager;
 
 import javax.security.auth.login.LoginException;
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintStream;
 
 public class LilOri extends ListenerAdapter {
 
     private static LilOri instance;
     private DatabaseConnector connector;
-    private DataMigrationManager dataManager;
 
     private LilOri() throws LoginException {
         instance = this;
-        this.dataManager = new DataMigrationManager(this);
 
         EventWaiter waiter = new EventWaiter();
         CommandClientBuilder cmdBuilder = new CommandClientBuilder();
@@ -49,16 +48,26 @@ public class LilOri extends ListenerAdapter {
         addCommands(cmdBuilder, waiter);
         CommandClient client = cmdBuilder.build();
 
-        // Set up database
-        File directory = new File("data", "quotes.json").getParentFile();
-        this.connector = new SQLiteConnector(directory, "lilori");
+        // Setup the SQLite Database
+        File file = new File("data", "lilori.db");
+        try {
+            if (!file.exists()) {
+                file.createNewFile();
+
+                System.out.println("Created SQLite Database File: lilori.db");
+            }
+
+            // Register SQLite Connector
+            this.connector = new SQLiteConnector(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         // Login Bot
         JDABuilder.createDefault(Settings.TOKEN)
                 .addEventListeners(waiter, client,
                         new Presence(),
                         new EventMentionOri()
-
                 ).build();
 
         // Load Music Managers
@@ -82,14 +91,16 @@ public class LilOri extends ListenerAdapter {
                 new CmdEval(),
                 new CmdTest(),
                 new CmdQuote(),
+                new CmdQuery(),
 
                 new CmdHelp(waiter),
-                new CmdPerms(waiter),
+                new CmdCommand(),
                 new CmdPing(),
+                new CmdPerms(waiter),
 
                 new CmdCoinflip(),
                 new CmdEightball(),
-                new CmdGay(waiter),
+                new CmdGay(),
                 new CmdSlap(),
                 new CmdFeed(),
 
@@ -125,9 +136,5 @@ public class LilOri extends ListenerAdapter {
 
     public DatabaseConnector getConnector() {
         return connector;
-    }
-
-    public DataMigrationManager getDataManager() {
-        return dataManager;
     }
 }

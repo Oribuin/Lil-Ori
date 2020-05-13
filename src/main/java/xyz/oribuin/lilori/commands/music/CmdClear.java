@@ -1,15 +1,15 @@
 package xyz.oribuin.lilori.commands.music;
 
-import xyz.oribuin.lilori.managers.music.TrackManager;
 import xyz.oribuin.lilori.managers.commands.command.Command;
 import xyz.oribuin.lilori.managers.commands.command.CommandEvent;
+import xyz.oribuin.lilori.managers.music.TrackManager;
 
 public class CmdClear extends Command {
     private boolean loop;
 
     public CmdClear() {
         this.name = "loop";
-        this.help = "fuck.";
+        this.description = "fuck.";
         this.category = new Command.Category("Music");
         this.arguments = "";
         this.ownerCommand = true;

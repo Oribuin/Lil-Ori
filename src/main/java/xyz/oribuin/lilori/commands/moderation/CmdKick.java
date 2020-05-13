@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 public class CmdKick extends Command {
     public CmdKick() {
         this.name = "Kick";
-        this.help = "Kick a member from the guild.";
+        this.description = "Kick a member from the guild.";
         this.cooldown = 2;
         this.category = new Command.Category("Moderation");
         this.guildOnly = true;

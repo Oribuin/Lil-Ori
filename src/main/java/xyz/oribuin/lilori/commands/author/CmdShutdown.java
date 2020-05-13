@@ -5,10 +5,11 @@ import xyz.oribuin.lilori.managers.commands.command.CommandEvent;
 
 public class CmdShutdown extends Command {
 
+
     public CmdShutdown() {
-        this.name = "Shutdown";
+        this.name = "database";
         this.category = new Category("Author");
-        this.help = "Shutdown the bot.";
+        this.description = "Shutdown the bot.";
         this.arguments = "[None]";
         this.guildOnly = true;
         this.ownerCommand = true;
@@ -16,7 +17,8 @@ public class CmdShutdown extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
-        event.reply("Now Shutting Down.");
-        event.getJDA().shutdown();
+        String[] args = event.getMessage().getContentRaw().split(" ");
+
+
     }
 }

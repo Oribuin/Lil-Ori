@@ -11,7 +11,7 @@ public class CmdBan extends Command {
     public CmdBan() {
         this.name = "Ban";
         this.aliases = new String[]{"Expel"};
-        this.help = "Ban a member from entering your guild";
+        this.description = "Ban a member from entering your guild";
         this.cooldown = 2;
         this.category = new Command.Category("Moderation");
         this.guildOnly = true;

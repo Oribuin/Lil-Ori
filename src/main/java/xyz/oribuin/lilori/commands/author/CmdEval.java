@@ -11,11 +11,12 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import java.awt.*;
+import java.util.concurrent.TimeUnit;
 
 public class CmdEval extends Command {
     public CmdEval() {
         this.name = "Eval";
-        this.help = "An evaluation.";
+        this.description = "An evaluation.";
         this.category = new Category("Test");
         this.arguments = "<Code>";
         this.hidden = true;
@@ -43,10 +44,8 @@ public class CmdEval extends Command {
         se.put("watching", Activity.watching(eval));
         se.put("playing", Activity.playing(eval));
 
-        for (Permission permission : Permission.values()) {
+        for (Permission permission : Permission.values())
             se.put(permission.getName(), permission);
-            System.out.println(permission.getName() + " " + permission);
-        }
 
         for (OnlineStatus value : OnlineStatus.values())
             se.put(value.name(), value);
@@ -68,6 +67,7 @@ public class CmdEval extends Command {
                 .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png")
                 .setDescription("**Eval:**```java\n" + eval + "```\n**Exception:**\n" + error);
 
-        event.reply(embedBuilder.build());
+        event.deleteCmd();
+        event.timedReply(embedBuilder.build(), 5, TimeUnit.SECONDS);
     }
 }

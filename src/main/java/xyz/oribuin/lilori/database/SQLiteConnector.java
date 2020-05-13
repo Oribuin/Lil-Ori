@@ -14,8 +14,9 @@ public class SQLiteConnector implements DatabaseConnector {
     private final String connectionString;
     private Connection connection;
 
-    public SQLiteConnector(File directory, String dbName) {
-        this.connectionString = "jdbc:sqlite" + new File(directory, dbName + ".db").getAbsolutePath();
+    public SQLiteConnector(File dbFile) {
+        this.connectionString = "jdbc:sqlite:" + dbFile;
+
         try {
             Class.forName("org.sqlite.JDBC"); // Make sure the driver is actually registered
         } catch (ClassNotFoundException e) {

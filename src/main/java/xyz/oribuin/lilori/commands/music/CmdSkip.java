@@ -8,7 +8,7 @@ public class CmdSkip extends Command {
 
     public CmdSkip() {
         this.name = "Skip";
-        this.help = "Skip the current track.";
+        this.description = "Skip the current track.";
         this.category = new Command.Category("Music");
         this.arguments = "";
         this.hidden = true;

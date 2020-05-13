@@ -13,7 +13,7 @@ public class CmdPresence extends Command {
         this.category = new Category("Author");
         this.aliases = new String[]{"Status"};
         this.arguments = "<OnlineStatus> <Activity> <String>";
-        this.help = "Set bot activity..";
+        this.description = "Set bot activity..";
         this.ownerCommand = true;
 
         this.waiter = waiter;

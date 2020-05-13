@@ -16,7 +16,7 @@ public @interface JDACommand {
 
     String[] name() default {"null"};
 
-    String help() default "No Help Available.";
+    String description() default "No description defined.";
 
     boolean guildOnly() default false;
 

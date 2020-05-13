@@ -122,7 +122,7 @@ public class CommandClientImpl implements CommandClient, EventListener {
                     }
                     builder.append("\n`").append(textPrefix).append(prefix == null ? " " : "").append(command.getName())
                             .append(command.getArguments() == null ? "`" : " " + command.getArguments() + "`")
-                            .append(" - ").append(command.getHelp());
+                            .append(" - ").append(command.getDescription());
                 }
             }
             User owner = event.getJDA().getUserById(ownerId);
@@ -203,6 +203,14 @@ public class CommandClientImpl implements CommandClient, EventListener {
     public int getCommandUses(String name) {
         return uses.getOrDefault(name, 0);
     }
+
+    @Override
+    public Command getCommandByName(String name) {
+        List<Command> commandList = new ArrayList<>();
+        this.getCommands().stream().filter(command -> command.getName().equals(name)).forEach(commandList::add);
+        return commandList.get(0);
+    }
+
 
     @Override
     public void addCommand(Command command) {

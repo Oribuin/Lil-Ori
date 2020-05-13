@@ -12,7 +12,7 @@ public class CmdFeed extends Command {
     public CmdFeed() {
         this.name = "Feed";
         this.aliases = new String[]{"snack"};
-        this.help = "Feed' Lil Ori Cookies.";
+        this.description = "Feed' Lil Ori Cookies.";
         this.category = new Category("Games");
         this.arguments = "";
     }

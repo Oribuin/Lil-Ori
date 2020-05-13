@@ -1,14 +1,14 @@
 package xyz.oribuin.lilori.commands.music;
 
-import xyz.oribuin.lilori.managers.music.GuildMusicManager;
-import xyz.oribuin.lilori.managers.music.TrackManager;
 import xyz.oribuin.lilori.managers.commands.command.Command;
 import xyz.oribuin.lilori.managers.commands.command.CommandEvent;
+import xyz.oribuin.lilori.managers.music.GuildMusicManager;
+import xyz.oribuin.lilori.managers.music.TrackManager;
 
 public class CmdStop extends Command {
     public CmdStop() {
         this.name = "Stop";
-        this.help = "Stops playing Music.";
+        this.description = "Stops playing Music.";
         this.category = new Category("Music");
         this.arguments = "";
         this.hidden = true;

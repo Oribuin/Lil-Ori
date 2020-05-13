@@ -2,11 +2,11 @@ package xyz.oribuin.lilori.managers.commands.command.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import xyz.oribuin.lilori.managers.commands.command.annotation.JDACommand;
 import xyz.oribuin.lilori.managers.commands.command.AnnotatedModuleCompiler;
 import xyz.oribuin.lilori.managers.commands.command.Command;
 import xyz.oribuin.lilori.managers.commands.command.CommandBuilder;
 import xyz.oribuin.lilori.managers.commands.command.CommandEvent;
+import xyz.oribuin.lilori.managers.commands.command.annotation.JDACommand;
 
 import java.lang.reflect.*;
 import java.util.ArrayList;
@@ -58,7 +58,7 @@ public class AnnotatedModuleCompilerImpl implements AnnotatedModuleCompiler {
             for (int i = 1; i < names.length; i++)
                 builder.addAliases(names[i]);
 
-        builder.setHelp(properties.help());
+        builder.setDescription(properties.description());
 
         builder.setArguments(properties.arguments().trim().isEmpty() ? null : properties.arguments().trim());
 

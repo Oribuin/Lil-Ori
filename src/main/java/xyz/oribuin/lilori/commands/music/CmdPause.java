@@ -6,7 +6,7 @@ import xyz.oribuin.lilori.managers.commands.command.CommandEvent;
 public class CmdPause extends Command {
     public CmdPause() {
         this.name = "Pause";
-        this.help = "Pause the current track.";
+        this.description = "Pause the current track.";
         this.category = new Command.Category("Music");
         this.arguments = "";
         this.hidden = true;

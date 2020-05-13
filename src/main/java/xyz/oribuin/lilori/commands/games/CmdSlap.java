@@ -15,7 +15,7 @@ public class CmdSlap extends Command {
         this.name = "Slap";
         this.category = new Category("Games");
         this.arguments = "<@Users>";
-        this.help = "Slap a user";
+        this.description = "Slap a user";
     }
 
     protected void execute(CommandEvent event) {
@@ -48,7 +48,8 @@ public class CmdSlap extends Command {
                 "https://media1.tenor.com/images/153b2f1bfd3c595c920ce60f1553c5f7/tenor.gif",
                 "https://media1.tenor.com/images/3fd96f4dcba48de453f2ab3acd657b53/tenor.gif",
                 "https://media1.tenor.com/images/0892a52155ac70d401126ede4d46ed5e/tenor.gif",
-                "https://media1.tenor.com/images/8b7788813720b2db4a28c64458f3bd81/tenor.gif"
+                "https://media1.tenor.com/images/8b7788813720b2db4a28c64458f3bd81/tenor.gif",
+                "https://media1.tenor.com/images/477821d58203a6786abea01d8cf1030e/tenor.gif"
         };
 
         int randomGif = new Random().nextInt(gifUrls.length);
@@ -59,7 +60,7 @@ public class CmdSlap extends Command {
 
         EmbedBuilder embedBuilder = new EmbedBuilder()
                 .setDescription(event.getAuthor().getAsMention() + " **Slapped** " + userMentions.toString()
-                        .replaceAll("\\[", "").replaceAll("]", "") + "**!**")
+                        .replaceAll("\\[", "").replace("]", "") + "**!**")
                 .setImage(gifUrls[randomGif])
                 .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png");
 

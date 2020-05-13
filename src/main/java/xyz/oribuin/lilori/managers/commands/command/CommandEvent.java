@@ -446,17 +446,6 @@ public class CommandEvent {
         return event.getGuild().getMember(user);
     }
 
-    /**
-     * public void banMember(@@NotNull User user, int days, String reason) {
-     * event.getGuild().getMember(user).ban(days, reason).queue();
-     * }
-     * <p>
-     * public void banMember(@NotNull User user, int days, String reason) {
-     * event.getGuild().getMember(user).ban(days, reason).queue();
-     * }
-     */
-
-
     public JDA getJDA() {
         return event.getJDA();
     }

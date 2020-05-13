@@ -9,7 +9,8 @@ import java.util.function.Consumer;
 
 public class CommandBuilder {
     private String name = "None";
-    private String help = "No Help Available.";
+    private String description = "No description defined.";
+    private boolean enabled = true;
     private Command.Category category = null;
     private String arguments = null;
     private boolean guildOnly = true;
@@ -24,7 +25,6 @@ public class CommandBuilder {
     private boolean usesTopicTags = true;
     private Command.CooldownScope cooldownScope = Command.CooldownScope.USER;
     private boolean hidden = false;
-    private boolean disabled = false;
     private String guildId = null;
 
     public CommandBuilder setName(String name) {
@@ -35,11 +35,16 @@ public class CommandBuilder {
         return null;
     }
 
-    public CommandBuilder setHelp(String help) {
-        if (help == null)
-            this.help = "No Help Available.";
+    public CommandBuilder setEnabled(boolean enabled) {
+        this.enabled = enabled;
+        return this;
+    }
+
+    public CommandBuilder setDescription(String description) {
+        if (description == null)
+            this.description = "No description defined.";
         else
-            this.help = help;
+            this.description = description;
         return this;
     }
 
@@ -89,6 +94,7 @@ public class CommandBuilder {
         return this;
     }
 
+
     public CommandBuilder addAliases(String... aliases) {
         for (String alias : aliases)
             addAliases(alias);
@@ -136,11 +142,6 @@ public class CommandBuilder {
         return this;
     }
 
-    public CommandBuilder setDisabled(boolean disabled) {
-        this.disabled = disabled;
-        return this;
-    }
-
     public CommandBuilder setGuildId(String id) {
         this.guildId = id;
         return null;
@@ -151,11 +152,11 @@ public class CommandBuilder {
     }
 
     public Command build(BiConsumer<Command, CommandEvent> execution) {
-        return new BlankCommand(name, help, category, arguments,
+        return new BlankCommand(name, description, enabled, category, arguments,
                 guildOnly, requiredRole, ownerCommand, cooldown,
                 userPermissions, botPermissions, aliases.toArray(new String[0]),
                 children.toArray(new Command[0]), helpBiConsumer, usesTopicTags,
-                cooldownScope, hidden, disabled, guildId) {
+                cooldownScope, hidden, guildId) {
 
             @Override
             protected void execute(CommandEvent event) {
@@ -164,15 +165,16 @@ public class CommandBuilder {
         };
     }
 
-    private abstract class BlankCommand extends Command {
-        BlankCommand(String name, String help, Category category, String arguments, boolean guildOnly, String requiredRole,
+    private abstract static class BlankCommand extends Command {
+        BlankCommand(String name, String description, boolean enabled, Category category, String arguments, boolean guildOnly, String requiredRole,
                      boolean ownerCommand, int cooldown, Permission[] userPermissions,
                      Permission[] botPermissions, String[] aliases, Command[] children,
                      BiConsumer<CommandEvent, Command> helpBiConsumer,
-                     boolean usesTopicTags, CooldownScope cooldownScope, boolean hidden, boolean disabled, String guildId) {
+                     boolean usesTopicTags, CooldownScope cooldownScope, boolean hidden, String guildId) {
 
             this.name = name;
-            this.help = help;
+            this.description = description;
+            this.enabled = enabled;
             this.category = category;
             this.arguments = arguments;
             this.guildOnly = guildOnly;
@@ -187,7 +189,6 @@ public class CommandBuilder {
             this.usesTopicTags = usesTopicTags;
             this.cooldownScope = cooldownScope;
             this.hidden = hidden;
-            this.disabled = disabled;
             this.guildId = guildId;
         }
     }
