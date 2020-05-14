@@ -1,8 +1,8 @@
 package xyz.oribuin.lilori.commands.games;
 
 import net.dv8tion.jda.api.EmbedBuilder;
-import xyz.oribuin.lilori.managers.commands.command.Command;
-import xyz.oribuin.lilori.managers.commands.command.CommandEvent;
+import xyz.oribuin.lilori.managers.command.Command;
+import xyz.oribuin.lilori.managers.command.CommandEvent;
 
 import java.awt.*;
 
@@ -13,12 +13,11 @@ public class CmdFeed extends Command {
         this.name = "Feed";
         this.aliases = new String[]{"snack"};
         this.description = "Feed' Lil Ori Cookies.";
-        this.category = new Category("Games");
-        this.arguments = "";
+        //this.arguments = "";
     }
 
     @Override
-    protected void execute(CommandEvent event) {
+    public void executeCommand(CommandEvent event) {
         String[] args = event.getMessage().getContentRaw().split(" ");
 
         if (args.length >= 2) {

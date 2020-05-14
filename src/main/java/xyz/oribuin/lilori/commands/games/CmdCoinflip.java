@@ -1,7 +1,7 @@
 package xyz.oribuin.lilori.commands.games;
 
-import xyz.oribuin.lilori.managers.commands.command.Command;
-import xyz.oribuin.lilori.managers.commands.command.CommandEvent;
+import xyz.oribuin.lilori.managers.command.Command;
+import xyz.oribuin.lilori.managers.command.CommandEvent;
 
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -10,14 +10,12 @@ public class CmdCoinflip extends Command {
 
     public CmdCoinflip() {
         this.name = "Coinflip";
-        this.category = new Category("Games");
         this.aliases = new String[]{"flip"};
-        this.arguments = "";
+        //this.arguments = "";
         this.description = "Flip a coin.";
     }
 
-    @Override
-    protected void execute(CommandEvent event) {
+    public void executeCommand(CommandEvent event) {
         int lowerInt = 1;
         int higherInt = 100;
         event.getChannel().sendMessage(":moneybag: Flipping...").queue(message -> {

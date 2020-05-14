@@ -4,8 +4,8 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Activity;
-import xyz.oribuin.lilori.managers.commands.command.Command;
-import xyz.oribuin.lilori.managers.commands.command.CommandEvent;
+import xyz.oribuin.lilori.managers.command.Command;
+import xyz.oribuin.lilori.managers.command.CommandEvent;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -17,14 +17,10 @@ public class CmdEval extends Command {
     public CmdEval() {
         this.name = "Eval";
         this.description = "An evaluation.";
-        this.category = new Category("Test");
-        this.arguments = "<Code>";
-        this.hidden = true;
-        this.ownerCommand = true;
     }
 
     @Override
-    protected void execute(CommandEvent event) {
+    public void executeCommand(CommandEvent event) {
         String[] args = event.getMessage().getContentRaw().split(" ");
 
         if (args.length == 1) {
@@ -40,7 +36,7 @@ public class CmdEval extends Command {
         se.put("guild", event.getGuild());
         se.put("message", event.getMessage());
         se.put("channel", event.getChannel());
-        se.put("voice", event.getSelfMember().getVoiceState());
+        se.put("voice", event.getGuild().getSelfMember().getVoiceState());
         se.put("watching", Activity.watching(eval));
         se.put("playing", Activity.playing(eval));
 

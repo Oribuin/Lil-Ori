@@ -1,8 +1,8 @@
 package xyz.oribuin.lilori.commands.games;
 
 import net.dv8tion.jda.api.EmbedBuilder;
-import xyz.oribuin.lilori.managers.commands.command.Command;
-import xyz.oribuin.lilori.managers.commands.command.CommandEvent;
+import xyz.oribuin.lilori.managers.command.Command;
+import xyz.oribuin.lilori.managers.command.CommandEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,12 +13,12 @@ public class CmdSlap extends Command {
 
     public CmdSlap() {
         this.name = "Slap";
-        this.category = new Category("Games");
-        this.arguments = "<@Users>";
+        //this.arguments = "<@Users>";
         this.description = "Slap a user";
     }
 
-    protected void execute(CommandEvent event) {
+    @Override
+    public void executeCommand(CommandEvent event) {
         String[] args = event.getMessage().getContentRaw().split(" ");
 
         if (args.length < 2) {

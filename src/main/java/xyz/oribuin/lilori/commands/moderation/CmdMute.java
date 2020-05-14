@@ -4,8 +4,8 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
-import xyz.oribuin.lilori.managers.commands.command.Command;
-import xyz.oribuin.lilori.managers.commands.command.CommandEvent;
+import xyz.oribuin.lilori.managers.command.Command;
+import xyz.oribuin.lilori.managers.command.CommandEvent;
 
 import java.awt.*;
 import java.util.concurrent.TimeUnit;
@@ -14,17 +14,14 @@ public class CmdMute extends Command {
     public CmdMute() {
         this.name = "Mute";
         this.description = "Mute a member from talking in the guild";
-        this.cooldown = 2;
-        this.category = new Command.Category("Moderation");
-        this.guildOnly = true;
-        this.arguments = "<Setup/@User>";
+        //this.arguments = "<Setup/@User>";
 
         this.botPermissions = new Permission[]{Permission.MANAGE_ROLES, Permission.MANAGE_CHANNEL, Permission.MANAGE_PERMISSIONS};
         this.userPermissions = new Permission[]{Permission.MANAGE_ROLES, Permission.MANAGE_CHANNEL, Permission.MANAGE_PERMISSIONS};
     }
 
     @Override
-    protected void execute(CommandEvent event) {
+    public void executeCommand(CommandEvent event) {
         String[] args = event.getMessage().getContentRaw().split(" ");
 
         if (args.length < 2) {
@@ -45,6 +42,7 @@ public class CmdMute extends Command {
             Role role = event.getGuild().getRolesByName("Muted", true).get(0);
             Member mentioned = event.getMessage().getMentionedMembers().get(0);
 
+            /*
             if (mentioned.isOwner() || event.isHigher(mentioned, event.getMember()) || event.isBot(mentioned)) {
                 event.deleteCmd(10, TimeUnit.SECONDS);
                 event.timedReply(event.getAuthor().getAsMention() + ", You cannot kick this user due to rank hierarchy.", 10, TimeUnit.SECONDS);
@@ -56,9 +54,10 @@ public class CmdMute extends Command {
                 event.timedReply(event.getAuthor().getAsMention() + ", This user is already muted.", 10, TimeUnit.SECONDS);
                 return;
             }
+             */
 
 
-            event.muteMember(event.getMember(), role);
+            event.getGuild().addRoleToMember(mentioned, role).queue();
             event.deleteCmd(10, TimeUnit.SECONDS);
             event.reply(event.getAuthor().getAsMention() + ", You have muted " + mentioned.getUser().getAsTag() + ".");
         }

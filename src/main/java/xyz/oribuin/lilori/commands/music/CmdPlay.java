@@ -1,8 +1,9 @@
 package xyz.oribuin.lilori.commands.music;
 
 import net.dv8tion.jda.api.Permission;
-import xyz.oribuin.lilori.managers.commands.command.Command;
-import xyz.oribuin.lilori.managers.commands.command.CommandEvent;
+import net.dv8tion.jda.api.entities.TextChannel;
+import xyz.oribuin.lilori.managers.command.Command;
+import xyz.oribuin.lilori.managers.command.CommandEvent;
 import xyz.oribuin.lilori.managers.music.TrackManager;
 
 import java.util.concurrent.TimeUnit;
@@ -12,14 +13,10 @@ public class CmdPlay extends Command {
     public CmdPlay() {
         this.name = "Play";
         this.description = "Play Music";
-        this.category = new Category("Music");
-        this.arguments = "<URL>";
-        this.hidden = true;
         this.botPermissions = new Permission[]{Permission.MESSAGE_MANAGE};
     }
 
-    @Override
-    protected void execute(CommandEvent event) {
+    public void executeCommand(CommandEvent event) {
         TrackManager trackManager = new TrackManager();
         String[] args = event.getMessage().getContentRaw().split(" ");
 
@@ -40,6 +37,6 @@ public class CmdPlay extends Command {
 
         event.getMessage().delete().queue();
         event.getGuild().getAudioManager().openAudioConnection(event.getMember().getVoiceState().getChannel());
-        trackManager.loadAndPlay(event.getTextChannel(), input);
+        trackManager.loadAndPlay((TextChannel) event.getChannel(), input);
     }
 }

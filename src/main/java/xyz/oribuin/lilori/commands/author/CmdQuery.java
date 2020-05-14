@@ -2,8 +2,8 @@ package xyz.oribuin.lilori.commands.author;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import xyz.oribuin.lilori.LilOri;
-import xyz.oribuin.lilori.managers.commands.command.Command;
-import xyz.oribuin.lilori.managers.commands.command.CommandEvent;
+import xyz.oribuin.lilori.managers.command.Command;
+import xyz.oribuin.lilori.managers.command.CommandEvent;
 
 import java.awt.*;
 import java.sql.PreparedStatement;
@@ -13,15 +13,11 @@ public class CmdQuery extends Command {
     public CmdQuery() {
         this.name = "Query";
         this.description = "Query a command in MySQL.";
-        this.category = new Command.Category("Author");
-        this.arguments = "<Query>";
-
-        this.hidden = true;
-        this.ownerCommand = true;
+        //this.arguments = "<Query>";
     }
 
     @Override
-    protected void execute(CommandEvent event) {
+    public void executeCommand(CommandEvent event) {
         String[] args = event.getMessage().getContentRaw().split(" ");
 
         if (args.length < 2) return;
