@@ -2,8 +2,8 @@ package xyz.oribuin.lilori.commands.moderation;
 
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
-import xyz.oribuin.lilori.managers.commands.command.Command;
-import xyz.oribuin.lilori.managers.commands.command.CommandEvent;
+import xyz.oribuin.lilori.managers.command.Command;
+import xyz.oribuin.lilori.managers.command.CommandEvent;
 
 import java.util.concurrent.TimeUnit;
 
@@ -12,17 +12,14 @@ public class CmdBan extends Command {
         this.name = "Ban";
         this.aliases = new String[]{"Expel"};
         this.description = "Ban a member from entering your guild";
-        this.cooldown = 2;
-        this.category = new Command.Category("Moderation");
-        this.guildOnly = true;
-        this.arguments = "<@User> <Messages> <Reason>";
+        ////this.arguments = "<@User> <Messages> <Reason>";
 
         this.userPermissions = new Permission[]{Permission.MESSAGE_MANAGE, Permission.BAN_MEMBERS};
         this.botPermissions = new Permission[]{Permission.MESSAGE_MANAGE, Permission.BAN_MEMBERS};
     }
 
     @Override
-    protected void execute(CommandEvent event) {
+    public void executeCommand(CommandEvent event) {
         String[] args = event.getMessage().getContentRaw().split(" ");
 
         if (args.length <= 3) {
@@ -39,11 +36,14 @@ public class CmdBan extends Command {
 
         Member mentioned = event.getMessage().getMentionedMembers().get(0);
 
+        // TODO: Add check for if higher and isBot
+        /*
         if (mentioned.isOwner() || event.isHigher(mentioned, mentioned) || event.isBot(mentioned)) {
             event.deleteCmd(10, TimeUnit.SECONDS);
             event.timedReply(event.getAuthor().getAsMention() + ", You cannot ban this user due to rank hierarchy.", 10, TimeUnit.SECONDS);
             return;
         }
+         */
 
         int messages;
         String reason = event.getMessage().getContentRaw().substring(args[0].length() + 1 + args[1].length() + 1 + args[2].length() + 1);

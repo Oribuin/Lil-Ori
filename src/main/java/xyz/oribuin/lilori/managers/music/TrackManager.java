@@ -29,6 +29,12 @@ public class TrackManager {
         AudioSourceManagers.registerLocalSource(playerManager);
     }
 
+    private static void connectChannel(AudioManager audioManager) {
+        if (!audioManager.isConnected() && !audioManager.isAttemptingToConnect()) {
+            audioManager.openAudioConnection(audioManager.getGuild().getSelfMember().getVoiceState().getChannel());
+        }
+    }
+
     public synchronized GuildMusicManager getGuildAudioPlayer(Guild guild) {
         long guildId = Long.parseLong(guild.getId());
 
@@ -107,12 +113,6 @@ public class TrackManager {
         if (looping) {
             musicManager.scheduler.onTrackEnd(musicManager.player, musicManager.player.getPlayingTrack(), AudioTrackEndReason.FINISHED);
             loadAndPlay(textChannel, musicManager.player.getPlayingTrack().getInfo().uri);
-        }
-    }
-
-    private static void connectChannel(AudioManager audioManager) {
-        if (!audioManager.isConnected() && !audioManager.isAttemptingToConnect()) {
-            audioManager.openAudioConnection(audioManager.getGuild().getSelfMember().getVoiceState().getChannel());
         }
     }
 }

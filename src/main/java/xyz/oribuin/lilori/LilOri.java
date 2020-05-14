@@ -1,52 +1,48 @@
 package xyz.oribuin.lilori;
 
+import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import xyz.oribuin.lilori.commands.CmdCommand;
 import xyz.oribuin.lilori.commands.CmdHelp;
 import xyz.oribuin.lilori.commands.CmdPing;
+import xyz.oribuin.lilori.commands.CmdPrefix;
 import xyz.oribuin.lilori.commands.administrative.CmdPerms;
-import xyz.oribuin.lilori.commands.author.*;
+import xyz.oribuin.lilori.commands.author.CmdEval;
+import xyz.oribuin.lilori.commands.author.CmdQuery;
+import xyz.oribuin.lilori.commands.author.CmdShutdown;
+import xyz.oribuin.lilori.commands.author.CmdTest;
 import xyz.oribuin.lilori.commands.games.*;
-import xyz.oribuin.lilori.commands.moderation.CmdBan;
-import xyz.oribuin.lilori.commands.moderation.CmdKick;
-import xyz.oribuin.lilori.commands.moderation.CmdMute;
-import xyz.oribuin.lilori.commands.moderation.CmdPurge;
-import xyz.oribuin.lilori.commands.music.*;
+import xyz.oribuin.lilori.commands.music.CmdPlay;
+import xyz.oribuin.lilori.commands.music.CmdStop;
 import xyz.oribuin.lilori.database.DatabaseConnector;
 import xyz.oribuin.lilori.database.SQLiteConnector;
 import xyz.oribuin.lilori.listeners.EventMentionOri;
 import xyz.oribuin.lilori.listeners.Presence;
-import xyz.oribuin.lilori.managers.commands.command.CommandClient;
-import xyz.oribuin.lilori.managers.commands.command.CommandClientBuilder;
-import xyz.oribuin.lilori.managers.commands.commons.waiter.EventWaiter;
-import xyz.oribuin.lilori.managers.music.GuildMusicManager;
-import xyz.oribuin.lilori.managers.music.TrackManager;
+import xyz.oribuin.lilori.managers.GuildSettingsManager;
+import xyz.oribuin.lilori.managers.command.Command;
+import xyz.oribuin.lilori.managers.command.CommandEvent;
+import xyz.oribuin.lilori.managers.command.CommandExecutor;
+import xyz.oribuin.lilori.managers.command.CommandHandler;
+import xyz.oribuin.lilori.utils.EventWaiter;
 
 import javax.security.auth.login.LoginException;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.sql.PreparedStatement;
 
 public class LilOri extends ListenerAdapter {
 
     private static LilOri instance;
     private DatabaseConnector connector;
+    private GuildSettingsManager guildSettingsManager;
+    private CommandHandler commandHandler;
 
     private LilOri() throws LoginException {
         instance = this;
-
         EventWaiter waiter = new EventWaiter();
-        CommandClientBuilder cmdBuilder = new CommandClientBuilder();
-
-        // Define Command Builder
-        cmdBuilder.setOwnerId("345406020450779149");
-        cmdBuilder.setPrefix(";");
-        cmdBuilder.useHelpBuilder(false);
-        cmdBuilder.setEmojis("<:tick:682145393898815536>", ":warning: ", "<cross:682145379281666049>");
-        cmdBuilder.useStatus(false);
-        addCommands(cmdBuilder, waiter);
-        CommandClient client = cmdBuilder.build();
 
         // Setup the SQLite Database
         File file = new File("data", "lilori.db");
@@ -63,63 +59,27 @@ public class LilOri extends ListenerAdapter {
             e.printStackTrace();
         }
 
+        // Setup Managers
+        this.guildSettingsManager = new GuildSettingsManager(this);
+        this.commandHandler = new CommandHandler();
+
+        this.registerCommands();
+        enable();
+
         // Login Bot
-        JDABuilder.createDefault(Settings.TOKEN)
-                .addEventListeners(waiter, client,
+        JDA jda = JDABuilder.createDefault(Settings.TOKEN)
+                .addEventListeners(waiter, new CommandExecutor(this, commandHandler),
                         new Presence(),
                         new EventMentionOri()
                 ).build();
 
-        // Load Music Managers
-        TrackManager trackManager = new TrackManager();
-        GuildMusicManager musicManager = new GuildMusicManager(trackManager.playerManager);
-        musicManager.player.setVolume(100);
 
         // Startup Message
-        PrintStream system = System.out;
-        system.println("***********************");
-        system.println(" ");
-        system.println("Bot Loaded: Lil' Ori");
-        system.println("Version: v1.0.0");
-        system.println("Author: Oribuin");
-        system.println(" ");
-        system.println("***********************");
-    }
+        for (Command command : this.getCommandHandler().getCommands()){
+            System.out.println("Loaded Command: " + command.getName());
+        }
 
-    private void addCommands(CommandClientBuilder commandBuilder, EventWaiter waiter) {
-        commandBuilder.addCommands(
-                new CmdEval(),
-                new CmdTest(),
-                new CmdQuote(),
-                new CmdQuery(),
-
-                new CmdHelp(waiter),
-                new CmdCommand(),
-                new CmdPing(),
-                new CmdPerms(waiter),
-
-                new CmdCoinflip(),
-                new CmdEightball(),
-                new CmdGay(),
-                new CmdSlap(),
-                new CmdFeed(),
-
-                new CmdVolume(),
-                new CmdPause(),
-                new CmdSkip(),
-                new CmdGetTrack(),
-                new CmdClear(),
-                new CmdPlay(),
-                new CmdStop(),
-
-                new CmdBan(),
-                new CmdKick(),
-                new CmdMute(),
-                new CmdPurge(waiter),
-
-                new CmdPresence(waiter),
-                new CmdShutdown()
-        );
+        System.out.println("Loaded Up " + jda.getSelfUser().getName() + " with " + this.getCommandHandler().getCommands().size() + " Command(s)");
     }
 
     public static void main(String... args) {
@@ -134,7 +94,50 @@ public class LilOri extends ListenerAdapter {
         return instance;
     }
 
+    private void registerCommands() {
+        this.getCommandHandler().registerCommands(
+                // General Commands
+                new CmdHelp(),
+                new CmdPing(),
+                new CmdPrefix(),
+                new CmdCommand(),
+
+                // Music Commands
+                new CmdPlay(),
+                new CmdStop(),
+
+                // Game Commands
+                new CmdCoinflip(),
+                new CmdEightball(),
+                new CmdFeed(),
+                new CmdGay(),
+                new CmdQuote(),
+                new CmdSlap(),
+
+                // Author
+                new CmdEval(),
+                new CmdQuery(),
+                new CmdShutdown(),
+                new CmdTest(),
+
+                // Admin
+                new CmdPerms()
+        );
+    }
+
+    private void enable() {
+        this.guildSettingsManager.enable();
+    }
+
     public DatabaseConnector getConnector() {
         return connector;
+    }
+
+    public GuildSettingsManager getGuildSettingsManager() {
+        return guildSettingsManager;
+    }
+
+    public CommandHandler getCommandHandler() {
+        return commandHandler;
     }
 }

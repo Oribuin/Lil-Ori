@@ -2,8 +2,9 @@ package xyz.oribuin.lilori.commands.games;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import xyz.oribuin.lilori.LilOri;
-import xyz.oribuin.lilori.managers.commands.command.Command;
-import xyz.oribuin.lilori.managers.commands.command.CommandEvent;
+import xyz.oribuin.lilori.Settings;
+import xyz.oribuin.lilori.managers.command.Command;
+import xyz.oribuin.lilori.managers.command.CommandEvent;
 
 import java.awt.*;
 import java.sql.PreparedStatement;
@@ -14,18 +15,16 @@ public class CmdQuote extends Command {
     public CmdQuote() {
         this.name = "Quote";
         this.description = "Quote command.";
-        this.category = new Category("Test");
-        this.arguments = "";
-        this.hidden = true;
+        //this.arguments = "";
     }
 
     @Override
-    protected void execute(CommandEvent event) {
+    public void executeCommand(CommandEvent event) {
         String[] args = event.getMessage().getContentRaw().split(" ");
 
         switch (args[1].toLowerCase()) {
             case "add":
-                if (!event.getAuthor().getId().equals(event.getClient().getOwnerId())) return;
+                if (!event.getAuthor().getId().equals(Settings.OWNER_ID)) return;
 
                 if (args.length >= 5) {
                     String QUOTE_ID = args[2].toLowerCase();
@@ -65,7 +64,7 @@ public class CmdQuote extends Command {
                 }
                 break;
             case "remove":
-                if (!event.getAuthor().getId().equals(event.getClient().getOwnerId())) return;
+                if (!event.getAuthor().getId().equals(Settings.OWNER_ID)) return;
 
                 if (args.length == 3) {
                     LilOri.getInstance().getConnector().connect(connection -> {

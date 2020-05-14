@@ -7,9 +7,9 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import xyz.oribuin.lilori.managers.commands.command.Command;
-import xyz.oribuin.lilori.managers.commands.command.CommandEvent;
-import xyz.oribuin.lilori.managers.commands.commons.waiter.EventWaiter;
+import xyz.oribuin.lilori.managers.command.Command;
+import xyz.oribuin.lilori.managers.command.CommandEvent;
+import xyz.oribuin.lilori.utils.EventWaiter;
 
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -23,20 +23,18 @@ public class CmdPurge extends Command {
         this.name = "Purge";
         this.aliases = new String[]{"clear"};
         this.description = "Mass clear server messages.";
-        this.category = new Category("Moderation");
-        this.guildOnly = true;
-        this.arguments = "<Channel/Msgs/User> <#Channel/Number/@User>";
+        //this.arguments = "<Channel/Msgs/User> <#Channel/Number/@User>";
         this.botPermissions = new Permission[]{Permission.MESSAGE_MANAGE, Permission.MANAGE_PERMISSIONS, Permission.MANAGE_CHANNEL};
         this.userPermissions = new Permission[]{Permission.MESSAGE_MANAGE, Permission.MANAGE_PERMISSIONS, Permission.MANAGE_CHANNEL};
         this.waiter = waiter;
     }
 
     @Override
-    protected void execute(CommandEvent event) {
+    public void executeCommand(CommandEvent event) {
 
         // Variables
         String[] args = event.getMessage().getContentRaw().split(" ");
-        TextChannel channel = event.getTextChannel();
+        TextChannel channel = (TextChannel) event.getChannel();
         OffsetDateTime time = event.getMessage().getTimeCreated();
         if (event.getMember() == null) return;
 
@@ -151,7 +149,8 @@ public class CmdPurge extends Command {
             }
 
             Member member = event.getMessage().getMentionedMembers().get(0);
-            if (member.hasPermission(Permission.ADMINISTRATOR) || member.getUser().isBot() || event.isHigher(member, event.getMember())) {
+            // || member.getUser().isBot() || event.isHigher(member, event.getMember())
+            if (member.hasPermission(Permission.ADMINISTRATOR)) {
                 event.timedReply(event.getMessage().getAuthor().getAsMention() + ", You cannot purge this user's messages.", 10, TimeUnit.SECONDS);
                 event.deleteCmd(10, TimeUnit.SECONDS);
                 return;

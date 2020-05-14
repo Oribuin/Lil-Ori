@@ -1,8 +1,8 @@
 package xyz.oribuin.lilori.commands.games;
 
 import net.dv8tion.jda.api.EmbedBuilder;
-import xyz.oribuin.lilori.managers.commands.command.Command;
-import xyz.oribuin.lilori.managers.commands.command.CommandEvent;
+import xyz.oribuin.lilori.managers.command.Command;
+import xyz.oribuin.lilori.managers.command.CommandEvent;
 
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -11,15 +11,12 @@ public class CmdEightball extends Command {
 
     public CmdEightball() {
         this.name = "Eightball";
-        this.category = new Category("Games");
         this.aliases = new String[]{"Ball"};
-        this.arguments = "<Question>";
+        //this.arguments = "<Question>";
         this.description = "Ask the 8ball any question?";
-        this.cooldown = 3;
-        this.cooldownScope = CooldownScope.CHANNEL;
     }
 
-    protected void execute(CommandEvent event) {
+    public void executeCommand(CommandEvent event) {
         String[] args = event.getMessage().getContentRaw().split(" ");
 
         if (args.length < 2) {
