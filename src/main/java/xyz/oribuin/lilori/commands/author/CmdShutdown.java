@@ -6,7 +6,7 @@ import xyz.oribuin.lilori.managers.command.CommandEvent;
 public class CmdShutdown extends Command {
 
     public CmdShutdown() {
-        this.name = "shutdown";
+        this.name = "Shutdown";
         this.description = "Shutdown the bot.";
         //this.arguments = "[None]";
         this.ownerOnly = true;
@@ -18,6 +18,8 @@ public class CmdShutdown extends Command {
 
         event.getChannel().sendMessage("**Shutting down bot**").queue();
         event.getJDA().shutdown();
+
+
 
     }
 }

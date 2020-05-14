@@ -8,11 +8,13 @@ public class CmdTest extends Command {
     public CmdTest() {
         this.name = "Test";
         this.description = "A test command.";
-        //this.arguments = "[None]";
+        this.ownerOnly = true;
 
     }
 
     @Override
     public void executeCommand(CommandEvent event) {
+
+
     }
 }

@@ -111,6 +111,7 @@ public class LilOri extends ListenerAdapter {
 
                 // Game Commands
                 new CmdCoinflip(),
+                new CmdColor(),
                 new CmdEightball(),
                 new CmdFeed(),
                 new CmdGay(),
