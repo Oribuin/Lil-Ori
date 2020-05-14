@@ -2,7 +2,6 @@ package xyz.oribuin.lilori;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import xyz.oribuin.lilori.commands.CmdCommand;
 import xyz.oribuin.lilori.commands.CmdHelp;
@@ -14,6 +13,10 @@ import xyz.oribuin.lilori.commands.author.CmdQuery;
 import xyz.oribuin.lilori.commands.author.CmdShutdown;
 import xyz.oribuin.lilori.commands.author.CmdTest;
 import xyz.oribuin.lilori.commands.games.*;
+import xyz.oribuin.lilori.commands.moderation.CmdBan;
+import xyz.oribuin.lilori.commands.moderation.CmdKick;
+import xyz.oribuin.lilori.commands.moderation.CmdMute;
+import xyz.oribuin.lilori.commands.moderation.CmdPurge;
 import xyz.oribuin.lilori.commands.music.CmdPlay;
 import xyz.oribuin.lilori.commands.music.CmdStop;
 import xyz.oribuin.lilori.database.DatabaseConnector;
@@ -22,7 +25,6 @@ import xyz.oribuin.lilori.listeners.EventMentionOri;
 import xyz.oribuin.lilori.listeners.Presence;
 import xyz.oribuin.lilori.managers.GuildSettingsManager;
 import xyz.oribuin.lilori.managers.command.Command;
-import xyz.oribuin.lilori.managers.command.CommandEvent;
 import xyz.oribuin.lilori.managers.command.CommandExecutor;
 import xyz.oribuin.lilori.managers.command.CommandHandler;
 import xyz.oribuin.lilori.utils.EventWaiter;
@@ -30,11 +32,10 @@ import xyz.oribuin.lilori.utils.EventWaiter;
 import javax.security.auth.login.LoginException;
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintStream;
-import java.sql.PreparedStatement;
 
 public class LilOri extends ListenerAdapter {
 
+    private EventWaiter waiter = new EventWaiter();
     private static LilOri instance;
     private DatabaseConnector connector;
     private GuildSettingsManager guildSettingsManager;
@@ -42,7 +43,6 @@ public class LilOri extends ListenerAdapter {
 
     private LilOri() throws LoginException {
         instance = this;
-        EventWaiter waiter = new EventWaiter();
 
         // Setup the SQLite Database
         File file = new File("data", "lilori.db");
@@ -74,12 +74,15 @@ public class LilOri extends ListenerAdapter {
                 ).build();
 
 
+        System.out.println("*=* Loading Lil' Ori Commands *=*");
         // Startup Message
-        for (Command command : this.getCommandHandler().getCommands()){
-            System.out.println("Loaded Command: " + command.getName());
+        int i = 0;
+        for (Command command : this.getCommandHandler().getCommands()) {
+
+            System.out.println("Loaded Command: " + command.getName() + " | (" + ++i + "/" + this.getCommandHandler().getCommands().size() + ")");
         }
 
-        System.out.println("Loaded Up " + jda.getSelfUser().getName() + " with " + this.getCommandHandler().getCommands().size() + " Command(s)");
+        System.out.println("*=* Loaded Up " + jda.getSelfUser().getName() + " with " + this.getCommandHandler().getCommands().size() + " Command(s) *=*");
     }
 
     public static void main(String... args) {
@@ -113,6 +116,12 @@ public class LilOri extends ListenerAdapter {
                 new CmdGay(),
                 new CmdQuote(),
                 new CmdSlap(),
+
+                // Moderation
+                new CmdBan(),
+                new CmdKick(),
+                new CmdMute(),
+                new CmdPurge(this.waiter),
 
                 // Author
                 new CmdEval(),

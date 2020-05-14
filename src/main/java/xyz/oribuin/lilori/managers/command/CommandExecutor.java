@@ -24,25 +24,26 @@ public class CommandExecutor extends ListenerAdapter {
 
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
         GuildSettings guildSettings = bot.getGuildSettingsManager().getGuildSettings(event.getGuild());
+
         for (Command cmd : commandHandler.getCommands()) {
 
             try {
-                if (!event.getMessage().getContentRaw().startsWith(guildSettings.getPrefix() + cmd.getName()))
-                    return;
+                if (!event.getMessage().getContentRaw().toLowerCase().startsWith(guildSettings.getPrefix().toLowerCase() + cmd.getName().toLowerCase()))
+                    continue;
 
 
-                System.out.println(1);
                 if (cmd.isOwnerOnly() && !event.getAuthor().getId().equals(Settings.OWNER_ID)) {
                     event.getChannel().sendMessage(event.getAuthor().getAsMention() + ", Sorry! You don't have permission to use this command.").queue();
                     return;
                 }
 
-                System.out.println(2);
                 if (!cmd.isEnabled())
                     return;
 
-                System.out.println(3);
-                if (cmd.getBotPermissions() != null && event.getGuild().getSelfMember().getPermissions().containsAll(Arrays.asList(cmd.getBotPermissions()))) {
+                if (event.getAuthor().isBot())
+                    return;
+
+                if (cmd.getBotPermissions() != null && !event.getGuild().getSelfMember().getPermissions().containsAll(Arrays.asList(cmd.getBotPermissions()))) {
                     EmbedBuilder botEmbed = new EmbedBuilder()
                             .setAuthor("Missing Permissions!")
                             .setColor(Color.decode("#33539e"))
@@ -53,8 +54,7 @@ public class CommandExecutor extends ListenerAdapter {
                     return;
                 }
 
-                System.out.println(4);
-                if (cmd.getUserPermissions() != null && event.getMember() != null && event.getMember().getPermissions().containsAll(Arrays.asList(cmd.getUserPermissions()))) {
+                if (cmd.getUserPermissions() != null && event.getMember() != null && !event.getMember().getPermissions().containsAll(Arrays.asList(cmd.getUserPermissions()))) {
                     EmbedBuilder userEmbed = new EmbedBuilder()
                             .setAuthor("Missing Permissions!")
                             .setColor(Color.decode("#33539e"))
@@ -65,7 +65,6 @@ public class CommandExecutor extends ListenerAdapter {
                     return;
                 }
 
-                System.out.println(5);
                 cmd.executeCommand(new CommandEvent(bot, event));
             } catch (PermissionException ex) {
                 System.out.println("Error Running Command: " + cmd.getName() +

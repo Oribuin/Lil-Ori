@@ -50,7 +50,7 @@ public class CmdPing extends Command {
                     .setColor(message.getEmbeds().get(0).getColor())
                     .setDescription("**" + ping + "ms latency** " + emoji);
 
-            message.editMessage(newEmbed.build()).queueAfter(1500, TimeUnit.NANOSECONDS);
+            message.editMessage(newEmbed.build()).queueAfter(2, TimeUnit.SECONDS);
 
         });
     }
