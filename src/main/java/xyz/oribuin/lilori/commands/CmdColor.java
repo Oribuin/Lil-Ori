@@ -1,4 +1,4 @@
-package xyz.oribuin.lilori.commands.games;
+package xyz.oribuin.lilori.commands;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import xyz.oribuin.lilori.managers.command.Command;

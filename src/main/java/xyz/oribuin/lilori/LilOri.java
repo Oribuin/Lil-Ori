@@ -3,7 +3,7 @@ package xyz.oribuin.lilori;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import xyz.oribuin.lilori.commands.CmdCommand;
+import xyz.oribuin.lilori.commands.CmdColor;
 import xyz.oribuin.lilori.commands.CmdHelp;
 import xyz.oribuin.lilori.commands.CmdPing;
 import xyz.oribuin.lilori.commands.CmdPrefix;
@@ -103,7 +103,6 @@ public class LilOri extends ListenerAdapter {
                 new CmdHelp(),
                 new CmdPing(),
                 new CmdPrefix(),
-                new CmdCommand(),
 
                 // Music Commands
                 new CmdPlay(),

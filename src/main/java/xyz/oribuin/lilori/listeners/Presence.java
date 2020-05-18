@@ -47,11 +47,4 @@ public class Presence extends ListenerAdapter {
     public void onGuildJoin(GuildJoinEvent event) {
         LilOri.getInstance().getGuildSettingsManager().loadGuildSettings(event.getGuild());
     }
-
-    public void onEmoteAdded(EmoteAddedEvent event) {
-        if (!event.getGuild().getId().equals("676064472720212028")) return;
-
-        Emote emote = event.getEmote();
-        emote.getManager().setName("emc_" + emote.getName()).queue();
-    }
 }

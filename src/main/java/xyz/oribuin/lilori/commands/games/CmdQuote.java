@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 
 public class CmdQuote extends Command {
 
+    private int quoteSize;
     public CmdQuote() {
         this.name = "Quote";
         this.description = "Quote command.";
@@ -21,6 +22,29 @@ public class CmdQuote extends Command {
     @Override
     public void executeCommand(CommandEvent event) {
         String[] args = event.getMessage().getContentRaw().split(" ");
+
+
+        LilOri.getInstance().getConnector().connect(connection -> {
+            String query = "SELECT * FROM quote_table";
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                ResultSet resultSet = statement.executeQuery();
+                if (resultSet.next()) {
+                    quoteSize = resultSet.getInt(1);
+                }
+            }
+        });
+
+        if (args.length < 2) {
+            EmbedBuilder embedBuilder = new EmbedBuilder()
+                    .setAuthor("Lil' Ori Quotes")
+                    .setColor(Color.decode("#33539e"))
+                    .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png")
+                    .setDescription("To view a quote, type " + event.getPrefix() + "quote get <id>\n \n" +
+                            "Quote Id Amount: " + 7);
+
+            event.reply(embedBuilder);
+            return;
+        }
 
         switch (args[1].toLowerCase()) {
             case "add":

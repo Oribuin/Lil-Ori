@@ -16,7 +16,7 @@ public class EventMentionOri extends ListenerAdapter {
                 .setColor(Color.decode("#33539e"))
                 .setDescription("» Discord JDA Utility Bot Created by Oribuin «\n" +
                         "\n" +
-                        "• Find all my commands using **;help**\n" +
+                        "• Find all my commands using **" + LilOri.getInstance().getGuildSettingsManager().getGuildSettings(event.getGuild()).getPrefix() + "help**\n" +
                         "• Find my source code on https://github.com/Oribuin/Lil-Ori/\n" +
                         "• Website: https://oribuin.xyz/")
                 .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png");

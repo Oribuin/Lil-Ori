@@ -31,7 +31,8 @@ public class CmdGay extends Command {
                     .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png")
                     .setDescription("**You are " + randomBound + "% Gay** :rainbow_flag:");
 
-            message.editMessage(embedBuilder.build()).queueAfter(2, TimeUnit.SECONDS);
+            event.getChannel().sendMessage(embedBuilder.build()).queueAfter(2, TimeUnit.SECONDS);
+            message.delete().queueAfter(2, TimeUnit.SECONDS);
         });
     }
 }

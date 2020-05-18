@@ -34,7 +34,7 @@ public class CmdPrefix extends Command {
 
         event.reply(embedBuilder);
         this.bot.getGuildSettingsManager().updateCommandPrefix(event.getGuild(), args[1]);
-        System.out.println(event.getAuthor().getAsTag() + " Updated " + event.getGuild().getName() + " Prefix to " + args[1]);
+        System.out.println(event.getAuthor().getAsTag() + " Updated \"" + event.getGuild().getName() + "\" Prefix to " + args[1]);
 
     }
 }

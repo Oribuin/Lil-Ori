@@ -48,7 +48,7 @@ public class Command extends ListenerAdapter {
     }
 
     public void setArguments(String[] arguments) {
-        //this.arguments = arguments;
+        this.arguments = arguments;
     }
 
     public String[] getAliases() {
