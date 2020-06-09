@@ -25,24 +25,32 @@ public class CommandExecutor extends ListenerAdapter {
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
         GuildSettings guildSettings = bot.getGuildSettingsManager().getGuildSettings(event.getGuild());
 
+        // Filter through each command
         for (Command cmd : commandHandler.getCommands()) {
 
             try {
-                if (!event.getMessage().getContentRaw().toLowerCase().startsWith(guildSettings.getPrefix().toLowerCase() + cmd.getName().toLowerCase()))
+
+                String[] args = event.getMessage().getContentRaw().split(" ");
+
+                if (!args[0].equalsIgnoreCase(guildSettings.getPrefix() + cmd.getName().toLowerCase()))
                     continue;
 
-
+                // TODO: Create a command client to store owner id
+                // Check if the command is owner only and the owner id equals to command author
                 if (cmd.isOwnerOnly() && !event.getAuthor().getId().equals(Settings.OWNER_ID)) {
                     event.getChannel().sendMessage(event.getAuthor().getAsMention() + ", Sorry! You don't have permission to use this command.").queue();
                     return;
                 }
 
+                // Check if command is enabled
                 if (!cmd.isEnabled())
                     return;
 
-                if (event.getAuthor().isBot())
+                // Check if the command author is a bot or fake
+                if (event.getAuthor().isBot() || event.getAuthor().isFake())
                     return;
 
+                // Check user permissions
                 if (cmd.getBotPermissions() != null && !event.getGuild().getSelfMember().getPermissions().containsAll(Arrays.asList(cmd.getBotPermissions()))) {
                     EmbedBuilder botEmbed = new EmbedBuilder()
                             .setAuthor("Missing Permissions!")
@@ -54,6 +62,7 @@ public class CommandExecutor extends ListenerAdapter {
                     return;
                 }
 
+                // Check user permissions
                 if (cmd.getUserPermissions() != null && event.getMember() != null && !event.getMember().getPermissions().containsAll(Arrays.asList(cmd.getUserPermissions()))) {
                     EmbedBuilder userEmbed = new EmbedBuilder()
                             .setAuthor("Missing Permissions!")
@@ -65,12 +74,14 @@ public class CommandExecutor extends ListenerAdapter {
                     return;
                 }
 
+                // Execute this command
                 cmd.executeCommand(new CommandEvent(bot, event));
             } catch (PermissionException ex) {
+                // Send permission exception log to console
                 System.out.println("Error Running Command: " + cmd.getName() +
-                        "Guild: " + event.getGuild().getName() +
-                        "Author: " + event.getAuthor().getAsTag() +
-                        "Permission: " + ex.getPermission());
+                        "\nGuild: " + event.getGuild().getName() +
+                        "\nAuthor: " + event.getAuthor().getAsTag() +
+                        "\nPermission: " + ex.getPermission());
             }
         }
     }

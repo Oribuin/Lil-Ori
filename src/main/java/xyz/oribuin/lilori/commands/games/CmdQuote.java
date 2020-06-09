@@ -13,6 +13,7 @@ import java.sql.ResultSet;
 public class CmdQuote extends Command {
 
     private int quoteSize;
+
     public CmdQuote() {
         this.name = "Quote";
         this.description = "Quote command.";
@@ -23,9 +24,8 @@ public class CmdQuote extends Command {
     public void executeCommand(CommandEvent event) {
         String[] args = event.getMessage().getContentRaw().split(" ");
 
-
         LilOri.getInstance().getConnector().connect(connection -> {
-            String query = "SELECT * FROM quote_table";
+            String query = "SELECT * FROM quotes";
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 ResultSet resultSet = statement.executeQuery();
                 if (resultSet.next()) {
@@ -40,7 +40,7 @@ public class CmdQuote extends Command {
                     .setColor(Color.decode("#33539e"))
                     .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png")
                     .setDescription("To view a quote, type " + event.getPrefix() + "quote get <id>\n \n" +
-                            "Quote Id Amount: " + 7);
+                            "Quote Id Amount: " + this.getQuoteSize());
 
             event.reply(embedBuilder);
             return;
@@ -52,31 +52,25 @@ public class CmdQuote extends Command {
 
                 if (args.length >= 5) {
                     String QUOTE_ID = args[2].toLowerCase();
-                    String QUOTE_AUTHOR = args[3];
+                    String QUOTE_AUTHOR = args[3].replace("_", " ");
                     String QUOTE = event.getMessage().getContentRaw().substring(args[0].length() + args[1].length() + args[2].length() + args[3].length() + 4);
 
-                    LilOri.getInstance().getConnector().connect(connection -> {
-                        String query = "INSERT INTO quote_table (quote_id, quote_author, quote)" +
-                                "VALUES (?, ?, ?)";
-
-                        try (PreparedStatement statement = connection.prepareStatement(query)) {
-                            statement.setString(1, QUOTE_ID);
-                            statement.setString(2, QUOTE_AUTHOR.replace("_", " "));
-                            statement.setString(3, QUOTE);
-                            statement.executeUpdate();
-                        }
-                    });
+                    this.bot.getDataManager().updateQuote(QUOTE_ID, QUOTE_AUTHOR, QUOTE);
 
                     event.reply(event.getAuthor().getAsMention() + ", Added quote to the database!");
-                    System.out.println(event.getAuthor().getAsTag() + " Added a quote to the database.\n \n" + QUOTE_ID + "\n" + QUOTE_AUTHOR + "\n" + QUOTE);
+                    System.out.println(event.getAuthor().getAsTag() + " Added a quote to the database.\n \n" + args[2] + "\n" + args[3].replace("_", " ") + "\n" + args[3]);
+                    return;
                 }
+
+                event.reply(event.getAuthor().getAsMention() + ", Correct Usage: " + event.getPrefix() + "quote add <QUOTE_ID> <QUOTE_AUTHOR> <QUOTE>");
                 break;
             case "select":
 
                 if (args.length == 3) {
+
                     LilOri.getInstance().getConnector().connect(connection -> {
 
-                        String query = "SELECT quote FROM quote_table WHERE quote_id = ?";
+                        String query = "SELECT quote FROM quotes WHERE label = ?";
                         try (PreparedStatement statement = connection.prepareStatement(query)) {
                             statement.setString(1, args[2]);
 
@@ -85,32 +79,33 @@ public class CmdQuote extends Command {
                                 event.reply(resultSet.getString(1));
                         }
                     });
+                    return;
                 }
+
+                event.reply(event.getAuthor().getAsMention() + ", Correct Usage: " + event.getPrefix() + "quote select <QUOTE_ID>");
                 break;
             case "remove":
                 if (!event.getAuthor().getId().equals(Settings.OWNER_ID)) return;
 
                 if (args.length == 3) {
-                    LilOri.getInstance().getConnector().connect(connection -> {
-                        String query = "DELETE FROM quote_table WHERE quote_id = ?";
-                        try (PreparedStatement removeStatement = connection.prepareStatement(query)) {
-                            removeStatement.setString(1, args[2]);
-                            removeStatement.executeUpdate();
-                        }
+                    this.bot.getDataManager().removeQuote(args[2]);
 
-                        event.reply(event.getAuthor().getAsMention() + ", Removed a quote from the database!");
-                        System.out.println(event.getAuthor().getAsTag() + " Removed a quote from the database.\nQuote Id: " + args[2]);
-                    });
+                    event.reply(event.getAuthor().getAsMention() + ", Removed a quote from the database!");
+                    System.out.println(event.getAuthor().getAsTag() + " Removed a quote from the database.\nQuote Id: " + args[2]);
+                    return;
                 }
+
+                event.reply(event.getAuthor().getAsMention() + ", Correct Usage: " + event.getPrefix() + "quote remove <QUOTE_ID>");
                 break;
 
             case "get":
                 if (args.length == 3) {
                     LilOri.getInstance().getConnector().connect(connection -> {
-                        String query = "SELECT * FROM quote_table WHERE quote_id = ?";
+                        String query = "SELECT * FROM quotes WHERE label = ?";
 
                         try (PreparedStatement getStatement = connection.prepareStatement(query)) {
                             getStatement.setString(1, args[2]);
+
                             ResultSet resultSet = getStatement.executeQuery();
                             if (resultSet.next()) {
                                 EmbedBuilder embedBuilder = new EmbedBuilder()
@@ -124,10 +119,31 @@ public class CmdQuote extends Command {
                             }
                         }
                     });
+
+                    return;
                 }
+
+                event.reply(event.getAuthor().getAsMention() + ", Correct Usage: " + event.getPrefix() + "quote get <QUOTE_ID>");
                 break;
             default:
                 event.reply(event.getAuthor().getAsMention() + ", Invalid Args.");
         }
+    }
+
+    private int getQuoteSize() {
+        quoteSize = 0;
+
+        LilOri.getInstance().getConnector().connect(connection -> {
+            String query = "SELECT * FROM quotes";
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                ResultSet result = statement.executeQuery();
+                if (!result.next())
+                    return;
+
+                quoteSize = result.getInt(1);
+            }
+        });
+
+        return quoteSize;
     }
 }

@@ -30,29 +30,30 @@ public class CmdEval extends Command {
 
         final String eval = event.getMessage().getContentRaw().substring(args[0].length() + 1);
 
-        ScriptEngine se = new ScriptEngineManager().getEngineByName("nashorn");
-        se.put("bot", event.getJDA());
-        se.put("event", event);
-        se.put("guild", event.getGuild());
-        se.put("message", event.getMessage());
-        se.put("channel", event.getChannel());
-        se.put("voice", event.getGuild().getSelfMember().getVoiceState());
-        se.put("watching", Activity.watching(eval));
-        se.put("playing", Activity.playing(eval));
+        ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
+        engine.put("bot", event.getJDA());
+        engine.put("event", event);
+        engine.put("guild", event.getGuild());
+        engine.put("message", event.getMessage());
+        engine.put("channel", event.getChannel());
+        engine.put("voice", event.getGuild().getSelfMember().getVoiceState());
+        engine.put("watching", Activity.watching(eval));
+        engine.put("playing", Activity.playing(eval));
 
         for (Permission permission : Permission.values())
-            se.put(permission.getName(), permission);
+            engine.put(permission.getName(), permission);
 
         for (OnlineStatus value : OnlineStatus.values())
-            se.put(value.name(), value);
+            engine.put(value.name(), value);
 
         for (Activity.ActivityType activityType : Activity.ActivityType.values())
-            se.put(activityType.name(), activityType);
+            engine.put(activityType.name(), activityType);
+
 
         String error = null;
 
         try {
-            se.eval(eval);
+            engine.eval(eval);
         } catch (ScriptException e) {
             error = e.getMessage();
         }

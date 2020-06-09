@@ -4,6 +4,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import xyz.oribuin.lilori.LilOri;
+import xyz.oribuin.lilori.Settings;
 
 import java.awt.*;
 

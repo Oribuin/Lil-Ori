@@ -14,7 +14,5 @@ public class CmdTest extends Command {
 
     @Override
     public void executeCommand(CommandEvent event) {
-
-
     }
 }

@@ -15,6 +15,7 @@ public class Command extends ListenerAdapter {
     protected boolean ownerOnly = false;
     protected Permission[] userPermissions;
     protected Permission[] botPermissions;
+
     public Command() {
         this.bot = LilOri.getInstance();
     }
@@ -23,56 +24,28 @@ public class Command extends ListenerAdapter {
         // Unused
     }
 
-    public void setUserPermission(Permission[] permissions) {
-        this.userPermissions = permissions;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public String[] getArguments() {
         return arguments;
-    }
-
-    public void setArguments(String[] arguments) {
-        this.arguments = arguments;
     }
 
     public String[] getAliases() {
         return aliases;
     }
 
-    public void setAliases(String[] aliases) {
-        this.aliases = aliases;
-    }
-
     public boolean isEnabled() {
         return enabled;
     }
 
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
     public boolean isOwnerOnly() {
         return ownerOnly;
-    }
-
-    public void setOwnerOnly(boolean ownerOnly) {
-        this.ownerOnly = ownerOnly;
     }
 
     public Permission[] getUserPermissions() {
@@ -83,7 +56,4 @@ public class Command extends ListenerAdapter {
         return botPermissions;
     }
 
-    public void setBotPermissions(Permission[] permissions) {
-        this.botPermissions = permissions;
-    }
 }

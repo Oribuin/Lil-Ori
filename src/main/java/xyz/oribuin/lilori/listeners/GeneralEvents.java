@@ -1,12 +1,11 @@
 package xyz.oribuin.lilori.listeners;
 
 import net.dv8tion.jda.api.entities.Activity;
-import net.dv8tion.jda.api.entities.Emote;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.DisconnectEvent;
 import net.dv8tion.jda.api.events.ReadyEvent;
-import net.dv8tion.jda.api.events.emote.EmoteAddedEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
+import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import xyz.oribuin.lilori.LilOri;
 
@@ -14,7 +13,7 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class Presence extends ListenerAdapter {
+public class GeneralEvents extends ListenerAdapter {
     public void onReady(ReadyEvent event) {
         for (Guild guild : event.getJDA().getGuilds()) {
             LilOri.getInstance().getGuildSettingsManager().loadGuildSettings(guild);
@@ -46,5 +45,9 @@ public class Presence extends ListenerAdapter {
 
     public void onGuildJoin(GuildJoinEvent event) {
         LilOri.getInstance().getGuildSettingsManager().loadGuildSettings(event.getGuild());
+    }
+
+    public void onGuildLeave(GuildLeaveEvent event) {
+        LilOri.getInstance().getGuildSettingsManager().removeGuildSettings(event.getGuild());
     }
 }

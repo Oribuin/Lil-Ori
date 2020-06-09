@@ -20,6 +20,5 @@ public class CmdShutdown extends Command {
         event.getJDA().shutdown();
 
 
-
     }
 }

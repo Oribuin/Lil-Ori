@@ -136,7 +136,7 @@ public class CmdPurge extends Command {
                                 consumer.getMessage().addReaction("✅").queue();
                             }
                         }, 2, TimeUnit.MINUTES, () -> {
-                            if (!waiter.isShutdown())
+                            if (waiter.isShutdown())
                                 waiter.shutdown();
                         });
             }

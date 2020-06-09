@@ -2,6 +2,7 @@ package xyz.oribuin.lilori;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import xyz.oribuin.lilori.commands.CmdColor;
 import xyz.oribuin.lilori.commands.CmdHelp;
@@ -22,7 +23,8 @@ import xyz.oribuin.lilori.commands.music.CmdStop;
 import xyz.oribuin.lilori.database.DatabaseConnector;
 import xyz.oribuin.lilori.database.SQLiteConnector;
 import xyz.oribuin.lilori.listeners.EventMentionOri;
-import xyz.oribuin.lilori.listeners.Presence;
+import xyz.oribuin.lilori.listeners.GeneralEvents;
+import xyz.oribuin.lilori.managers.DataManager;
 import xyz.oribuin.lilori.managers.GuildSettingsManager;
 import xyz.oribuin.lilori.managers.command.Command;
 import xyz.oribuin.lilori.managers.command.CommandExecutor;
@@ -35,17 +37,21 @@ import java.io.IOException;
 
 public class LilOri extends ListenerAdapter {
 
-    private EventWaiter waiter = new EventWaiter();
     private static LilOri instance;
-    private DatabaseConnector connector;
-    private GuildSettingsManager guildSettingsManager;
     private CommandHandler commandHandler;
+    private DatabaseConnector connector;
+    private DataManager dataManager;
+    private EventWaiter waiter = new EventWaiter();
+    private GuildSettingsManager guildSettingsManager;
+
 
     private LilOri() throws LoginException {
         instance = this;
 
         // Setup the SQLite Database
         File file = new File("data", "lilori.db");
+
+
         try {
             if (!file.exists()) {
                 file.createNewFile();
@@ -62,25 +68,20 @@ public class LilOri extends ListenerAdapter {
         // Setup Managers
         this.guildSettingsManager = new GuildSettingsManager(this);
         this.commandHandler = new CommandHandler();
+        this.dataManager = new DataManager(this);
 
         this.registerCommands();
-        enable();
+        this.enable();
 
         // Login Bot
         JDA jda = JDABuilder.createDefault(Settings.TOKEN)
-                .addEventListeners(waiter, new CommandExecutor(this, commandHandler),
-                        new Presence(),
-                        new EventMentionOri()
-                ).build();
-
+                .addEventListeners(waiter, new CommandExecutor(this, commandHandler), new GeneralEvents(), new EventMentionOri(), this).build();
 
         System.out.println("*=* Loading Lil' Ori Commands *=*");
-        // Startup Message
         int i = 0;
-        for (Command command : this.getCommandHandler().getCommands()) {
 
+        for (Command command : this.getCommandHandler().getCommands())
             System.out.println("Loaded Command: " + command.getName() + " | (" + ++i + "/" + this.getCommandHandler().getCommands().size() + ")");
-        }
 
         System.out.println("*=* Loaded Up " + jda.getSelfUser().getName() + " with " + this.getCommandHandler().getCommands().size() + " Command(s) *=*");
     }
@@ -136,17 +137,22 @@ public class LilOri extends ListenerAdapter {
 
     private void enable() {
         this.guildSettingsManager.enable();
+        this.dataManager.enable();
+    }
+
+    public CommandHandler getCommandHandler() {
+        return commandHandler;
     }
 
     public DatabaseConnector getConnector() {
         return connector;
     }
 
-    public GuildSettingsManager getGuildSettingsManager() {
-        return guildSettingsManager;
+    public DataManager getDataManager() {
+        return dataManager;
     }
 
-    public CommandHandler getCommandHandler() {
-        return commandHandler;
+    public GuildSettingsManager getGuildSettingsManager() {
+        return guildSettingsManager;
     }
 }
