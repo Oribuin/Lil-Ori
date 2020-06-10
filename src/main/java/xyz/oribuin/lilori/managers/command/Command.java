@@ -4,13 +4,15 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import xyz.oribuin.lilori.LilOri;
 
+import java.util.List;
+
 public class Command extends ListenerAdapter {
 
     public final LilOri bot;
     protected String name;
     protected String description;
-    protected String[] arguments;
-    protected String[] aliases;
+    protected List<String> arguments;
+    protected List<String> aliases;
     protected boolean enabled = true;
     protected boolean ownerOnly = false;
     protected Permission[] userPermissions;
@@ -32,11 +34,11 @@ public class Command extends ListenerAdapter {
         return description;
     }
 
-    public String[] getArguments() {
+    public List<String> getArguments() {
         return arguments;
     }
 
-    public String[] getAliases() {
+    public List<String> getAliases() {
         return aliases;
     }
 

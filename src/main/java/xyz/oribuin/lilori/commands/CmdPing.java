@@ -5,6 +5,7 @@ import xyz.oribuin.lilori.managers.command.Command;
 import xyz.oribuin.lilori.managers.command.CommandEvent;
 
 import java.awt.*;
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 public class CmdPing extends Command {
@@ -13,7 +14,7 @@ public class CmdPing extends Command {
 
     public CmdPing() {
         this.name = "Ping";
-        this.aliases = new String[]{"latency"};
+        this.aliases = Arrays.asList("latency", "connection");
         this.description = "Get the latency ping for the bot.";
     }
 

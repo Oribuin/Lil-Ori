@@ -3,6 +3,7 @@ package xyz.oribuin.lilori.commands.games;
 import xyz.oribuin.lilori.managers.command.Command;
 import xyz.oribuin.lilori.managers.command.CommandEvent;
 
+import java.util.Collections;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -10,7 +11,7 @@ public class CmdCoinflip extends Command {
 
     public CmdCoinflip() {
         this.name = "Coinflip";
-        this.aliases = new String[]{"flip"};
+        this.aliases = Collections.singletonList("Flip");
         //this.arguments = "";
         this.description = "Flip a coin.";
     }

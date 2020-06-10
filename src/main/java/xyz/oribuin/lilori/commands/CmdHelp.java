@@ -5,12 +5,13 @@ import xyz.oribuin.lilori.managers.command.Command;
 import xyz.oribuin.lilori.managers.command.CommandEvent;
 
 import java.awt.*;
+import java.util.Collections;
 
 public class CmdHelp extends Command {
 
     public CmdHelp() {
         this.name = "Help";
-        this.aliases = new String[]{"Support"};
+        this.aliases = Collections.singletonList("Support");
         this.description = "Get the list of commands for the bot.";
     }
 

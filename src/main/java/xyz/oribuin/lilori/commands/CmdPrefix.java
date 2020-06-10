@@ -6,13 +6,15 @@ import xyz.oribuin.lilori.managers.command.Command;
 import xyz.oribuin.lilori.managers.command.CommandEvent;
 
 import java.awt.*;
+import java.util.Arrays;
+import java.util.Collections;
 
 public class CmdPrefix extends Command {
 
     public CmdPrefix() {
         this.name = "Prefix";
         this.description = "Change the bot permission";
-        this.arguments = new String[]{"<Prefix>"};
+        this.arguments = Collections.singletonList("<prefix>");
         this.userPermissions = new Permission[]{Permission.ADMINISTRATOR};
     }
 

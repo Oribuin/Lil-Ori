@@ -5,12 +5,13 @@ import net.dv8tion.jda.api.entities.Member;
 import xyz.oribuin.lilori.managers.command.Command;
 import xyz.oribuin.lilori.managers.command.CommandEvent;
 
+import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
 public class CmdBan extends Command {
     public CmdBan() {
         this.name = "Ban";
-        this.aliases = new String[]{"Expel"};
+        this.aliases = Collections.singletonList("Expel");
         this.description = "Ban a member from entering your guild";
         ////this.arguments = "<@User> <Messages> <Reason>";
 

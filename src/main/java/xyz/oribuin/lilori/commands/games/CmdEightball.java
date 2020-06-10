@@ -4,6 +4,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import xyz.oribuin.lilori.managers.command.Command;
 import xyz.oribuin.lilori.managers.command.CommandEvent;
 
+import java.util.Collections;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -11,7 +12,7 @@ public class CmdEightball extends Command {
 
     public CmdEightball() {
         this.name = "Eightball";
-        this.aliases = new String[]{"Ball"};
+        this.aliases = Collections.singletonList("Ball");
         //this.arguments = "<Question>";
         this.description = "Ask the 8ball any question?";
     }

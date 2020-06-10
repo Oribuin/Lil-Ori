@@ -15,6 +15,7 @@ public class CommandExecutor extends ListenerAdapter {
 
     private final LilOri bot;
     private final CommandHandler commandHandler;
+    private boolean aBoolean = true;
 
     public CommandExecutor(LilOri bot, CommandHandler commandHandler) {
         this.bot = bot;
@@ -23,28 +24,33 @@ public class CommandExecutor extends ListenerAdapter {
 
 
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
+        // TODO: Create a command client to store owner id
+
+
         GuildSettings guildSettings = bot.getGuildSettingsManager().getGuildSettings(event.getGuild());
+
+        if (!event.getMessage().getContentRaw().startsWith(guildSettings.getPrefix()))
+            return;
 
         // Filter through each command
         for (Command cmd : commandHandler.getCommands()) {
 
             try {
-
                 String[] args = event.getMessage().getContentRaw().split(" ");
 
-                if (!args[0].equalsIgnoreCase(guildSettings.getPrefix() + cmd.getName().toLowerCase()))
+                // Check if command name or alias
+                if (!cmd.getName().equalsIgnoreCase(args[0].substring(1)) && cmd.getAliases().stream().noneMatch(x -> x.equalsIgnoreCase(args[0].substring(1))))
                     continue;
 
-                // TODO: Create a command client to store owner id
+                // Check if command is enabled
+                if (!cmd.isEnabled())
+                    return;
+
                 // Check if the command is owner only and the owner id equals to command author
                 if (cmd.isOwnerOnly() && !event.getAuthor().getId().equals(Settings.OWNER_ID)) {
                     event.getChannel().sendMessage(event.getAuthor().getAsMention() + ", Sorry! You don't have permission to use this command.").queue();
                     return;
                 }
-
-                // Check if command is enabled
-                if (!cmd.isEnabled())
-                    return;
 
                 // Check if the command author is a bot or fake
                 if (event.getAuthor().isBot() || event.getAuthor().isFake())

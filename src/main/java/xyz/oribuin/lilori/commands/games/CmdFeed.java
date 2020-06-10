@@ -5,13 +5,14 @@ import xyz.oribuin.lilori.managers.command.Command;
 import xyz.oribuin.lilori.managers.command.CommandEvent;
 
 import java.awt.*;
+import java.util.Collections;
 
 public class CmdFeed extends Command {
     private int cookies;
 
     public CmdFeed() {
         this.name = "Feed";
-        this.aliases = new String[]{"snack"};
+        this.aliases = Collections.singletonList("Snack");
         this.description = "Feed' Lil Ori Cookies.";
         //this.arguments = "";
     }

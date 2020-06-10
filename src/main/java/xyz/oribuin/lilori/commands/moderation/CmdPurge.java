@@ -12,6 +12,7 @@ import xyz.oribuin.lilori.managers.command.CommandEvent;
 import xyz.oribuin.lilori.utils.EventWaiter;
 
 import java.time.OffsetDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -21,7 +22,7 @@ public class CmdPurge extends Command {
 
     public CmdPurge(EventWaiter waiter) {
         this.name = "Purge";
-        this.aliases = new String[]{"clear"};
+        this.aliases = Collections.singletonList("clear");
         this.description = "Mass clear server messages.";
         //this.arguments = "<Channel/Msgs/User> <#Channel/Number/@User>";
         this.botPermissions = new Permission[]{Permission.MESSAGE_MANAGE, Permission.MANAGE_PERMISSIONS, Permission.MANAGE_CHANNEL};
