@@ -7,12 +7,14 @@ import xyz.oribuin.lilori.managers.command.CommandEvent;
 
 import java.awt.*;
 import java.sql.PreparedStatement;
+import java.util.Collections;
 
 public class CmdQuery extends Command {
 
     public CmdQuery() {
         this.name = "Query";
         this.description = "Query a command in MySQL.";
+        this.aliases = Collections.emptyList();
         //this.arguments = "<Query>";
     }
 

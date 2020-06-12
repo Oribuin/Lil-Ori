@@ -11,12 +11,15 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import java.awt.*;
+import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
 public class CmdEval extends Command {
+
     public CmdEval() {
         this.name = "Eval";
         this.description = "An evaluation.";
+        this.aliases = Collections.emptyList();
     }
 
     @Override
@@ -40,15 +43,9 @@ public class CmdEval extends Command {
         engine.put("watching", Activity.watching(eval));
         engine.put("playing", Activity.playing(eval));
 
-        for (Permission permission : Permission.values())
-            engine.put(permission.getName(), permission);
-
-        for (OnlineStatus value : OnlineStatus.values())
-            engine.put(value.name(), value);
-
-        for (Activity.ActivityType activityType : Activity.ActivityType.values())
-            engine.put(activityType.name(), activityType);
-
+        for (Permission permission : Permission.values()) engine.put(permission.getName(), permission);
+        for (OnlineStatus value : OnlineStatus.values()) engine.put(value.name(), value);
+        for (Activity.ActivityType activityType : Activity.ActivityType.values()) engine.put(activityType.name(), activityType);
 
         String error = null;
 

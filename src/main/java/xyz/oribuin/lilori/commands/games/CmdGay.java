@@ -6,6 +6,7 @@ import xyz.oribuin.lilori.managers.command.Command;
 import xyz.oribuin.lilori.managers.command.CommandEvent;
 
 import java.awt.*;
+import java.util.Collections;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -14,6 +15,7 @@ public class CmdGay extends Command {
     public CmdGay() {
         this.name = "Gay";
         this.description = "How gay are you?";
+        this.aliases = Collections.emptyList();
         this.botPermissions = new Permission[]{Permission.MESSAGE_MANAGE, Permission.MESSAGE_ADD_REACTION};
     }
 

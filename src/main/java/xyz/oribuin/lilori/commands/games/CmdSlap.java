@@ -5,6 +5,7 @@ import xyz.oribuin.lilori.managers.command.Command;
 import xyz.oribuin.lilori.managers.command.CommandEvent;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -13,7 +14,7 @@ public class CmdSlap extends Command {
 
     public CmdSlap() {
         this.name = "Slap";
-        //this.arguments = "<@Users>";
+        this.aliases = Collections.emptyList();
         this.description = "Slap a user";
     }
 

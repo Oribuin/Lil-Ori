@@ -24,7 +24,6 @@ public class CmdPurge extends Command {
         this.name = "Purge";
         this.aliases = Collections.singletonList("clear");
         this.description = "Mass clear server messages.";
-        //this.arguments = "<Channel/Msgs/User> <#Channel/Number/@User>";
         this.botPermissions = new Permission[]{Permission.MESSAGE_MANAGE, Permission.MANAGE_PERMISSIONS, Permission.MANAGE_CHANNEL};
         this.userPermissions = new Permission[]{Permission.MESSAGE_MANAGE, Permission.MANAGE_PERMISSIONS, Permission.MANAGE_CHANNEL};
         this.waiter = waiter;

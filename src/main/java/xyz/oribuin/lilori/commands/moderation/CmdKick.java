@@ -5,13 +5,14 @@ import net.dv8tion.jda.api.entities.Member;
 import xyz.oribuin.lilori.managers.command.Command;
 import xyz.oribuin.lilori.managers.command.CommandEvent;
 
+import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
 public class CmdKick extends Command {
     public CmdKick() {
         this.name = "Kick";
         this.description = "Kick a member from the guild.";
-        ////this.arguments = "<@User> <Reason>";
+        this.aliases = Collections.emptyList();
 
         this.botPermissions = new Permission[]{Permission.KICK_MEMBERS, Permission.MESSAGE_MANAGE};
         this.userPermissions = new Permission[]{Permission.KICK_MEMBERS, Permission.MESSAGE_MANAGE};

@@ -9,6 +9,7 @@ import xyz.oribuin.lilori.managers.command.CommandEvent;
 import java.awt.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.Collections;
 
 public class CmdQuote extends Command {
 
@@ -17,6 +18,7 @@ public class CmdQuote extends Command {
     public CmdQuote() {
         this.name = "Quote";
         this.description = "Quote command.";
+        this.aliases = Collections.emptyList();
         //this.arguments = "";
     }
 

@@ -13,8 +13,6 @@ public class CmdBan extends Command {
         this.name = "Ban";
         this.aliases = Collections.singletonList("Expel");
         this.description = "Ban a member from entering your guild";
-        ////this.arguments = "<@User> <Messages> <Reason>";
-
         this.userPermissions = new Permission[]{Permission.MESSAGE_MANAGE, Permission.BAN_MEMBERS};
         this.botPermissions = new Permission[]{Permission.MESSAGE_MANAGE, Permission.BAN_MEMBERS};
     }

@@ -2,7 +2,6 @@ package xyz.oribuin.lilori;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
-import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import xyz.oribuin.lilori.commands.CmdColor;
 import xyz.oribuin.lilori.commands.CmdHelp;
@@ -38,11 +37,11 @@ import java.io.IOException;
 public class LilOri extends ListenerAdapter {
 
     private static LilOri instance;
-    private CommandHandler commandHandler;
+    private final CommandHandler commandHandler;
+    private final DataManager dataManager;
+    private final EventWaiter waiter = new EventWaiter();
+    private final GuildSettingsManager guildSettingsManager;
     private DatabaseConnector connector;
-    private DataManager dataManager;
-    private EventWaiter waiter = new EventWaiter();
-    private GuildSettingsManager guildSettingsManager;
 
 
     private LilOri() throws LoginException {
@@ -50,7 +49,6 @@ public class LilOri extends ListenerAdapter {
 
         // Setup the SQLite Database
         File file = new File("data", "lilori.db");
-
 
         try {
             if (!file.exists()) {
@@ -70,6 +68,7 @@ public class LilOri extends ListenerAdapter {
         this.commandHandler = new CommandHandler();
         this.dataManager = new DataManager(this);
 
+
         this.registerCommands();
         this.enable();
 
@@ -81,7 +80,10 @@ public class LilOri extends ListenerAdapter {
         int i = 0;
 
         for (Command command : this.getCommandHandler().getCommands())
-            System.out.println("Loaded Command: " + command.getName() + " | (" + ++i + "/" + this.getCommandHandler().getCommands().size() + ")");
+            if (command.getAliases() == null)
+                throw new NullPointerException("Command aliases is null");
+            else
+                System.out.println("Loaded Command: " + command.getName() + " | (" + ++i + "/" + this.getCommandHandler().getCommands().size() + ")");
 
         System.out.println("*=* Loaded Up " + jda.getSelfUser().getName() + " with " + this.getCommandHandler().getCommands().size() + " Command(s) *=*");
     }

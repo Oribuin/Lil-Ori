@@ -7,6 +7,7 @@ import xyz.oribuin.lilori.managers.command.CommandEvent;
 
 import java.awt.*;
 import java.sql.PreparedStatement;
+import java.util.Collections;
 
 public class CmdColor extends Command {
     private Color embedColor;
@@ -14,6 +15,7 @@ public class CmdColor extends Command {
     public CmdColor() {
         this.name = "Color";
         this.description = "See a color in an embed.";
+        this.aliases = Collections.emptyList();
     }
 
     @Override

@@ -15,7 +15,6 @@ public class CommandExecutor extends ListenerAdapter {
 
     private final LilOri bot;
     private final CommandHandler commandHandler;
-    private boolean aBoolean = true;
 
     public CommandExecutor(LilOri bot, CommandHandler commandHandler) {
         this.bot = bot;
@@ -37,6 +36,10 @@ public class CommandExecutor extends ListenerAdapter {
 
             try {
                 String[] args = event.getMessage().getContentRaw().split(" ");
+
+                if (cmd.getAliases() == null) {
+                    throw new IllegalArgumentException("Null Aliases in command " + cmd.getName());
+                }
 
                 // Check if command name or alias
                 if (!cmd.getName().equalsIgnoreCase(args[0].substring(1)) && cmd.getAliases().stream().noneMatch(x -> x.equalsIgnoreCase(args[0].substring(1))))

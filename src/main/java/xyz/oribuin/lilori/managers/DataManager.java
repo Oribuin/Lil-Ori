@@ -2,7 +2,6 @@ package xyz.oribuin.lilori.managers;
 
 import net.dv8tion.jda.api.entities.Guild;
 import xyz.oribuin.lilori.LilOri;
-import xyz.oribuin.lilori.Settings;
 
 import java.sql.PreparedStatement;
 

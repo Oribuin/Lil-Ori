@@ -8,13 +8,14 @@ import xyz.oribuin.lilori.managers.command.Command;
 import xyz.oribuin.lilori.managers.command.CommandEvent;
 
 import java.awt.*;
+import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
 public class CmdMute extends Command {
     public CmdMute() {
         this.name = "Mute";
         this.description = "Mute a member from talking in the guild";
-        //this.arguments = "<Setup/@User>";
+        this.aliases = Collections.emptyList();
 
         this.botPermissions = new Permission[]{Permission.MANAGE_ROLES, Permission.MANAGE_CHANNEL, Permission.MANAGE_PERMISSIONS};
         this.userPermissions = new Permission[]{Permission.MANAGE_ROLES, Permission.MANAGE_CHANNEL, Permission.MANAGE_PERMISSIONS};

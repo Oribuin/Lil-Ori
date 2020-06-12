@@ -6,6 +6,7 @@ import xyz.oribuin.lilori.managers.command.Command;
 import xyz.oribuin.lilori.managers.command.CommandEvent;
 import xyz.oribuin.lilori.managers.music.TrackManager;
 
+import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
 public class CmdPlay extends Command {
@@ -13,6 +14,7 @@ public class CmdPlay extends Command {
     public CmdPlay() {
         this.name = "Play";
         this.description = "Play Music";
+        this.aliases = Collections.emptyList();
         this.botPermissions = new Permission[]{Permission.MESSAGE_MANAGE};
     }
 
