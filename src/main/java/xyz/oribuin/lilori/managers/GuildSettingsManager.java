@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class GuildSettingsManager extends Manager {
 
-    private Map<Long, GuildSettings> guildSettings;
+    private final Map<Long, GuildSettings> guildSettings;
 
     public GuildSettingsManager(LilOri bot) {
         super(bot);

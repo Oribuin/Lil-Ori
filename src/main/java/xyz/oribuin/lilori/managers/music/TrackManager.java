@@ -8,16 +8,15 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
 
-import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class TrackManager {
+
+    public List<AudioTrack> trackList = new ArrayList<>();
 
     public final AudioPlayerManager playerManager;
     public final Map<Long, GuildMusicManager> musicManagerMap;
@@ -29,13 +28,13 @@ public class TrackManager {
         AudioSourceManagers.registerLocalSource(playerManager);
     }
 
-    private static void connectChannel(AudioManager audioManager) {
-        if (!audioManager.isConnected() && !audioManager.isAttemptingToConnect()) {
+    private void connectChannel(AudioManager audioManager) {
+        if (!audioManager.isConnected() && audioManager.getGuild().getSelfMember().getVoiceState() != null) {
             audioManager.openAudioConnection(audioManager.getGuild().getSelfMember().getVoiceState().getChannel());
         }
     }
 
-    public synchronized GuildMusicManager getGuildAudioPlayer(Guild guild) {
+    public GuildMusicManager getGuildAudioPlayer(Guild guild) {
         long guildId = Long.parseLong(guild.getId());
 
         GuildMusicManager musicManager = musicManagerMap.get(guildId);
@@ -48,26 +47,12 @@ public class TrackManager {
         return musicManager;
     }
 
-    public void loadAndPlay(final TextChannel textChannel, final String trackUrl) {
+    public void loadAndPlay(TextChannel textChannel, final String trackUrl) {
         GuildMusicManager musicManager = getGuildAudioPlayer(textChannel.getGuild());
 
-        playerManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
+        playerManager.loadItem(trackUrl, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack track) {
-                long totalSeconds = track.getDuration() / 1000;
-                totalSeconds %= 3600;
-                long minutes = totalSeconds / 60;
-                long seconds = totalSeconds % 60;
-
-                EmbedBuilder playEmbed = new EmbedBuilder()
-                        .setAuthor("« Lil' Ori Music »")
-                        .setColor(Color.decode("#33539e"))
-                        .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png")
-                        .setDescription("Song: " + track.getInfo().title + " (" + minutes + ":" + seconds + ")\n" +
-                                "Author: " + track.getInfo().author + "\n" +
-                                "URL: " + track.getInfo().uri);
-
-                textChannel.sendMessage(playEmbed.build()).queue();
                 play(textChannel.getGuild(), musicManager, track);
             }
 
@@ -104,15 +89,43 @@ public class TrackManager {
     public void skipTrack(TextChannel textChannel) {
         GuildMusicManager musicManager = getGuildAudioPlayer(textChannel.getGuild());
         musicManager.scheduler.nextTrack();
-        textChannel.sendMessage("Skipped Track").queue();
     }
 
-    public void loop(final TextChannel textChannel, boolean looping) {
-        Guild guild = textChannel.getGuild();
-        GuildMusicManager musicManager = getGuildAudioPlayer(guild);
-        if (looping) {
-            musicManager.scheduler.onTrackEnd(musicManager.player, musicManager.player.getPlayingTrack(), AudioTrackEndReason.FINISHED);
-            loadAndPlay(textChannel, musicManager.player.getPlayingTrack().getInfo().uri);
-        }
+    public AudioPlaylist getPlaylist(Guild guild) {
+        GuildMusicManager musicManager = this.getGuildAudioPlayer(guild);
+
+        return new AudioPlaylist() {
+            @Override
+            public String getName() {
+                return guild.getName().toLowerCase() + "_playlist";
+            }
+
+            @Override
+            public List<AudioTrack> getTracks() {
+                return trackList;
+            }
+
+            @Override
+            public AudioTrack getSelectedTrack() {
+                return musicManager.player.getPlayingTrack();
+            }
+
+            @Override
+            public boolean isSearchResult() {
+                return false;
+            }
+        };
+    }
+
+    public void addSong(Guild guild, AudioTrack track) {
+        this.getPlaylist(guild).getTracks().add(track);
+    }
+
+    public void removeSong(Guild guild, AudioTrack track) {
+        this.getPlaylist(guild).getTracks().remove(track);
+    }
+
+    public void clearPlaylist(Guild guild) {
+        this.getPlaylist(guild).getTracks().clear();
     }
 }

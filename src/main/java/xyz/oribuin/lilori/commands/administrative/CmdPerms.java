@@ -11,7 +11,6 @@ public class CmdPerms extends Command {
         this.aliases = Collections.singletonList("Perms");
         this.description = "List of permissions the bot has.";
         this.aliases = Collections.emptyList();
-        //this.arguments = "<Page>";
     }
 
     @Override

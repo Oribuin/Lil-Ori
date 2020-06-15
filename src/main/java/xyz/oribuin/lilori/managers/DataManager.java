@@ -24,7 +24,7 @@ public class DataManager extends Manager {
         bot.getConnector().connect(connection -> {
 
             String[] queries = {
-                    "CREATE TABLE IF NOT EXISTS guild_settings (guild_id LONG, prefix TXT)",
+                    "CREATE TABLE IF NOT EXISTS guild_settings (guild_id LONG, prefix TXT, PRIMARY KEY(guild_id))",
                     "CREATE TABLE IF NOT EXISTS quotes (label TXT, author TXT, quote TXT)",
             };
 
@@ -48,6 +48,15 @@ public class DataManager extends Manager {
         });
     }
 
+    public void removeGuild(Guild guild) {
+        bot.getConnector().connect(connection -> {
+            String deleteGuild = "REMOVE FROM guild_settings WHERE guild_id = ?";
+            try (PreparedStatement statement = connection.prepareStatement(deleteGuild)) {
+                statement.setLong(1, guild.getIdLong());
+                statement.executeUpdate();
+            }
+        });
+    }
     /**
      * Add or Change a quote inside the database
      *

@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import xyz.oribuin.lilori.LilOri;
+import xyz.oribuin.lilori.Settings;
 
 import java.util.Random;
 import java.util.Timer;
@@ -20,10 +21,10 @@ public class GeneralEvents extends ListenerAdapter {
         }
 
         Activity[] activities = {
-                Activity.watching("Ori Code"),
-                Activity.watching("My RAM nervously"),
-                Activity.watching("Ori fail at MySQL"),
-                Activity.watching("My Database")
+                Activity.watching("#BlackLivesMatter"),
+                Activity.watching("#BLM"),
+                Activity.watching("#JusticeForGeorgeFloyd"),
+                Activity.watching("#JusticeForBreonnaTaylor")
         };
 
 
@@ -44,10 +45,12 @@ public class GeneralEvents extends ListenerAdapter {
     }
 
     public void onGuildJoin(GuildJoinEvent event) {
+        LilOri.getInstance().getDataManager().createGuild(event.getGuild(), Settings.DEFAULT_PREFIX);
         LilOri.getInstance().getGuildSettingsManager().loadGuildSettings(event.getGuild());
     }
 
     public void onGuildLeave(GuildLeaveEvent event) {
+        LilOri.getInstance().getDataManager().removeGuild(event.getGuild());
         LilOri.getInstance().getGuildSettingsManager().removeGuildSettings(event.getGuild());
     }
 }

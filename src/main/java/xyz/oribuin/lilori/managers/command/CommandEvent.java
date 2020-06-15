@@ -101,6 +101,10 @@ public class CommandEvent {
         return event.getChannel();
     }
 
+    public TextChannel getTextChannel() {
+        return (TextChannel) this.getChannel();
+    }
+
     public Guild getGuild() {
         return event.getGuild();
     }

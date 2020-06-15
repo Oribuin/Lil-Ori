@@ -26,16 +26,6 @@ public class CmdQuote extends Command {
     public void executeCommand(CommandEvent event) {
         String[] args = event.getMessage().getContentRaw().split(" ");
 
-        LilOri.getInstance().getConnector().connect(connection -> {
-            String query = "SELECT * FROM quotes";
-            try (PreparedStatement statement = connection.prepareStatement(query)) {
-                ResultSet resultSet = statement.executeQuery();
-                if (resultSet.next()) {
-                    quoteSize = resultSet.getInt(1);
-                }
-            }
-        });
-
         if (args.length < 2) {
             EmbedBuilder embedBuilder = new EmbedBuilder()
                     .setAuthor("Lil' Ori Quotes")
@@ -133,18 +123,16 @@ public class CmdQuote extends Command {
     }
 
     private int getQuoteSize() {
-        quoteSize = 0;
-
         LilOri.getInstance().getConnector().connect(connection -> {
             String query = "SELECT * FROM quotes";
             try (PreparedStatement statement = connection.prepareStatement(query)) {
-                ResultSet result = statement.executeQuery();
-                if (!result.next())
-                    return;
+                ResultSet resultSet = statement.executeQuery();
+                resultSet.last();
 
-                quoteSize = result.getInt(1);
+                quoteSize = resultSet.getRow();
             }
         });
+
 
         return quoteSize;
     }
