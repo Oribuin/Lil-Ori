@@ -30,11 +30,11 @@ public class CmdLoop extends Command {
             return;
         }
 
-        if (trackScheduler.isLooping()) {
+        if (trackScheduler.isLooping())
             event.reply("✅ No longer Looping.");
-        } else {
+        else
             event.reply("✅ Now Looping.");
-            trackScheduler.setLooping(true);
-        }
+
+        trackScheduler.setLooping(!trackScheduler.isLooping());
     }
 }

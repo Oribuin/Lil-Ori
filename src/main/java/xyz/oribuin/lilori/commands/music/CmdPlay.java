@@ -14,6 +14,9 @@ import xyz.oribuin.lilori.managers.music.TrackScheduler;
 
 import java.awt.*;
 import java.util.Collections;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 public class CmdPlay extends Command {
@@ -44,13 +47,19 @@ public class CmdPlay extends Command {
             return;
         }
 
+
+        if (musicManager.player.isPaused()) {
+            musicManager.player.setPaused(false);
+            event.reply(event.getAuthor().getAsMention() + ", Playback has now been resumed.");
+            return;
+        }
+
         if (musicManager.player.getPlayingTrack() == null) {
-            String input = event.getMessage().getContentRaw().substring(args[0].length() + 1);
 
-
-
+            String url = event.getMessage().getContentRaw().substring(args[0].length() + 1);
             event.getGuild().getAudioManager().openAudioConnection(event.getMember().getVoiceState().getChannel());
-            trackManager.loadAndPlay((TextChannel) event.getChannel(), input);
+
+            trackManager.loadAndPlay(event.getTextChannel(), url, true);
             AudioTrack track = musicManager.player.getPlayingTrack();
             trackScheduler.onTrackEnd(musicManager.player, track, AudioTrackEndReason.FINISHED);
 
@@ -67,9 +76,19 @@ public class CmdPlay extends Command {
                             "Author: " + track.getInfo().author + "\n" +
                             "URL: " + track.getInfo().uri);
 
-            event.reply(playEmbed.build());
+            event.getChannel().sendMessage(playEmbed.build()).queue();
             event.getMessage().delete().queue();
-            return;
+
+            Timer timer = new Timer();
+            TimerTask timerTask = new TimerTask() {
+                @Override
+                public void run() {
+                    System.out.println(trackScheduler.isLooping());
+                }
+            };
+
+            timer.schedule(timerTask, 0, 500);
         }
     }
+
 }

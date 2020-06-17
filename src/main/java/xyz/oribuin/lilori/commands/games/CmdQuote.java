@@ -9,17 +9,17 @@ import xyz.oribuin.lilori.managers.command.CommandEvent;
 import java.awt.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.Collections;
 
 public class CmdQuote extends Command {
 
-    private int quoteSize;
+    private int quoteCount;
 
     public CmdQuote() {
         this.name = "Quote";
         this.description = "Quote command.";
         this.aliases = Collections.emptyList();
-        //this.arguments = "";
     }
 
     @Override
@@ -32,7 +32,7 @@ public class CmdQuote extends Command {
                     .setColor(Color.decode("#33539e"))
                     .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png")
                     .setDescription("To view a quote, type " + event.getPrefix() + "quote get <id>\n \n" +
-                            "Quote Id Amount: " + this.getQuoteSize());
+                            "Quote Id Amount: " + this.getQuoteCount());
 
             event.reply(embedBuilder);
             return;
@@ -50,7 +50,7 @@ public class CmdQuote extends Command {
                     this.bot.getDataManager().updateQuote(QUOTE_ID, QUOTE_AUTHOR, QUOTE);
 
                     event.reply(event.getAuthor().getAsMention() + ", Added quote to the database!");
-                    System.out.println(event.getAuthor().getAsTag() + " Added a quote to the database.\n \n" + args[2] + "\n" + args[3].replace("_", " ") + "\n" + args[3]);
+                    System.out.println(event.getAuthor().getAsTag() + " Added a quote to the database.\n \n" + QUOTE_ID + "\n" + QUOTE_AUTHOR + "\n" + QUOTE);
                     return;
                 }
 
@@ -122,18 +122,17 @@ public class CmdQuote extends Command {
         }
     }
 
-    private int getQuoteSize() {
+    private int getQuoteCount() {
         LilOri.getInstance().getConnector().connect(connection -> {
-            String query = "SELECT * FROM quotes";
+            String query = "SELECT COUNT(*) FROM quotes";
             try (PreparedStatement statement = connection.prepareStatement(query)) {
-                ResultSet resultSet = statement.executeQuery();
-                resultSet.last();
-
-                quoteSize = resultSet.getRow();
+                ResultSet result = statement.executeQuery();
+                result.next();
+                quoteCount = result.getInt(1);
             }
         });
 
 
-        return quoteSize;
+        return quoteCount;
     }
 }

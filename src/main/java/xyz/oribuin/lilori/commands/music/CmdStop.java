@@ -23,7 +23,7 @@ public class CmdStop extends Command {
             return;
         }
 
-        musicManager.player.stopTrack();
+        event.getGuild().getAudioManager().setSendingHandler(null);
         event.getGuild().getAudioManager().closeAudioConnection();
         event.reply(event.getAuthor().getAsMention() + ", Ended the audio track. :wave:");
     }

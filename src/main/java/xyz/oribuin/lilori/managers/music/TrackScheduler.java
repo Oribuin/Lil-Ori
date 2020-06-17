@@ -30,6 +30,7 @@ public class TrackScheduler extends AudioEventAdapter {
 
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack audioTrack, AudioTrackEndReason endReason) {
+
         if (endReason.mayStartNext)
             if (this.isLooping())
                 player.startTrack(audioTrack.makeClone(), false);

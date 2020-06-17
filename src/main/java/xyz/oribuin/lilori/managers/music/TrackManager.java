@@ -4,28 +4,36 @@ import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
+import com.sedmelluq.discord.lavaplayer.source.http.HttpAudioSourceManager;
+import com.sedmelluq.discord.lavaplayer.source.local.LocalAudioSourceManager;
+import com.sedmelluq.discord.lavaplayer.source.soundcloud.SoundCloudAudioSourceManager;
+import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class TrackManager {
 
     public List<AudioTrack> trackList = new ArrayList<>();
 
     public final AudioPlayerManager playerManager;
-    public final Map<Long, GuildMusicManager> musicManagerMap;
+    public final Map<String, GuildMusicManager> musicManagers;
 
     public TrackManager() {
-        this.musicManagerMap = new HashMap<>();
         this.playerManager = new DefaultAudioPlayerManager();
-        AudioSourceManagers.registerRemoteSources(playerManager);
-        AudioSourceManagers.registerLocalSource(playerManager);
+        this.playerManager.registerSourceManager(new YoutubeAudioSourceManager());
+        this.playerManager.registerSourceManager(new HttpAudioSourceManager());
+        this.playerManager.registerSourceManager(new LocalAudioSourceManager());
+
+        musicManagers = new HashMap<>();
     }
 
     private void connectChannel(AudioManager audioManager) {
@@ -35,37 +43,41 @@ public class TrackManager {
     }
 
     public GuildMusicManager getGuildAudioPlayer(Guild guild) {
-        long guildId = Long.parseLong(guild.getId());
 
-        GuildMusicManager musicManager = musicManagerMap.get(guildId);
+        GuildMusicManager musicManager = musicManagers.get(guild.getId());
         if (musicManager == null) {
             musicManager = new GuildMusicManager(playerManager);
-            musicManagerMap.put(guildId, musicManager);
+            musicManagers.put(guild.getId(), musicManager);
         }
 
         guild.getAudioManager().setSendingHandler(musicManager.getSendHandler());
         return musicManager;
     }
 
-    public void loadAndPlay(TextChannel textChannel, final String trackUrl) {
-        GuildMusicManager musicManager = getGuildAudioPlayer(textChannel.getGuild());
+    public void loadAndPlay(TextChannel textChannel, String trackUrl, boolean addPlaylist) {
+        GuildMusicManager musicManager = this.getGuildAudioPlayer(textChannel.getGuild());
 
-        playerManager.loadItem(trackUrl, new AudioLoadResultHandler() {
+        playerManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack track) {
-                play(textChannel.getGuild(), musicManager, track);
+                musicManager.scheduler.queue(track);
             }
 
             @Override
             public void playlistLoaded(AudioPlaylist playlist) {
                 AudioTrack firstTrack = playlist.getSelectedTrack();
+                List<AudioTrack> trackList = playlist.getTracks();
 
                 if (firstTrack == null) {
-                    firstTrack = playlist.getTracks().get(0);
+                    firstTrack = trackList.get(0);
                 }
 
-                textChannel.sendMessage("Added " + firstTrack.getInfo().title + " to queue.").queue();
-                play(textChannel.getGuild(), musicManager, firstTrack);
+                if (addPlaylist) {
+                    trackList.forEach(musicManager.scheduler::queue);
+                    return;
+                }
+
+                musicManager.scheduler.queue(firstTrack);
             }
 
             @Override
@@ -81,9 +93,15 @@ public class TrackManager {
         });
     }
 
-    public void play(Guild guild, GuildMusicManager musicManager, AudioTrack track) {
-        connectChannel(guild.getAudioManager());
-        musicManager.scheduler.queue(track);
+    private GuildMusicManager getMusicManager(Guild guild) {
+        GuildMusicManager musicManager = musicManagers.get(guild.getId());
+        if (musicManager == null) {
+            musicManager = new GuildMusicManager(playerManager);
+            musicManager.player.setVolume(50);
+            musicManagers.put(guild.getId(), musicManager);
+        }
+
+        return musicManager;
     }
 
     public void skipTrack(TextChannel textChannel) {

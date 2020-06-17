@@ -24,7 +24,7 @@ application {
 dependencies {
     // JDA Dependencies
     implementation 'net.dv8tion:JDA:4.1.1_160'
-    implementation 'com.sedmelluq:lavaplayer:1.3.49'
+    implementation 'com.sedmelluq:lavaplayer:1.3.50'
 
     // SLF4j
     implementation 'org.slf4j:slf4j-nop:1.7.25'

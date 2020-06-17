@@ -34,6 +34,7 @@ public class CmdColor extends Command {
 
         try {
 
+
             if (args[1].startsWith("#")) {
                 embedColor = Color.decode(args[1]);
 
