@@ -50,7 +50,7 @@ public class TrackManager {
             musicManagers.put(guild.getId(), musicManager);
         }
 
-        guild.getAudioManager().setSendingHandler(musicManager.getSendHandler());
+        musicManager.getAudioManager(guild).setSendingHandler(musicManager.getSendHandler());
         return musicManager;
     }
 

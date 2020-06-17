@@ -2,6 +2,8 @@ package xyz.oribuin.lilori.managers.music;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.managers.AudioManager;
 
 public class GuildMusicManager {
     public final AudioPlayer player;
@@ -17,5 +19,9 @@ public class GuildMusicManager {
 
     public AudioPlayerSendHandler getSendHandler() {
         return new AudioPlayerSendHandler(player);
+    }
+
+    public AudioManager getAudioManager(Guild guild) {
+        return guild.getAudioManager();
     }
 }

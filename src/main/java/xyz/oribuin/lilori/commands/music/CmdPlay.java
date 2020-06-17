@@ -57,7 +57,7 @@ public class CmdPlay extends Command {
         if (musicManager.player.getPlayingTrack() == null) {
 
             String url = event.getMessage().getContentRaw().substring(args[0].length() + 1);
-            event.getGuild().getAudioManager().openAudioConnection(event.getMember().getVoiceState().getChannel());
+            musicManager.getAudioManager(event.getGuild()).openAudioConnection(event.getMember().getVoiceState().getChannel());
 
             trackManager.loadAndPlay(event.getTextChannel(), url, true);
             AudioTrack track = musicManager.player.getPlayingTrack();
