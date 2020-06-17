@@ -93,22 +93,6 @@ public class TrackManager {
         });
     }
 
-    private GuildMusicManager getMusicManager(Guild guild) {
-        GuildMusicManager musicManager = musicManagers.get(guild.getId());
-        if (musicManager == null) {
-            musicManager = new GuildMusicManager(playerManager);
-            musicManager.player.setVolume(50);
-            musicManagers.put(guild.getId(), musicManager);
-        }
-
-        return musicManager;
-    }
-
-    public void skipTrack(TextChannel textChannel) {
-        GuildMusicManager musicManager = getGuildAudioPlayer(textChannel.getGuild());
-        musicManager.scheduler.nextTrack();
-    }
-
     public AudioPlaylist getPlaylist(Guild guild) {
         GuildMusicManager musicManager = this.getGuildAudioPlayer(guild);
 
@@ -133,17 +117,5 @@ public class TrackManager {
                 return false;
             }
         };
-    }
-
-    public void addSong(Guild guild, AudioTrack track) {
-        this.getPlaylist(guild).getTracks().add(track);
-    }
-
-    public void removeSong(Guild guild, AudioTrack track) {
-        this.getPlaylist(guild).getTracks().remove(track);
-    }
-
-    public void clearPlaylist(Guild guild) {
-        this.getPlaylist(guild).getTracks().clear();
     }
 }
