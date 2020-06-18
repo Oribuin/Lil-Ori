@@ -15,16 +15,15 @@ public class CmdStop extends Command {
     }
 
     public void executeCommand(CommandEvent event) {
-        TrackManager trackManager = new TrackManager();
-        GuildMusicManager musicManager = trackManager.getGuildAudioPlayer(event.getGuild());
+        TrackManager tm = new TrackManager(event.getGuild());
 
         if (!event.getGuild().getAudioManager().isConnected()) {
             event.reply(event.getAuthor() + ", There is no active Audio Track.");
             return;
         }
 
-        musicManager.getAudioManager(event.getGuild()).setSendingHandler(null);
-        musicManager.getAudioManager(event.getGuild()).closeAudioConnection();
+        tm.getMusicManager().getAudioManager(event.getGuild()).setSendingHandler(null);
+        tm.getMusicManager().getAudioManager(event.getGuild()).closeAudioConnection();
         event.reply(event.getAuthor().getAsMention() + ", Ended the audio track. :wave:");
     }
 }

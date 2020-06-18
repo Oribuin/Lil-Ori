@@ -1,22 +1,14 @@
 package xyz.oribuin.lilori.commands.music;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.events.guild.member.update.GuildMemberUpdateBoostTimeEvent;
 import xyz.oribuin.lilori.managers.command.Command;
 import xyz.oribuin.lilori.managers.command.CommandEvent;
 import xyz.oribuin.lilori.managers.music.GuildMusicManager;
 import xyz.oribuin.lilori.managers.music.TrackManager;
 import xyz.oribuin.lilori.managers.music.TrackScheduler;
 
-import java.awt.*;
 import java.util.Collections;
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 public class CmdPlay extends Command {
@@ -29,9 +21,8 @@ public class CmdPlay extends Command {
     }
 
     public void executeCommand(CommandEvent event) {
-        TrackManager trackManager = new TrackManager();
-        GuildMusicManager musicManager = trackManager.getGuildAudioPlayer(event.getGuild());
-        TrackScheduler trackScheduler = new TrackScheduler(musicManager.player);
+        TrackManager tm = new TrackManager(event.getGuild());
+        GuildMusicManager musicManager = tm.getMusicManager();
 
         String[] args = event.getMessage().getContentRaw().split(" ");
 
@@ -47,48 +38,26 @@ public class CmdPlay extends Command {
             return;
         }
 
+        String url = event.getMessage().getContentRaw().substring(args[0].length() + 1);
 
-        if (musicManager.player.isPaused()) {
+        if (musicManager .player.isPaused()) {
             musicManager.player.setPaused(false);
             event.reply(event.getAuthor().getAsMention() + ", Playback has now been resumed.");
-            return;
         }
 
-        if (musicManager.player.getPlayingTrack() == null) {
+        musicManager.getAudioManager(event.getGuild()).openAudioConnection(event.getMember().getVoiceState().getChannel());
 
-            String url = event.getMessage().getContentRaw().substring(args[0].length() + 1);
-            musicManager.getAudioManager(event.getGuild()).openAudioConnection(event.getMember().getVoiceState().getChannel());
 
-            trackManager.loadAndPlay(event.getTextChannel(), url, true);
-            AudioTrack track = musicManager.player.getPlayingTrack();
-            trackScheduler.onTrackEnd(musicManager.player, track, AudioTrackEndReason.FINISHED);
+         tm.loadAndPlay(event.getTextChannel(), url, false);
+        AudioTrack track = musicManager.player.getPlayingTrack();
 
-            long totalSeconds = track.getDuration() / 1000;
-            totalSeconds %= 3600;
-            long minutes = totalSeconds / 60;
-            long seconds = totalSeconds % 60;
+        long totalSeconds = track.getDuration() / 1000;
+        totalSeconds %= 3600;
+        long minutes = totalSeconds / 60;
+        long seconds = totalSeconds % 60;
 
-            EmbedBuilder playEmbed = new EmbedBuilder()
-                    .setAuthor("« Lil' Ori Music »")
-                    .setColor(Color.decode("#33539e"))
-                    .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png")
-                    .setDescription("Song: " + track.getInfo().title + " (" + minutes + ":" + seconds + ")\n" +
-                            "Author: " + track.getInfo().author + "\n" +
-                            "URL: " + track.getInfo().uri);
+        event.reply(event.getAuthor().getAsMention() + ", Now playing " + url);
 
-            event.getChannel().sendMessage(playEmbed.build()).queue();
-            event.getMessage().delete().queue();
-
-            Timer timer = new Timer();
-            TimerTask timerTask = new TimerTask() {
-                @Override
-                public void run() {
-                    System.out.println(trackScheduler.isLooping());
-                }
-            };
-
-            timer.schedule(timerTask, 0, 500);
-        }
     }
 
 }

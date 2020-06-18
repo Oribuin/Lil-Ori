@@ -9,8 +9,8 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class TrackScheduler extends AudioEventAdapter {
-    private boolean looping = false;
-    private final AudioPlayer player;
+    private boolean looping;
+    private final  AudioPlayer player;
     private final Queue<AudioTrack> queue;
 
     public TrackScheduler(AudioPlayer player) {
@@ -19,23 +19,25 @@ public class TrackScheduler extends AudioEventAdapter {
     }
 
     public void queue(AudioTrack track) {
-        if (!player.startTrack(track, true)) {
+        if (!player.startTrack(track, false)) {
             queue.offer(track);
         }
     }
 
     public void nextTrack() {
-        player.startTrack(queue.poll(), false);
+        player.startTrack(queue.poll(), true);
     }
 
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack audioTrack, AudioTrackEndReason endReason) {
 
         if (endReason.mayStartNext)
-            if (this.isLooping())
+            if (this.isLooping()) {
                 player.startTrack(audioTrack.makeClone(), false);
-            else
+            } else {
                 this.nextTrack();
+            }
+
     }
 
     public boolean isLooping() {

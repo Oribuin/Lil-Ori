@@ -9,7 +9,6 @@ import xyz.oribuin.lilori.managers.command.CommandEvent;
 import java.awt.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.Collections;
 
 public class CmdQuote extends Command {

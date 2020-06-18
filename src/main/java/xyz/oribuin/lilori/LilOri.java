@@ -20,6 +20,7 @@ import xyz.oribuin.lilori.commands.moderation.CmdPurge;
 import xyz.oribuin.lilori.commands.music.CmdLoop;
 import xyz.oribuin.lilori.commands.music.CmdPlay;
 import xyz.oribuin.lilori.commands.music.CmdStop;
+import xyz.oribuin.lilori.commands.music.CmdVolume;
 import xyz.oribuin.lilori.database.DatabaseConnector;
 import xyz.oribuin.lilori.database.SQLiteConnector;
 import xyz.oribuin.lilori.listeners.EventMentionOri;
@@ -112,6 +113,7 @@ public class LilOri extends ListenerAdapter {
                 new CmdLoop(),
                 new CmdPlay(),
                 new CmdStop(),
+                new CmdVolume(),
 
                 // Game Commands
                 new CmdCoinflip(),
