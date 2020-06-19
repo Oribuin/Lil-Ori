@@ -18,7 +18,7 @@ public class CmdLoop extends Command {
 
     @Override
     public void executeCommand(CommandEvent event) {
-        TrackManager tm = new TrackManager(event.getGuild());
+        TrackManager tm = TrackManager.getInstance(event.getGuild());
 
         if (event.getMember().getVoiceState() == null || !event.getMember().getVoiceState().inVoiceChannel()) {
             event.reply(event.getAuthor().getAsMention() + ", Could not loop since you are not in the voice channel");
