@@ -21,7 +21,7 @@ public class CmdPlay extends Command {
     }
 
     public void executeCommand(CommandEvent event) {
-        TrackManager tm = new TrackManager(event.getGuild());
+        TrackManager tm = TrackManager.getInstance(event.getGuild());
         GuildMusicManager musicManager = tm.getMusicManager();
 
         String[] args = event.getMessage().getContentRaw().split(" ");
