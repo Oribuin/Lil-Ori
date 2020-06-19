@@ -18,7 +18,7 @@ public class CmdVolume extends Command {
 
     @Override
     public void executeCommand(CommandEvent event) {
-        TrackManager tm = new TrackManager(event.getGuild());
+        TrackManager tm = TrackManager.getInstance(event.getGuild());
         String[] args = event.getMessage().getContentRaw().split(" ");
 
         if (event.getMember().getVoiceState() == null || !event.getMember().getVoiceState().inVoiceChannel()) {
