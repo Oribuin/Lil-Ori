@@ -21,9 +21,14 @@ public class TrackManager {
 
     public List<AudioTrack> trackList = new ArrayList<>();
 
+    private static TrackManager instance;
     public final AudioPlayerManager playerManager;
     public final Map<String, GuildMusicManager> musicManagers;
     private final Guild guild;
+    
+    public TrackManager() {
+        thi   
+    }
 
     public TrackManager(Guild guild) {
         this.playerManager = new DefaultAudioPlayerManager();
@@ -33,6 +38,7 @@ public class TrackManager {
 
         this.guild = guild;
         musicManagers = new HashMap<>();
+        instance = this;
     }
 
     public GuildMusicManager getMusicManager() {
@@ -45,6 +51,10 @@ public class TrackManager {
 
         musicManager.getAudioManager(guild).setSendingHandler(musicManager.getSendHandler());
         return musicManager;
+    }
+    
+    public static synchronized TrackManager getInstance() {
+        return instance;
     }
 
     public void loadAndPlay(TextChannel textChannel, String trackUrl, boolean addPlaylist) {
