@@ -8,6 +8,7 @@ import xyz.oribuin.lilori.managers.music.TrackManager;
 import java.util.Collections;
 
 public class CmdStop extends Command {
+    
     public CmdStop() {
         this.name = "Stop";
         this.description = "Stops playing Music.";
@@ -15,7 +16,7 @@ public class CmdStop extends Command {
     }
 
     public void executeCommand(CommandEvent event) {
-        TrackManager tm = new TrackManager(event.getGuild());
+        TrackManager tm = TrackManager.getInstance(event.getGuild());
 
         if (!event.getGuild().getAudioManager().isConnected()) {
             event.reply(event.getAuthor() + ", There is no active Audio Track.");
