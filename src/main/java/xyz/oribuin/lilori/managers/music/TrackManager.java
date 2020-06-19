@@ -25,12 +25,8 @@ public class TrackManager {
     public final AudioPlayerManager playerManager;
     public final Map<String, GuildMusicManager> musicManagers;
     private final Guild guild;
-    
-    public TrackManager() {
-        thi   
-    }
 
-    public TrackManager(Guild guild) {
+    private TrackManager(Guild guild) {
         this.playerManager = new DefaultAudioPlayerManager();
         this.playerManager.registerSourceManager(new YoutubeAudioSourceManager());
         this.playerManager.registerSourceManager(new HttpAudioSourceManager());
@@ -38,7 +34,6 @@ public class TrackManager {
 
         this.guild = guild;
         musicManagers = new HashMap<>();
-        instance = this;
     }
 
     public GuildMusicManager getMusicManager() {
@@ -53,7 +48,11 @@ public class TrackManager {
         return musicManager;
     }
     
-    public static synchronized TrackManager getInstance() {
+
+    public static synchronized TrackManager getInstance(Guild guild) {
+        if (instance == null) {
+            instance = new TrackManager(guild);
+        }
         return instance;
     }
 
