@@ -9,9 +9,12 @@ import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,12 +22,11 @@ import java.util.Map;
 
 public class TrackManager {
 
-    public List<AudioTrack> trackList = new ArrayList<>();
-
     private static TrackManager instance;
     public final AudioPlayerManager playerManager;
     public final Map<String, GuildMusicManager> musicManagers;
     private final Guild guild;
+    public List<AudioTrack> trackList = new ArrayList<>();
 
     private TrackManager(Guild guild) {
         this.playerManager = new DefaultAudioPlayerManager();
@@ -34,6 +36,13 @@ public class TrackManager {
 
         this.guild = guild;
         musicManagers = new HashMap<>();
+    }
+
+    public static TrackManager getInstance(Guild guild) {
+        if (instance == null) {
+            instance = new TrackManager(guild);
+        }
+        return instance;
     }
 
     public GuildMusicManager getMusicManager() {
@@ -47,24 +56,34 @@ public class TrackManager {
         musicManager.getAudioManager(guild).setSendingHandler(musicManager.getSendHandler());
         return musicManager;
     }
-    
 
-    public static synchronized TrackManager getInstance(Guild guild) {
-        if (instance == null) {
-            instance = new TrackManager(guild);
-        }
-        return instance;
-    }
-
-    public void loadAndPlay(TextChannel textChannel, String trackUrl, boolean addPlaylist) {
+    public void loadAndPlay(Member author, TextChannel textChannel, String trackUrl, boolean addPlaylist) {
         playerManager.loadItemOrdered(this.getMusicManager(), trackUrl, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack track) {
+                // Message Here
+                long totalSeconds = track.getDuration() / 1000;
+                totalSeconds %= 3600;
+                long minutes = totalSeconds / 60;
+                long seconds = totalSeconds % 60;
+
+                EmbedBuilder embedBuilder = new EmbedBuilder()
+                        .setAuthor("\uD83C\uDFB5 Now Playing " + track.getInfo().title)
+                        .setColor(Color.RED)
+                        .setDescription("**Song URL**\n" +
+                                track.getInfo().uri + "\n \n" +
+                                "**Song Duration**\n" +
+                                minutes + " minutes & " + seconds + " seconds\n \n")
+                        .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png");
+
+                textChannel.sendMessage(author.getAsMention()).embed(embedBuilder.build()).queue();
                 getMusicManager().scheduler.queue(track);
             }
 
             @Override
             public void playlistLoaded(AudioPlaylist playlist) {
+
+
                 AudioTrack firstTrack = playlist.getSelectedTrack();
                 List<AudioTrack> trackList = playlist.getTracks();
 
@@ -73,6 +92,7 @@ public class TrackManager {
                 }
 
                 if (addPlaylist) {
+                    textChannel.sendMessage(author.getAsMention() + ", Adding " + playlist.getTracks().size() +  " to the playlist").queue();
                     trackList.forEach(getMusicManager().scheduler::queue);
                     return;
                 }

@@ -1,13 +1,14 @@
 package xyz.oribuin.lilori.commands.music;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import net.dv8tion.jda.api.Permission;
 import xyz.oribuin.lilori.managers.command.Command;
 import xyz.oribuin.lilori.managers.command.CommandEvent;
 import xyz.oribuin.lilori.managers.music.GuildMusicManager;
 import xyz.oribuin.lilori.managers.music.TrackManager;
-import xyz.oribuin.lilori.managers.music.TrackScheduler;
 
+import java.awt.*;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
@@ -40,24 +41,15 @@ public class CmdPlay extends Command {
 
         String url = event.getMessage().getContentRaw().substring(args[0].length() + 1);
 
-        if (musicManager .player.isPaused()) {
+        if (musicManager.player.isPaused()) {
             musicManager.player.setPaused(false);
             event.reply(event.getAuthor().getAsMention() + ", Playback has now been resumed.");
         }
 
+        event.deleteCmd();
+        tm.loadAndPlay(event.getMember(), event.getTextChannel(), url, false);
         musicManager.getAudioManager(event.getGuild()).openAudioConnection(event.getMember().getVoiceState().getChannel());
-
-
-         tm.loadAndPlay(event.getTextChannel(), url, false);
-        AudioTrack track = musicManager.player.getPlayingTrack();
-
-        long totalSeconds = track.getDuration() / 1000;
-        totalSeconds %= 3600;
-        long minutes = totalSeconds / 60;
-        long seconds = totalSeconds % 60;
-
-        event.reply(event.getAuthor().getAsMention() + ", Now playing " + url);
-
+        tm.getTrackScheduler().onTrackEnd(tm.getMusicManager().player, musicManager.player.getPlayingTrack(), AudioTrackEndReason.FINISHED);
     }
 
 }

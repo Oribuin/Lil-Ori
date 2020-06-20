@@ -57,12 +57,13 @@ public class DataManager extends Manager {
             }
         });
     }
+
     /**
      * Add or Change a quote inside the database
      *
-     * @param label The quote label
+     * @param label  The quote label
      * @param author The quote sender
-     * @param quote The quote text
+     * @param quote  The quote text
      */
     public void updateQuote(String label, String author, String quote) {
         bot.getConnector().connect(connection -> {

@@ -2,9 +2,7 @@ package xyz.oribuin.lilori.commands.music;
 
 import xyz.oribuin.lilori.managers.command.Command;
 import xyz.oribuin.lilori.managers.command.CommandEvent;
-import xyz.oribuin.lilori.managers.music.GuildMusicManager;
 import xyz.oribuin.lilori.managers.music.TrackManager;
-import xyz.oribuin.lilori.managers.music.TrackScheduler;
 
 import java.util.Collections;
 
@@ -21,6 +19,11 @@ public class CmdVolume extends Command {
         TrackManager tm = TrackManager.getInstance(event.getGuild());
         String[] args = event.getMessage().getContentRaw().split(" ");
 
+        if (args.length < 2) {
+            event.reply("**Current Volume: " + tm.getMusicManager().player.getVolume() + "**");
+            return;
+        }
+
         if (event.getMember().getVoiceState() == null || !event.getMember().getVoiceState().inVoiceChannel()) {
             event.reply(event.getAuthor().getAsMention() + ", Could not change volume since you are not in the voice channel");
             return;
@@ -30,7 +33,7 @@ public class CmdVolume extends Command {
             int volume = Integer.parseInt(args[1]);
 
             tm.getMusicManager().player.setVolume(volume);
-            event.reply(event.getAuthor().getAsMention() + "Successfully changed volume to " + volume);
+            event.reply(event.getAuthor().getAsMention() + ", Successfully changed volume to " + volume);
         } catch (NumberFormatException ex) {
             event.reply(event.getAuthor().getAsMention() + ", Please include the correct arguments." + event.getPrefix() + this.getName() + " <volume>");
         }

@@ -45,7 +45,8 @@ public class CmdEval extends Command {
 
         for (Permission permission : Permission.values()) engine.put(permission.getName(), permission);
         for (OnlineStatus value : OnlineStatus.values()) engine.put(value.name(), value);
-        for (Activity.ActivityType activityType : Activity.ActivityType.values()) engine.put(activityType.name(), activityType);
+        for (Activity.ActivityType activityType : Activity.ActivityType.values())
+            engine.put(activityType.name(), activityType);
 
         String error = null;
 

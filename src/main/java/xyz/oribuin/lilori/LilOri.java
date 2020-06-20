@@ -17,10 +17,7 @@ import xyz.oribuin.lilori.commands.moderation.CmdBan;
 import xyz.oribuin.lilori.commands.moderation.CmdKick;
 import xyz.oribuin.lilori.commands.moderation.CmdMute;
 import xyz.oribuin.lilori.commands.moderation.CmdPurge;
-import xyz.oribuin.lilori.commands.music.CmdLoop;
-import xyz.oribuin.lilori.commands.music.CmdPlay;
-import xyz.oribuin.lilori.commands.music.CmdStop;
-import xyz.oribuin.lilori.commands.music.CmdVolume;
+import xyz.oribuin.lilori.commands.music.*;
 import xyz.oribuin.lilori.database.DatabaseConnector;
 import xyz.oribuin.lilori.database.SQLiteConnector;
 import xyz.oribuin.lilori.listeners.EventMentionOri;
@@ -111,6 +108,7 @@ public class LilOri extends ListenerAdapter {
 
                 // Music Commands
                 new CmdLoop(),
+                new CmdPause(),
                 new CmdPlay(),
                 new CmdStop(),
                 new CmdVolume(),

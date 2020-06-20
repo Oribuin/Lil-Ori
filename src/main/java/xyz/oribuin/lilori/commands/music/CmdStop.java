@@ -2,13 +2,12 @@ package xyz.oribuin.lilori.commands.music;
 
 import xyz.oribuin.lilori.managers.command.Command;
 import xyz.oribuin.lilori.managers.command.CommandEvent;
-import xyz.oribuin.lilori.managers.music.GuildMusicManager;
 import xyz.oribuin.lilori.managers.music.TrackManager;
 
 import java.util.Collections;
 
 public class CmdStop extends Command {
-    
+
     public CmdStop() {
         this.name = "Stop";
         this.description = "Stops playing Music.";

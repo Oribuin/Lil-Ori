@@ -44,8 +44,11 @@ public class CmdHelp extends Command {
                 break;
 
             case "music":
-                embedBuilder.setDescription("» Play Command - " + event.getPrefix() + "**play <Youtube-URL>** «\n" +
-                        "» Stop Command - " + event.getPrefix() + "**stop** «");
+                embedBuilder.setDescription("» Loop Command (WIP)- " + event.getPrefix() + "**loop** «\n" +
+                        "» Pause Command - " + event.getPrefix() + "**pause** «\n" +
+                        "» Play Command - " + event.getPrefix() + "**play <Youtube-URL>** «\n" +
+                        "» Stop Command - " + event.getPrefix() + "**stop** «\n" +
+                        "» Volume Command - " + event.getPrefix() + "**volume <Volume>** «");
                 break;
 
             case "games":
