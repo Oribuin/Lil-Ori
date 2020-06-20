@@ -14,17 +14,20 @@ public class EventMentionOri extends ListenerAdapter {
         EmbedBuilder embedBuilder = new EmbedBuilder()
                 .setAuthor("Lil' Ori Bot | Prefix: " + LilOri.getInstance().getGuildSettingsManager().getGuildSettings(event.getGuild()).getPrefix(), "https://discordapp.com/oauth2/authorize?client_id=581203970203189269&permissions=121498961&scope=bot")
                 .setColor(Color.decode("#33539e"))
-                .setDescription("» Discord JDA Utility Bot Created by Oribuin «\n" +
+                .setDescription("» Discord Utility Bot Created by Oribuin «\n" +
                         "\n" +
                         "• Find all my commands using **" + LilOri.getInstance().getGuildSettingsManager().getGuildSettings(event.getGuild()).getPrefix() + "help**\n" +
                         "• Find my source code on https://github.com/Oribuin/Lil-Ori/\n" +
-                        "• Website: https://oribuin.xyz/")
+                        "• Website: https://oribuin.xyz/\n" +
+                        "• Donate: https://oribuin.xyz/donate")
                 .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png");
 
         if (event.getMessage().getContentRaw().equals("<@!581203970203189269>"))
             event.getChannel().sendMessage(embedBuilder.build()).queue();
 
-        if (event.getMessage().getContentRaw().contains("<@!345406020450779149>") && !event.getAuthor().getId().equals("345406020450779149"))
-            event.getMessage().addReaction(":AngySnoot1:690641610983079967").queue();
+        String oriMention = event.getJDA().getUserById("345406020450779149").getAsMention();
+
+        if (event.getMessage().getContentRaw().contains(oriMention) && !event.getAuthor().getId().equals("345406020450779149"))
+            event.getMessage().addReaction(":what:702320610134458408").queue();
     }
 }

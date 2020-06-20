@@ -25,10 +25,10 @@ public class CommandExecutor extends ListenerAdapter {
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
         // TODO: Create a command client to store owner id
 
-
         GuildSettings guildSettings = bot.getGuildSettingsManager().getGuildSettings(event.getGuild());
 
-        if (!event.getMessage().getContentRaw().startsWith(guildSettings.getPrefix()))
+        String content = event.getMessage().getContentRaw().toLowerCase();
+        if (!content.startsWith(guildSettings.getPrefix().toLowerCase()))
             return;
 
         // Filter through each command

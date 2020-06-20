@@ -15,7 +15,7 @@ public class CmdPrefix extends Command {
         this.description = "Change the bot permission";
         this.aliases = Collections.emptyList();
         this.arguments = Collections.singletonList("<prefix>");
-        this.userPermissions = new Permission[]{Permission.ADMINISTRATOR};
+        //this.userPermissions = new Permission[]{Permission.ADMINISTRATOR};
     }
 
     @Override
@@ -24,6 +24,16 @@ public class CmdPrefix extends Command {
 
         if (args.length == 1) {
             event.reply(event.getAuthor().getAsMention() + ", Please provide the correct args! " + this.getName());
+            return;
+        }
+
+        if (args[0].equalsIgnoreCase(event.getPrefix())) {
+            event.reply(event.getAuthor().getAsMention() + ", That prefix is already set.");
+            return;
+        }
+
+        if (event.getPrefix().length() > 1) {
+            event.reply(event.getAuthor().getAsMention() + ", Due to current odd issues, you cannot have a prefix longer than 1 character");
             return;
         }
 

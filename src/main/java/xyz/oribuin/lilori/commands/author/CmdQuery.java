@@ -15,6 +15,7 @@ public class CmdQuery extends Command {
         this.name = "Query";
         this.description = "Query a command in MySQL.";
         this.aliases = Collections.emptyList();
+        this.ownerOnly = true;
         //this.arguments = "<Query>";
     }
 
