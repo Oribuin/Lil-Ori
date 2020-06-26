@@ -17,8 +17,6 @@ public class CmdShutdown extends Command {
 
     @Override
     public void executeCommand(CommandEvent event) {
-        String[] args = event.getMessage().getContentRaw().split(" ");
-
         event.getChannel().sendMessage("**Shutting down bot**").queue();
         event.getJDA().shutdown();
 
