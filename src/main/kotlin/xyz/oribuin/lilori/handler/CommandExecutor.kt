@@ -6,13 +6,10 @@ import net.dv8tion.jda.api.exceptions.PermissionException
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.Settings
-import java.util.*
 
 class CommandExecutor(private val bot: LilOri, private val commandHandler: CommandHandler) : ListenerAdapter() {
 
     override fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
-
-        println(15)
 
         // TODO: Create a command client to store owner id
         val guildSettings = bot.guildSettingsManager.getGuildSettings(event.guild)
@@ -21,10 +18,8 @@ class CommandExecutor(private val bot: LilOri, private val commandHandler: Comma
         if (!content.startsWith(guildSettings!!.getPrefix().toLowerCase()))
             return
 
-        println(24)
         // Filter through each command
         for (cmd in commandHandler.commandList()) {
-            println(27)
             try {
                 val args = event.message.contentRaw.split(" ").toTypedArray()
                 requireNotNull(cmd.aliases) { "Null Aliases in command " + cmd.name }
@@ -50,8 +45,9 @@ class CommandExecutor(private val bot: LilOri, private val commandHandler: Comma
                 // Check if the command author is a bot or fake
                 if (event.author.isBot || event.author.isFake) return
 
+                println(48)
                 // Check user permissions
-                if (!event.guild.selfMember.permissions.containsAll(listOf(*cmd.botPermissions))) {
+                if (cmd.botPermissions.isNotEmpty() && !event.guild.selfMember.permissions.containsAll(cmd.botPermissions.toList())) {
                     val embed = EmbedBuilder()
                             .setAuthor("\uD83D\uDC94 No Permission!")
                             .setColor(Settings.EMBED_COLOR)
@@ -61,16 +57,18 @@ class CommandExecutor(private val bot: LilOri, private val commandHandler: Comma
                     return
                 }
 
+                println(60)
+                
                 // Check user permissions
-                if (event.member != null && !event.member!!.permissions.containsAll(listOf(*cmd.userPermissions))) {
+                if (cmd.userPermissions.isNotEmpty() && event.member?.permissions?.containsAll(cmd.userPermissions.toList()) == false) {
                     val embed = EmbedBuilder()
                             .setAuthor("\uD83D\uDC94 No Permission!")
                             .setColor(Settings.EMBED_COLOR)
                             .setDescription("You do not have enough permissions for this command!")
                             .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png")
                     event.channel.sendMessage(event.author.asMention).embed(embed.build()).queue()
-                    return
                 }
+
 
                 // Execute this command
                 println("Executed command: ${cmd.name}")

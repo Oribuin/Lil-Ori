@@ -1,9 +1,6 @@
 package xyz.oribuin.lilori.commands.author
 
 import net.dv8tion.jda.api.EmbedBuilder
-import net.dv8tion.jda.api.OnlineStatus
-import net.dv8tion.jda.api.Permission
-import net.dv8tion.jda.api.entities.Activity
 import xyz.oribuin.lilori.handler.Command
 import xyz.oribuin.lilori.handler.CommandEvent
 import java.awt.Color

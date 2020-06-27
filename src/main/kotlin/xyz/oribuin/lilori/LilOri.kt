@@ -118,7 +118,7 @@ class LilOri private constructor() : ListenerAdapter() {
             if (command.aliases == null)
                 throw NullPointerException("Command aliases is null")
             else
-                println("Loaded Command: ${command.name} | (${++i}/${commandHandler.commands.size} ")
+                println("Loaded Command: ${command.name} | (${++i}/${commandHandler.commands.size}) ")
 
         println("*=* Loaded Up ${jda.selfUser.name} with ${commandHandler.commands.size}  Command(s) *=*")
     }

@@ -1,16 +1,8 @@
 package xyz.oribuin.lilori.commands.global.moderation
 
-import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.Permission
-import net.dv8tion.jda.api.entities.ChannelType
-import net.dv8tion.jda.api.entities.PermissionOverride
-import net.dv8tion.jda.api.entities.TextChannel
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import xyz.oribuin.lilori.handler.Command
 import xyz.oribuin.lilori.handler.CommandEvent
-import java.util.concurrent.TimeUnit
-import java.util.function.Consumer
-import java.util.function.Predicate
 
 class CmdPurge() : Command() {
 
