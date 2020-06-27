@@ -12,17 +12,18 @@ class CmdPlay : Command() {
         name = "Play"
         description = "Play Music"
         aliases = emptyList()
+        arguments = listOf("<youtube_url>")
         botPermissions = arrayOf(Permission.MESSAGE_MANAGE)
     }
 
-    override fun executeCommand(event: CommandEvent?) {
-        (event?: return)
+    override fun executeCommand(event: CommandEvent) {
+
 
         val tm = getInstance(event.guild)
         val musicManager = (tm?: return).musicManager
         val args = event.message.contentRaw.split(" ").toTypedArray()
 
-        if (event.member!!.voiceState == null && !event.member!!.voiceState!!.inVoiceChannel()) {
+        if (event.member?.voiceState == null && event.member?.voiceState?.inVoiceChannel() == false) {
             event.deleteCmd(10, TimeUnit.SECONDS)
             event.timedReply(event.author.asMention + ", You must be in a voice channel to execute this command.", 10, TimeUnit.SECONDS)
             return
@@ -45,7 +46,7 @@ class CmdPlay : Command() {
 
         tm.loadAndPlay(event.member!!, event.textChannel, url, false)
 
-        musicManager.getAudioManager(event.guild).openAudioConnection(event.member!!.voiceState?.channel)
+        musicManager.getAudioManager(event.guild).openAudioConnection(event.member?.voiceState?.channel)
         tm.trackScheduler.onTrackEnd(tm.musicManager.player, musicManager.player.playingTrack, AudioTrackEndReason.FINISHED)
     }
 }

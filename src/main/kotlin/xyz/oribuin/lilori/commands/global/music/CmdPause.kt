@@ -11,19 +11,19 @@ class CmdPause : Command() {
         name = "Pause"
         aliases = emptyList()
         description = "Pause the music"
+        arguments = emptyList()
     }
 
-    override fun executeCommand(event: CommandEvent?) {
-        (event?: return)
-
+    override fun executeCommand(event: CommandEvent) {
         val tm = getInstance(event.guild)
+        (tm?: return)
 
-        if (event.member!!.voiceState == null || !event.member!!.voiceState!!.inVoiceChannel()) {
+        if (event.member?.voiceState == null || event.member?.voiceState?.inVoiceChannel() == false) {
             event.reply(event.author.asMention + ", Could not change volume since you are not in the voice channel")
             return
         }
 
-        val player = tm!!.musicManager.player
+        val player = tm.musicManager.player
         val msg: String
 
         if (player.isPaused) {

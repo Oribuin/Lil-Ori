@@ -10,11 +10,13 @@ class CmdColor : Command() {
         name = "Color"
         description = "See a color in an embed."
         aliases = emptyList()
+        arguments = listOf("<#hex>/<r,g,b>")
     }
 
     private var embedColor: Color? = null
-    override fun executeCommand(event: CommandEvent?) {
-        val args = event!!.message.contentRaw.split(" ").toTypedArray()
+    override fun executeCommand(event: CommandEvent) {
+
+        val args = event.message.contentRaw.split(" ").toTypedArray()
         if (args.size < 2) {
             event.reply(event.author.asMention + ", Please include the correct arguments. " + event.prefix + "color <#HEX-CODE/Red,Green,Blue>")
             return
@@ -26,14 +28,14 @@ class CmdColor : Command() {
         }
 
         try {
-            if (args[1].startsWith("#")) {
-                embedColor = Color.decode(args[1])
+            embedColor = if (args[1].startsWith("#")) {
+                Color.decode(args[1])
 
             } else {
                 val red = args[1].toInt()
                 val green = args[2].toInt()
                 val blue = args[3].toInt()
-                embedColor = Color(red, green, blue)
+                Color(red, green, blue)
             }
 
             val embedBuilder = EmbedBuilder()

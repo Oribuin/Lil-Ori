@@ -9,10 +9,11 @@ class CmdStop : Command() {
         name = "Stop"
         description = "Stops playing Music."
         aliases = emptyList()
+        arguments = emptyList()
     }
 
-    override fun executeCommand(event: CommandEvent?) {
-        (event?: return)
+    override fun executeCommand(event: CommandEvent) {
+
         val tm = getInstance(event.guild)
         (tm?: return)
 

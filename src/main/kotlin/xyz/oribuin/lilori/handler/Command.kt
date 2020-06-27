@@ -20,12 +20,12 @@ open class Command : ListenerAdapter() {
         protected set
     var isOwnerOnly = false
         protected set
-    lateinit var userPermissions: Array<Permission>
+    var userPermissions: Array<Permission> = emptyArray()
         protected set
-    lateinit var botPermissions: Array<Permission>
+    var botPermissions: Array<Permission> = emptyArray()
         protected set
 
-    open fun executeCommand(event: CommandEvent?) {
+    open fun executeCommand(event: CommandEvent) {
         // Unused
     }
 

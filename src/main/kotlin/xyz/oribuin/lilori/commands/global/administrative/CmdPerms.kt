@@ -13,11 +13,10 @@ class CmdPerms : Command() {
         name = "Permissions"
         aliases = listOf("Perms")
         description = "List of permissions the bot has."
-        aliases = emptyList()
+        arguments = emptyList()
     }
 
-    override fun executeCommand(event: CommandEvent?) {
-        (event ?: return)
+    override fun executeCommand(event: CommandEvent) {
 
         val perms: MutableList<String> = ArrayList()
         event.selfMember.permissions.forEach(Consumer { permission: Permission -> perms.add(permission.getName().toLowerCase().replace("_", " ")) })

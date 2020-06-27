@@ -13,10 +13,11 @@ class DataManager(bot: LilOri?) : Manager(bot!!) {
      * Create all the SQLite Tables if they don't exist.
      */
     private fun createTables() {
-        bot.connector!!.connect { connection: Connection ->
+        bot.connector?.connect { connection: Connection ->
             val queries = arrayOf(
                     "CREATE TABLE IF NOT EXISTS guild_settings (guild_id LONG, prefix TXT, PRIMARY KEY(guild_id))",
                     "CREATE TABLE IF NOT EXISTS quotes (label TXT, author TXT, quote TXT)")
+
             for (query in queries) {
                 connection.prepareStatement(query).use { statement -> statement.executeUpdate() }
             }
@@ -24,7 +25,7 @@ class DataManager(bot: LilOri?) : Manager(bot!!) {
     }
 
     fun createGuild(guild: Guild, prefix: String?) {
-        bot.connector!!.connect { connection: Connection ->
+        bot.connector?.connect { connection: Connection ->
             val createGuild = "INSERT INTO guild_settings (guild_id, prefix) VALUES (?, ?)"
             connection.prepareStatement(createGuild).use { statement ->
                 statement.setLong(1, guild.idLong)
@@ -35,7 +36,7 @@ class DataManager(bot: LilOri?) : Manager(bot!!) {
     }
 
     fun removeGuild(guild: Guild) {
-        bot.connector!!.connect { connection: Connection ->
+        bot.connector?.connect { connection: Connection ->
             val deleteGuild = "REMOVE FROM guild_settings WHERE guild_id = ?"
             connection.prepareStatement(deleteGuild).use { statement ->
                 statement.setLong(1, guild.idLong)
@@ -52,7 +53,7 @@ class DataManager(bot: LilOri?) : Manager(bot!!) {
      * @param quote  The quote text
      */
     fun updateQuote(label: String?, author: String?, quote: String?) {
-        bot.connector!!.connect { connection: Connection ->
+        bot.connector?.connect { connection: Connection ->
             val addQuote = "REPLACE INTO quotes (label, author, quote) VALUES (?, ?, ?)"
             connection.prepareStatement(addQuote).use { statement ->
                 statement.setString(1, label)
@@ -69,7 +70,7 @@ class DataManager(bot: LilOri?) : Manager(bot!!) {
      * @param label the label being checked
      */
     fun removeQuote(label: String?) {
-        bot.connector!!.connect { connection: Connection ->
+        bot.connector?.connect { connection: Connection ->
             val removeQuote = "DELETE FROM quotes WHERE label = ?"
             connection.prepareStatement(removeQuote).use { statement ->
                 statement.setString(1, label)

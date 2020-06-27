@@ -12,10 +12,11 @@ class CmdLoop : Command() {
         name = "Loop"
         aliases = emptyList()
         description = "Toggle song looping on/off"
+        arguments = emptyList()
     }
 
-    override fun executeCommand(event: CommandEvent?) {
-        if (event!!.member!!.voiceState == null || !event.member!!.voiceState!!.inVoiceChannel()) {
+    override fun executeCommand(event: CommandEvent) {
+        if (event.member?.voiceState == null || event.member?.voiceState?.inVoiceChannel() == false) {
             event.reply(event.author.asMention + ", Could not loop since you are not in the voice channel")
             return
         }

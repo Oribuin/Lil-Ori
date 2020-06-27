@@ -54,11 +54,11 @@ class GeneralEvents : ListenerAdapter() {
 
     override fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
         val embedBuilder = EmbedBuilder()
-                .setAuthor("Lil' Ori Bot | Prefix: " + LilOri.instance.guildSettingsManager.getGuildSettings(event.guild)!!.getPrefix(), "https://discordapp.com/oauth2/authorize?client_id=581203970203189269&permissions=121498961&scope=bot")
+                .setAuthor("Lil' Ori Bot | Prefix: " + LilOri.instance.guildSettingsManager.getGuildSettings(event.guild)?.getPrefix(), "https://discordapp.com/oauth2/authorize?client_id=581203970203189269&permissions=121498961&scope=bot")
                 .setColor(Color.decode("#33539e"))
                 .setDescription("» Discord Utility Bot Created by Oribuin « " +
                         " " +
-                        "• Find all my commands using **${LilOri.instance.guildSettingsManager.getGuildSettings(event.guild)!!.getPrefix()}help** " +
+                        "• Find all my commands using **${LilOri.instance.guildSettingsManager.getGuildSettings(event.guild)?.getPrefix()}help** " +
                         "• Find my source code on https://github.com/Oribuin/Lil-Ori/" +
                         "• Website: https://oribuin.xyz/" +
                         "• Donate: https://oribuin.xyz/donate".trimIndent())

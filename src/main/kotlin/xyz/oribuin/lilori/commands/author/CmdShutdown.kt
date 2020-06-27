@@ -8,13 +8,11 @@ class CmdShutdown : Command() {
         name = "Shutdown"
         description = "Shutdown the bot."
         aliases = emptyList()
-        //this.arguments = "[None]";
+        arguments = emptyList()
         isOwnerOnly = true
     }
 
-    override fun executeCommand(event: CommandEvent?) {
-        (event ?: return)
-
+    override fun executeCommand(event: CommandEvent) {
         event.channel.sendMessage("**Shutting down bot**").queue()
         event.jda.shutdown()
     }

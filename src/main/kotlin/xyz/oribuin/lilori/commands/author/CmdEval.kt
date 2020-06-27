@@ -11,14 +11,15 @@ import javax.script.ScriptException
 class CmdEval : Command() {
     init {
         name = "Eval"
-        description = "An evaluation."
         aliases = emptyList()
-        isEnabled = false;
+        description = "An evaluation."
+        arguments = emptyList()
+        isEnabled = false
     }
 
-    override fun executeCommand(event: CommandEvent?) {
+    override fun executeCommand(event: CommandEvent) {
 
-        val args = (event ?: return).message.contentRaw.split(" ").toTypedArray()
+        val args = event.message.contentRaw.split(" ").toTypedArray()
 
         if (args.size == 1) {
             event.reply(event.author.asMention + ", Please include some code to evaluate.")

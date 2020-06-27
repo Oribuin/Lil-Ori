@@ -9,6 +9,11 @@ import java.util.*
 
 class GuildSettingsManager(bot: LilOri?) : Manager(bot!!) {
     private val guildSettings: MutableMap<Long, GuildSettings?>
+
+    init {
+        guildSettings = HashMap()
+    }
+
     override fun enable() {
         // Unused
     }
@@ -19,11 +24,14 @@ class GuildSettingsManager(bot: LilOri?) : Manager(bot!!) {
      * @param guild The guild being loaded.
      */
     fun loadGuildSettings(guild: Guild) {
-        if (guildSettings.containsKey(guild.idLong)) return
-        bot.connector!!.connect { connection: Connection ->
+        if (guildSettings.containsKey(guild.idLong))
+            return
+
+        bot.connector?.connect { connection: Connection ->
             val settings = default
             guildSettings[guild.idLong] = settings
             val commandPrefix = "SELECT prefix FROM guild_settings WHERE guild_id = ?"
+
             connection.prepareStatement(commandPrefix).use { statement ->
                 statement.setLong(1, guild.idLong)
                 val resultSet = statement.executeQuery()
@@ -32,7 +40,7 @@ class GuildSettingsManager(bot: LilOri?) : Manager(bot!!) {
         }
     }
 
-    fun unloadGuildSettings(guild: Guild) {
+    private fun unloadGuildSettings(guild: Guild) {
         guildSettings.remove(guild.idLong)
     }
 
@@ -42,9 +50,9 @@ class GuildSettingsManager(bot: LilOri?) : Manager(bot!!) {
      * @param guild the guild being deleted.
      */
     fun removeGuildSettings(guild: Guild) {
-        unloadGuildSettings(guild)
+        this.unloadGuildSettings(guild)
         val removeGuild = "DELETE FROM guild_settings WHERE guild_id = ?"
-        bot.connector!!.connect { connection: Connection -> connection.prepareStatement(removeGuild).use { statement -> statement.setLong(1, guild.idLong) } }
+        bot.connector?.connect { connection: Connection -> connection.prepareStatement(removeGuild).use { statement -> statement.setLong(1, guild.idLong) } }
     }
 
     /**
@@ -54,7 +62,9 @@ class GuildSettingsManager(bot: LilOri?) : Manager(bot!!) {
      * @return Guild's Settings
      */
     fun getGuildSettings(guild: Guild): GuildSettings? {
-        if (!guildSettings.containsKey(guild.idLong)) loadGuildSettings(guild)
+        if (!guildSettings.containsKey(guild.idLong))
+            loadGuildSettings(guild)
+
         return guildSettings[guild.idLong]
     }
 
@@ -65,18 +75,18 @@ class GuildSettingsManager(bot: LilOri?) : Manager(bot!!) {
      * @param prefix represents the new command prefix
      */
     fun updateGuild(guild: Guild, prefix: String?) {
-        getGuildSettings(guild)!!.setPrefix(prefix!!)
-        bot.connector!!.connect { connection: Connection ->
+        if (prefix != null) {
+            getGuildSettings(guild)?.setPrefix(prefix)
+        }
+
+        bot.connector?.connect { connection: Connection ->
             val updateSettings = "REPLACE INTO guild_settings (guild_id, prefix) VALUES (?, ?)"
+
             connection.prepareStatement(updateSettings).use { statement ->
                 statement.setLong(1, guild.idLong)
                 statement.setString(2, prefix)
                 statement.executeUpdate()
             }
         }
-    }
-
-    init {
-        guildSettings = HashMap()
     }
 }

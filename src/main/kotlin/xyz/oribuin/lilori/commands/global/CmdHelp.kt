@@ -8,15 +8,10 @@ class CmdHelp : Command() {
         name = "Help"
         aliases = listOf("Support")
         description = "Get the list of commands for the bot."
+        arguments = emptyList()
     }
 
-    override fun executeCommand(event: CommandEvent?) {
-        (event ?: println("executed $name"))
-
-        val args = (event ?: return).message.contentRaw.split(" ").toTypedArray()
-        val prefix: String? = event.prefix
-
+    override fun executeCommand(event: CommandEvent) {
         event.reply("Coming soon:tm:")
-
     }
 }

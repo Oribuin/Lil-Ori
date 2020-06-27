@@ -15,10 +15,11 @@ class CmdGay : Command() {
         description = "How gay are you?"
         aliases = emptyList()
         botPermissions = arrayOf(Permission.MESSAGE_MANAGE, Permission.MESSAGE_ADD_REACTION)
+        arguments = emptyList()
     }
 
-    override fun executeCommand(event: CommandEvent?) {
-        (event?: return)
+    override fun executeCommand(event: CommandEvent) {
+
 
         val upperBound = 100
         val lowerBound = 1

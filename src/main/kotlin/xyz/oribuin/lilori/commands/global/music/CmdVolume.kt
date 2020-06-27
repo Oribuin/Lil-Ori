@@ -9,10 +9,11 @@ class CmdVolume : Command() {
         name = "Volume"
         aliases = emptyList()
         description = "Change the volume of the volume"
+        arguments = listOf("<volume>")
     }
 
-    override fun executeCommand(event: CommandEvent?) {
-        (event?: return)
+    override fun executeCommand(event: CommandEvent) {
+
         val tm = getInstance(event.guild)
         (tm?: return)
 
@@ -21,7 +22,7 @@ class CmdVolume : Command() {
             event.reply("**Current Volume: ${tm.musicManager.player.volume}**")
             return
         }
-        if (event.member!!.voiceState == null || !event.member!!.voiceState?.inVoiceChannel()!!) {
+        if (event.member?.voiceState == null || !event.member?.voiceState?.inVoiceChannel()!!) {
             event.reply("${event.author.asMention}, Could not change volume since you are not in the voice channel")
             return
         }

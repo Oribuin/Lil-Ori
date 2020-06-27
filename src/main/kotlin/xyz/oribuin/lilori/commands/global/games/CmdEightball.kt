@@ -10,12 +10,11 @@ class CmdEightball : Command() {
     init {
         name = "Eightball"
         aliases = listOf("Ball")
-        //this.arguments = "<Question>";
         description = "Ask the 8ball any question?"
+        arguments = emptyList()
     }
 
-    override fun executeCommand(event: CommandEvent?) {
-        (event ?: return)
+    override fun executeCommand(event: CommandEvent) {
 
         val args = event.message.contentRaw.split(" ").toTypedArray()
         if (args.size < 2) {

@@ -10,13 +10,12 @@ class CmdFeed : Command() {
         name = "Feed"
         aliases = listOf("Snack")
         description = "Feed' Lil Ori Cookies."
-        //this.arguments = "";
+        arguments = emptyList()
     }
 
     private var cookies = 0
 
-    override fun executeCommand(event: CommandEvent?) {
-        (event?: return)
+    override fun executeCommand(event: CommandEvent) {
 
         val args = event.message.contentRaw.split(" ").toTypedArray()
 

@@ -10,13 +10,14 @@ import java.sql.Connection
 class CmdQuery : Command() {
     init {
         name = "Query"
-        description = "Query a command in MySQL."
         aliases = emptyList()
+        description = "Query a command in SQLite."
+        arguments = emptyList()
         isOwnerOnly = true
     }
 
-    override fun executeCommand(event: CommandEvent?) {
-        val args = event!!.message.contentRaw.split(" ").toTypedArray()
+    override fun executeCommand(event: CommandEvent) {
+        val args = event.message.contentRaw.split(" ").toTypedArray()
 
         if (args.size < 2) {
             event.reply("${event.author.asMention}, Please include the correct arguments.")

@@ -14,11 +14,13 @@ class CmdQuote : Command() {
         name = "Quote"
         description = "Quote command."
         aliases = emptyList()
+        arguments = listOf("select", "<quote_id>0")
     }
 
 
-    override fun executeCommand(event: CommandEvent?) {
-        val args = event!!.message.contentRaw.split(" ").toTypedArray()
+    override fun executeCommand(event: CommandEvent) {
+        val args = event.message.contentRaw.split(" ").toTypedArray()
+
         if (args.size < 2) {
             val embedBuilder = EmbedBuilder()
                     .setAuthor("Lil' Ori Quotes")

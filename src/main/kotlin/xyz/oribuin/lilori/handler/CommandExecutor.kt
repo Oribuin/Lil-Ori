@@ -15,7 +15,7 @@ class CommandExecutor(private val bot: LilOri, private val commandHandler: Comma
         val guildSettings = bot.guildSettingsManager.getGuildSettings(event.guild)
         val content = event.message.contentRaw.toLowerCase()
 
-        if (!content.startsWith(guildSettings!!.getPrefix().toLowerCase()))
+        if (guildSettings?.getPrefix()?.toLowerCase()?.let { content.startsWith(it) } == false)
             return
 
         // Filter through each command
@@ -26,7 +26,7 @@ class CommandExecutor(private val bot: LilOri, private val commandHandler: Comma
 
                 // Check if command name or alias
                 if (!cmd.name.equals(args[0].substring(1), ignoreCase = true) &&
-                        cmd.aliases!!.stream().noneMatch { x: String -> x.equals(args[0].substring(1), ignoreCase = true) }) continue
+                        cmd.aliases?.stream()?.noneMatch { x: String -> x.equals(args[0].substring(1), ignoreCase = true) } == true) continue
 
                 // Check if command is enabled
                 if (!cmd.isEnabled) return
@@ -45,7 +45,6 @@ class CommandExecutor(private val bot: LilOri, private val commandHandler: Comma
                 // Check if the command author is a bot or fake
                 if (event.author.isBot || event.author.isFake) return
 
-                println(48)
                 // Check user permissions
                 if (cmd.botPermissions.isNotEmpty() && !event.guild.selfMember.permissions.containsAll(cmd.botPermissions.toList())) {
                     val embed = EmbedBuilder()
@@ -57,8 +56,6 @@ class CommandExecutor(private val bot: LilOri, private val commandHandler: Comma
                     return
                 }
 
-                println(60)
-                
                 // Check user permissions
                 if (cmd.userPermissions.isNotEmpty() && event.member?.permissions?.containsAll(cmd.userPermissions.toList()) == false) {
                     val embed = EmbedBuilder()
@@ -73,12 +70,15 @@ class CommandExecutor(private val bot: LilOri, private val commandHandler: Comma
                 // Execute this command
                 println("Executed command: ${cmd.name}")
                 cmd.executeCommand(CommandEvent(bot, event))
-            } catch (ex: PermissionException) {
+            } catch (ex: Exception) {
                 // Send permission exception log to console
+                /*
                 println(("Error Running Command: ${cmd.name} " +
                         "Guild: ${event.guild.name} " +
                         "Author: ${event.author.asTag} " +
-                        "Permission: ${ex.permission}").trimIndent())
+                        "Permission: ${ex}").trimIndent())
+                 */
+                ex.printStackTrace()
             }
         }
     }

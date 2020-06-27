@@ -13,10 +13,11 @@ class CmdSlap : Command() {
         name = "Slap"
         aliases = emptyList()
         description = "Slap a user"
+        arguments = listOf("<@users>")
     }
 
-    override fun executeCommand(event: CommandEvent?) {
-        (event?: return)
+    override fun executeCommand(event: CommandEvent) {
+
 
         val args = event.message.contentRaw.split(" ").toTypedArray()
 

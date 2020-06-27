@@ -1,15 +1,23 @@
 package xyz.oribuin.lilori.commands.global
 
 import net.dv8tion.jda.api.EmbedBuilder
+import net.dv8tion.jda.api.Permission
 import xyz.oribuin.lilori.handler.Command
 import xyz.oribuin.lilori.handler.CommandEvent
 import java.awt.Color
 
 class CmdPrefix : Command() {
-    override fun executeCommand(event: CommandEvent?) {
-        (event ?: return)
+    init {
+        name = "Prefix"
+        description = "Change the bot permission"
+        aliases = emptyList()
+        arguments = listOf("<prefix>")
+        userPermissions = arrayOf(Permission.ADMINISTRATOR)
+    }
 
+    override fun executeCommand(event: CommandEvent) {
         val args = event.message.contentRaw.split(" ").toTypedArray()
+
         if (args.size == 1) {
             event.reply("${event.author.asMention}, Please provide the correct args!");
             return
@@ -37,13 +45,5 @@ class CmdPrefix : Command() {
         event.reply(embedBuilder)
         bot.guildSettingsManager.updateGuild(event.guild, args[1])
         println(event.author.asTag + " Updated \"" + event.guild.name + "\" Prefix to " + args[1])
-    }
-
-    init {
-        name = "Prefix"
-        description = "Change the bot permission"
-        aliases = emptyList()
-        arguments = listOf("<prefix>")
-        //this.userPermissions = new Permission[]{Permission.ADMINISTRATOR};
     }
 }
