@@ -47,6 +47,6 @@ class CmdPlay : Command() {
         tm.loadAndPlay(event.member!!, event.textChannel, url, false)
 
         musicManager.getAudioManager(event.guild).openAudioConnection(event.member?.voiceState?.channel)
-        tm.trackScheduler.onTrackEnd(tm.musicManager.player, musicManager.player.playingTrack, AudioTrackEndReason.FINISHED)
+        //tm.trackScheduler.onTrackEnd(tm.musicManager.player, musicManager.player.playingTrack, AudioTrackEndReason.FINISHED)
     }
 }

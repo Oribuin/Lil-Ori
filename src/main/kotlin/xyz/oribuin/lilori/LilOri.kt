@@ -2,10 +2,7 @@ package xyz.oribuin.lilori
 
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.hooks.ListenerAdapter
-import xyz.oribuin.lilori.commands.author.CmdEval
-import xyz.oribuin.lilori.commands.author.CmdQuery
-import xyz.oribuin.lilori.commands.author.CmdShutdown
-import xyz.oribuin.lilori.commands.author.CmdTest
+import xyz.oribuin.lilori.commands.author.*
 import xyz.oribuin.lilori.commands.global.CmdColor
 import xyz.oribuin.lilori.commands.global.CmdHelp
 import xyz.oribuin.lilori.commands.global.CmdPing
@@ -19,6 +16,7 @@ import xyz.oribuin.lilori.database.SQLiteConnector
 import xyz.oribuin.lilori.handler.CommandExecutor
 import xyz.oribuin.lilori.handler.CommandHandler
 import xyz.oribuin.lilori.listeners.GeneralEvents
+import xyz.oribuin.lilori.listeners.support.SupportListener
 import xyz.oribuin.lilori.managers.DataManager
 import xyz.oribuin.lilori.managers.GuildSettingsManager
 import java.io.File
@@ -28,7 +26,7 @@ import javax.security.auth.login.LoginException
 class LilOri private constructor() : ListenerAdapter() {
 
     // Define handlers
-    private val commandHandler: CommandHandler
+    val commandHandler: CommandHandler
     var connector: DatabaseConnector? = null
 
     // Define managers
@@ -50,10 +48,7 @@ class LilOri private constructor() : ListenerAdapter() {
                 // Moderation Commands
                 CmdPurge(),
                 // Author Commands
-                CmdEval(),
-                CmdQuery(),
-                CmdShutdown(),
-                CmdTest(),
+                CmdEval(), CmdQuery(), CmdShutdown(), CmdTest(), CmdUpdate(),
                 // Admin Commands
                 CmdPerms()
         )
@@ -102,12 +97,12 @@ class LilOri private constructor() : ListenerAdapter() {
         commandHandler = CommandHandler()
         dataManager = DataManager(this)
 
-        registerCommands()
-        enable()
+        this.registerCommands()
+        this.enable()
 
         // Login Bot
         val jda = JDABuilder.createDefault(Settings.TOKEN)
-                .addEventListeners(CommandExecutor(this, commandHandler), GeneralEvents(), this)
+                .addEventListeners(CommandExecutor(this, commandHandler), GeneralEvents(), SupportListener(), this)
                 .build()
 
         println("*=* Loading Lil' Ori Commands *=*")
@@ -122,4 +117,5 @@ class LilOri private constructor() : ListenerAdapter() {
 
         println("*=* Loaded Up ${jda.selfUser.name} with ${commandHandler.commands.size}  Command(s) *=*")
     }
+
 }

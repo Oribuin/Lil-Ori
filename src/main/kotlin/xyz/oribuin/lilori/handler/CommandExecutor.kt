@@ -68,16 +68,13 @@ class CommandExecutor(private val bot: LilOri, private val commandHandler: Comma
 
 
                 // Execute this command
-                println("Executed command: ${cmd.name}")
                 cmd.executeCommand(CommandEvent(bot, event))
-            } catch (ex: Exception) {
+            } catch (ex: PermissionException) {
                 // Send permission exception log to console
-                /*
                 println(("Error Running Command: ${cmd.name} " +
                         "Guild: ${event.guild.name} " +
                         "Author: ${event.author.asTag} " +
-                        "Permission: ${ex}").trimIndent())
-                 */
+                        "Permission: ${ex.permission}").trimIndent())
                 ex.printStackTrace()
             }
         }

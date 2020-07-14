@@ -39,3 +39,4 @@ archived
 data/lilori.db
 data/quotes.json
 src/main/kotlin/xyz/oribuin/lilori/Settings.kt
+src/main/kotlin/xyz/oribuin/lilori/commands/author/CmdTest.kt

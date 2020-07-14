@@ -7,6 +7,12 @@ class CommandHandler {
         this.commands.addAll(cmds)
     }
 
+    fun registerCommand(cmd: Command) {
+        if (!commands.contains(cmd)) {
+            commands.add(cmd)
+        }
+    }
+
     fun commandList(): List<Command> {
         return this.commands.toList()
     }
