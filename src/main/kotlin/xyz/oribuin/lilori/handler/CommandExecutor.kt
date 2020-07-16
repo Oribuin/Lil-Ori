@@ -45,8 +45,8 @@ class CommandExecutor(private val bot: LilOri, private val commandHandler: Comma
                     return
                 }
 
-                // Check if the command author is a bot or fake
-                if (event.author.isBot || event.author.isFake) return
+                // Check if the command author is a bot
+                if (event.author.isBot) return
 
                 // Check user permissions
                 if (cmd.botPermissions.isNotEmpty() && !event.guild.selfMember.permissions.containsAll(cmd.botPermissions.toList())) {

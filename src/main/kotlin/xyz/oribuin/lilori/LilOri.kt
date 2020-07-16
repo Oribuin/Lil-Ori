@@ -23,6 +23,7 @@ import xyz.oribuin.lilori.listeners.GeneralEvents
 import xyz.oribuin.lilori.listeners.support.SupportListeners
 import xyz.oribuin.lilori.managers.DataManager
 import xyz.oribuin.lilori.managers.GuildSettingsManager
+import xyz.oribuin.lilori.utils.EventWaiter
 import java.io.File
 import java.io.IOException
 import javax.security.auth.login.LoginException
@@ -38,7 +39,7 @@ class LilOri private constructor() : ListenerAdapter() {
     val guildSettingsManager: GuildSettingsManager
 
     // Define others
-    //private val eventWaiter = EventWaiter()
+    private val eventWaiter = EventWaiter()
 
     // Register all commands
     private fun registerCommands() {
@@ -58,7 +59,7 @@ class LilOri private constructor() : ListenerAdapter() {
 
                 // Support Discord commands
                 // Ticket
-                CmdTicket(), CmdClose()
+                CmdTicket(), CmdClose(eventWaiter)
         )
     }
 
@@ -111,7 +112,7 @@ class LilOri private constructor() : ListenerAdapter() {
         // Login Bot
         val jda = JDABuilder.createDefault(Settings.TOKEN)
                 .enableIntents(GatewayIntent.GUILD_MEMBERS)
-                .addEventListeners(CommandExecutor(this, commandHandler), GeneralEvents(), SupportListeners(), this)
+                .addEventListeners(CommandExecutor(this, commandHandler), GeneralEvents(), SupportListeners(), eventWaiter, this)
         
         val jdaBot = jda.build()
 
