@@ -15,6 +15,7 @@ class CmdEval : Command() {
         description = "An evaluation."
         arguments = emptyList()
         isEnabled = false
+        isOwnerOnly = true
     }
 
     override fun executeCommand(event: CommandEvent) {

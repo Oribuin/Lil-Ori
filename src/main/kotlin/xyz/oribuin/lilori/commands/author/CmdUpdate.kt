@@ -83,7 +83,7 @@ class CmdUpdate : Command() {
     private fun updateJar(event: CommandEvent) {
         event.channel.sendMessage("<a:bee:730546474424729712> **Starting to update JAR file.**").queue { msg ->
             try {
-                val file = File("build/libs", "LilOri.jar")
+                val file = File("build/libs", "Lil-Ori-1.0-all.jar")
                 // Edit message
                 msg.editMessage("<a:bee:730546474424729712> **Logging into SFTP.**").queue()
 

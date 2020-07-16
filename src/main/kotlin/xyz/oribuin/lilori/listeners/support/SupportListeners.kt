@@ -2,10 +2,12 @@ package xyz.oribuin.lilori.listeners.support
 
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.Permission
+import net.dv8tion.jda.api.events.guild.GuildBanEvent
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 
 class SupportListeners : ListenerAdapter() {
@@ -37,7 +39,7 @@ class SupportListeners : ListenerAdapter() {
         if (event.guild.id != "731659405958971413")
             return
 
-        // Define the channel name
+        // Define the channel
         val channel = event.guild.getTextChannelById("733059354328170629")
 
         // Embed builder
@@ -51,6 +53,25 @@ class SupportListeners : ListenerAdapter() {
         // Send message to channel
         (channel ?: return).sendMessage(embedBuilder.build()).queue()
         println("${event.user.asTag} (${event.user.id}) has left ${event.guild.name}!")
+    }
+
+    override fun onGuildBan(event: GuildBanEvent) {
+        if (event.guild.id != "731659405958971413")
+            return
+
+        // Define the channel
+        val channel = event.guild.getTextChannelById("733059354328170629")
+
+        channel?.sendMessage("${event.user.asTag} was banned from the server!")?.queue()
+    }
+
+    override fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
+        // Ticket channel check
+        if (event.channel.id == "733092364771655710") {
+            if (!event.message.contentRaw.toLowerCase().equals(";ticket")) {
+                event.message.delete().queue()
+            }
+        }
     }
 
     override fun onGuildVoiceJoin(event: GuildVoiceJoinEvent) {
@@ -76,6 +97,6 @@ class SupportListeners : ListenerAdapter() {
             return
 
         val channel = event.guild.getTextChannelsByName("voice-talk", true)[0]
-        (channel.getPermissionOverride(event.member)?: return).delete().queue()
+        (channel.getPermissionOverride(event.member) ?: return).delete().queue()
     }
 }

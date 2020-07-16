@@ -40,7 +40,7 @@ class CmdBan : Command() {
             return
         }
 
-        if (isHigher(event)) {
+        if (cantBan(event)) {
             sendRankHierarchy(event)
             return
         }
@@ -109,8 +109,13 @@ class CmdBan : Command() {
         event.channel.sendMessage(event.author.asMention).embed(embed.build()).queue()
     }
 
-    private fun isHigher(event: CommandEvent): Boolean {
+    private fun cantBan(event: CommandEvent): Boolean {
         val mentioned = event.message.mentionedMembers[0]
-        return if (mentioned === event.member) true else if (mentioned.isOwner) true else if (mentioned.isFake) true else if (mentioned.roles[0].position >= event.selfMember.roles[0].position) true else if (mentioned.roles[0].position >= event.member!!.roles[0].position) true else mentioned.user.isBot
+        return if (mentioned === event.member)
+            true
+        else if (mentioned.isOwner)
+            true
+        else
+            mentioned.user.isBot
     }
 }

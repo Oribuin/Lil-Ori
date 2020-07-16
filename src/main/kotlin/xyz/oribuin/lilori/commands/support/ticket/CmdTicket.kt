@@ -48,6 +48,8 @@ class CmdTicket : Command() {
                     }
                 }
 
-        event.reply("${event.author.asMention}, Successfully created your ticket channel!")
+        event.deleteCmd()
+        event.timedReply("${event.author.asMention}, Successfully created your ticket channel!", 30, TimeUnit.SECONDS)
+        println("${event.author.asTag} has created the ticket channel, $channelName")
     }
 }

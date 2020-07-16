@@ -9,10 +9,10 @@ class CmdTest : Command() {
         aliases = emptyList()
         description = "A test command."
         arguments = emptyList()
+        isOwnerOnly = true
     }
 
     override fun executeCommand(event: CommandEvent) {
         event.deleteCmd()
-        event.reply("test2")
     }
 }

@@ -34,7 +34,9 @@ class CmdQuery : Command() {
                         .setAuthor("Executed SQL Query")
                         .setColor(Color.decode("#33539e"))
                         .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png")
-                        .setDescription("""**Database:** (SQLite) lilori.db\n**Query: **$query""".trimMargin())
+                        .setDescription("""**Database:** (SQLite) lilori.db
+
+                        **Query: **$query""".trimMargin())
 
                 event.channel.sendMessage(event.author.asMention).embed(embedBuilder.build())
 

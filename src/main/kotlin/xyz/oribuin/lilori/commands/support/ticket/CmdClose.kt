@@ -20,8 +20,8 @@ class CmdClose() : Command() {
             return
         }
 
-        //event.channel.sendMessage(event.author.asMention + ", Are you sure you want to close the ticket channel?").queue { msg ->
-            /*
+        /*
+        event.channel.sendMessage(event.author.asMention + ", Are you sure you want to close the ticket channel?").queue { msg ->
             msg.addReaction("✅").queue()
             msg.addReaction("❌").queue()
 
