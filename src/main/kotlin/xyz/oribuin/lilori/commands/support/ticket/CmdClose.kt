@@ -4,7 +4,7 @@ import xyz.oribuin.lilori.handler.Command
 import xyz.oribuin.lilori.handler.CommandEvent
 import java.util.concurrent.TimeUnit
 
-class CmdClose() : Command() {
+class CmdClose : Command() {
     init {
         name = "Close"
         description = "Close a ticket!"

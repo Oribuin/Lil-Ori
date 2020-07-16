@@ -9,6 +9,7 @@ import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.TimeUnit
 import java.util.function.Consumer
 import java.util.function.Predicate
+import java.util.stream.Collectors
 import javax.annotation.Nonnull
 
 class EventWaiter(private val threadpool: ScheduledExecutorService) : EventListener {
@@ -35,7 +36,7 @@ class EventWaiter(private val threadpool: ScheduledExecutorService) : EventListe
         val cClass: Class<*> = event.javaClass
         if (waitingEvents.containsKey(cClass)) {
             // Out projected prohibits the use of 'public final fun attempt (event: T) Boolean? defined in xyz.oribuin.lilori.utils.WaitingEvent
-            //waitingEvents[cClass]?.forEach { i -> i.attempt(event) }
+            waitingEvents[cClass]?.stream()?.filter { i -> i?.attempt(event)!! }?.collect(Collectors.toSet())
         }
 
         if (event is ShutdownEvent) {
