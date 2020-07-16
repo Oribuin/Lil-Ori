@@ -27,7 +27,7 @@ class GuildSettingsManager(bot: LilOri?) : Manager(bot!!) {
         if (guildSettings.containsKey(guild.idLong))
             return
 
-        bot.connector?.connect { connection: Connection ->
+        bot.connector.connect { connection: Connection ->
             val settings = default
             guildSettings[guild.idLong] = settings
             val commandPrefix = "SELECT prefix FROM guild_settings WHERE guild_id = ?"
@@ -52,7 +52,7 @@ class GuildSettingsManager(bot: LilOri?) : Manager(bot!!) {
     fun removeGuildSettings(guild: Guild) {
         this.unloadGuildSettings(guild)
         val removeGuild = "DELETE FROM guild_settings WHERE guild_id = ?"
-        bot.connector?.connect { connection: Connection -> connection.prepareStatement(removeGuild).use { statement -> statement.setLong(1, guild.idLong) } }
+        bot.connector.connect { connection: Connection -> connection.prepareStatement(removeGuild).use { statement -> statement.setLong(1, guild.idLong) } }
     }
 
     /**
@@ -79,7 +79,7 @@ class GuildSettingsManager(bot: LilOri?) : Manager(bot!!) {
             getGuildSettings(guild)?.setPrefix(prefix)
         }
 
-        bot.connector?.connect { connection: Connection ->
+        bot.connector.connect { connection: Connection ->
             val updateSettings = "REPLACE INTO guild_settings (guild_id, prefix) VALUES (?, ?)"
 
             connection.prepareStatement(updateSettings).use { statement ->

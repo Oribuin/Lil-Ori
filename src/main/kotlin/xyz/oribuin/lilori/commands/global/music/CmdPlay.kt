@@ -1,6 +1,5 @@
 package xyz.oribuin.lilori.commands.global.music
 
-import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason
 import net.dv8tion.jda.api.Permission
 import xyz.oribuin.lilori.handler.Command
 import xyz.oribuin.lilori.handler.CommandEvent

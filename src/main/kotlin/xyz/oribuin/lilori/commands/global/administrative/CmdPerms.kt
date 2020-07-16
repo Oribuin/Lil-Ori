@@ -2,6 +2,7 @@ package xyz.oribuin.lilori.commands.global.administrative
 
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.Permission
+import org.apache.commons.lang3.StringUtils
 import xyz.oribuin.lilori.handler.Command
 import xyz.oribuin.lilori.handler.CommandEvent
 import java.awt.Color
@@ -19,7 +20,7 @@ class CmdPerms : Command() {
     override fun executeCommand(event: CommandEvent) {
 
         val perms: MutableList<String> = ArrayList()
-        event.selfMember.permissions.forEach(Consumer { permission: Permission -> perms.add(permission.getName().toLowerCase().replace("_", " ")) })
+        event.selfMember.permissions.forEach(Consumer { permission: Permission -> perms.add(StringUtils.capitalize(permission.getName()).replace("_", " ")) })
 
         val embedBuilder = EmbedBuilder()
                 .setAuthor("Lil' Ori Permissions")

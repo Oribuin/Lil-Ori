@@ -4,7 +4,7 @@ import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import xyz.oribuin.lilori.LilOri
 
-open class Command : ListenerAdapter() {
+abstract class Command : ListenerAdapter() {
 
     @JvmField
     val bot: LilOri = LilOri.instance
@@ -24,9 +24,9 @@ open class Command : ListenerAdapter() {
         protected set
     var botPermissions: Array<Permission> = emptyArray()
         protected set
+    var guildId: String? = null
+        protected set
 
-    open fun executeCommand(event: CommandEvent) {
-        // Unused
-    }
+    abstract fun executeCommand(event: CommandEvent)
 
 }

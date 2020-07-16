@@ -31,6 +31,9 @@ class CommandExecutor(private val bot: LilOri, private val commandHandler: Comma
                 // Check if command is enabled
                 if (!cmd.isEnabled) return
 
+                if (cmd.guildId != null && !cmd.guildId.equals(event.guild.id))
+                    return
+
                 // Check if the command is owner only and the owner id equals to command author
                 if (cmd.isOwnerOnly && event.author.id != Settings.OWNER_ID) {
                     val embed = EmbedBuilder()

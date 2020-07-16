@@ -2,6 +2,7 @@ package xyz.oribuin.lilori
 
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.hooks.ListenerAdapter
+import net.dv8tion.jda.api.requests.GatewayIntent
 import xyz.oribuin.lilori.commands.author.*
 import xyz.oribuin.lilori.commands.global.CmdColor
 import xyz.oribuin.lilori.commands.global.CmdHelp
@@ -9,14 +10,17 @@ import xyz.oribuin.lilori.commands.global.CmdPing
 import xyz.oribuin.lilori.commands.global.CmdPrefix
 import xyz.oribuin.lilori.commands.global.administrative.CmdPerms
 import xyz.oribuin.lilori.commands.global.games.*
+import xyz.oribuin.lilori.commands.global.moderation.CmdBan
 import xyz.oribuin.lilori.commands.global.moderation.CmdPurge
 import xyz.oribuin.lilori.commands.global.music.*
+import xyz.oribuin.lilori.commands.support.ticket.CmdClose
+import xyz.oribuin.lilori.commands.support.ticket.CmdTicket
 import xyz.oribuin.lilori.database.DatabaseConnector
 import xyz.oribuin.lilori.database.SQLiteConnector
 import xyz.oribuin.lilori.handler.CommandExecutor
 import xyz.oribuin.lilori.handler.CommandHandler
 import xyz.oribuin.lilori.listeners.GeneralEvents
-import xyz.oribuin.lilori.listeners.support.SupportListener
+import xyz.oribuin.lilori.listeners.support.SupportListeners
 import xyz.oribuin.lilori.managers.DataManager
 import xyz.oribuin.lilori.managers.GuildSettingsManager
 import java.io.File
@@ -26,15 +30,15 @@ import javax.security.auth.login.LoginException
 class LilOri private constructor() : ListenerAdapter() {
 
     // Define handlers
-    val commandHandler: CommandHandler
-    var connector: DatabaseConnector? = null
+    private val commandHandler: CommandHandler
+    lateinit var connector: DatabaseConnector
 
     // Define managers
     val dataManager: DataManager
     val guildSettingsManager: GuildSettingsManager
 
     // Define others
-    // EventWaiter waiter = new EventWaiter()
+    //private val eventWaiter = EventWaiter()
 
     // Register all commands
     private fun registerCommands() {
@@ -46,11 +50,15 @@ class LilOri private constructor() : ListenerAdapter() {
                 // Game Commands
                 CmdCoinflip(), CmdColor(), CmdEightball(), CmdFeed(), CmdGay(), CmdQuote(), CmdSlap(),
                 // Moderation Commands
-                CmdPurge(),
+                CmdPurge(), CmdBan(),
                 // Author Commands
                 CmdEval(), CmdQuery(), CmdShutdown(), CmdTest(), CmdUpdate(),
                 // Admin Commands
-                CmdPerms()
+                CmdPerms(),
+
+                // Support Discord commands
+                // Ticket
+                CmdTicket(), CmdClose()
         )
     }
 
@@ -102,11 +110,12 @@ class LilOri private constructor() : ListenerAdapter() {
 
         // Login Bot
         val jda = JDABuilder.createDefault(Settings.TOKEN)
-                .addEventListeners(CommandExecutor(this, commandHandler), GeneralEvents(), SupportListener(), this)
-                .build()
+                .enableIntents(GatewayIntent.GUILD_MEMBERS)
+                .addEventListeners(CommandExecutor(this, commandHandler), GeneralEvents(), SupportListeners(), this)
+        
+        val jdaBot = jda.build()
 
         println("*=* Loading Lil' Ori Commands *=*")
-
         var i = 0
 
         for (command in commandHandler.commands)
@@ -115,7 +124,7 @@ class LilOri private constructor() : ListenerAdapter() {
             else
                 println("Loaded Command: ${command.name} | (${++i}/${commandHandler.commands.size}) ")
 
-        println("*=* Loaded Up ${jda.selfUser.name} with ${commandHandler.commands.size}  Command(s) *=*")
+        println("*=* Loaded Up ${jdaBot.selfUser.name} with ${commandHandler.commands.size}  Command(s) *=*")
     }
 
 }

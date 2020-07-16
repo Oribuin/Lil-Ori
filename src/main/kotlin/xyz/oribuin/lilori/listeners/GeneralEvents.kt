@@ -1,7 +1,6 @@
 package xyz.oribuin.lilori.listeners
 
 import net.dv8tion.jda.api.EmbedBuilder
-import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.Activity
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.events.DisconnectEvent
@@ -58,12 +57,12 @@ class GeneralEvents : ListenerAdapter() {
         val embedBuilder = EmbedBuilder()
                 .setAuthor("Lil' Ori Bot | Prefix: " + LilOri.instance.guildSettingsManager.getGuildSettings(event.guild)?.getPrefix(), "https://discordapp.com/oauth2/authorize?client_id=581203970203189269&permissions=121498961&scope=bot")
                 .setColor(Color.decode("#33539e"))
-                .setDescription("» Discord Utility Bot Created by Oribuin « " +
-                        " " +
-                        "• Find all my commands using **${LilOri.instance.guildSettingsManager.getGuildSettings(event.guild)?.getPrefix()}help** " +
-                        "• Find my source code on https://github.com/Oribuin/Lil-Ori/" +
-                        "• Website: https://oribuin.xyz/" +
-                        "• Donate: https://oribuin.xyz/donate".trimIndent())
+                .setDescription("""» Discord Utility Bot Created by Oribuin « 
+                        
+                        • Find all my commands using **${LilOri.instance.guildSettingsManager.getGuildSettings(event.guild)?.getPrefix()}help** 
+                        • Find my source code on https://github.com/Oribuin/Lil-Ori/
+                        • Website: https://oribuin.xyz/
+                        • Donate: https://oribuin.xyz/donate""".trimIndent())
                 .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png")
 
         if (event.message.contentRaw == "<@!581203970203189269>")

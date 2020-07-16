@@ -22,6 +22,7 @@ class CmdUpdate : Command() {
     }
 
     override fun executeCommand(event: CommandEvent) {
+
         val args = event.message.contentRaw.split(" ").toTypedArray()
 
         if (args.size < 2) {
@@ -38,6 +39,7 @@ class CmdUpdate : Command() {
 
                 if (event.message.attachments.size == 0) {
                     event.reply("<a:bee:730546474424729712> Please include a jar file to upload.")
+                    return
                 }
 
                 this.updatePlugin(event, args[2].toLowerCase())
@@ -47,7 +49,6 @@ class CmdUpdate : Command() {
 
     private fun updatePlugin(event: CommandEvent, pluginName: String) {
         val client = FTPClient()
-        var fis: FileInputStream
         val fileName = event.message.attachments[0].fileName
         val file = File("plugins", fileName)
 
@@ -64,14 +65,15 @@ class CmdUpdate : Command() {
                 client.login(Settings.FTP_USERNAME, Settings.FTP_PASSWORD)
 
                 msg.editMessage("<a:bee:730546474424729712> **Storing $fileName into website FTP.**").queue()
-                fis = FileInputStream(file.path)
-                println(fis.toString())
-                client.storeFile("jars.oribuin.xyz/${pluginName}/" + file.name, fis)
+                client.storeFile("jars.oribuin.xyz/$pluginName/${file.name}", FileInputStream(file.path))
 
-                msg.editMessage("<a:bee:730546474424729712> **Logging out of FTP..**")
+                msg.editMessage("<a:bee:730546474424729712> **Logging out of FTP..**").queue()
                 client.logout()
-                fis.close()
+                FileInputStream(file.path).close()
                 client.disconnect()
+
+                msg.editMessage("<a:bee:730546474424729712> **Successfully updated ${StringUtils.capitalize(pluginName)}! (https://jars.oribuin.xyz/$pluginName/${file.name})**").queue()
+                file.delete()
             } catch (ex: Exception) {
                 ex.printStackTrace()
             }

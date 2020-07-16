@@ -1,8 +1,6 @@
 package xyz.oribuin.lilori.commands.author
 
 import net.dv8tion.jda.api.EmbedBuilder
-import net.dv8tion.jda.api.entities.Emote
-import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent
 import xyz.oribuin.lilori.handler.Command
 import xyz.oribuin.lilori.handler.CommandEvent
 import java.awt.Color

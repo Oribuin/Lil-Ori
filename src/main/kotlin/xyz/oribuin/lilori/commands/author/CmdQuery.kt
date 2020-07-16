@@ -24,7 +24,7 @@ class CmdQuery : Command() {
             return
         }
 
-        LilOri.instance.connector?.connect { connection: Connection ->
+        LilOri.instance.connector.connect { connection: Connection ->
 
             val query = event.message.contentRaw.substring(args[0].length + 1)
             connection.prepareStatement(query).use { getStatement ->

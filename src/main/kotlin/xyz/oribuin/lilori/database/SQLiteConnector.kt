@@ -20,7 +20,7 @@ class SQLiteConnector(directory: File) : DatabaseConnector {
                 this.connection?.close()
             }
         } catch (ex: SQLiteException) {
-            error("An error occured closing the SQLTE database connection: ${ex.message}")
+            error("An error occured closing the SQLITE database connection: ${ex.message}")
         }
     }
 
