@@ -30,11 +30,11 @@ class EventWaiter @JvmOverloads constructor(threadpool: ScheduledExecutorService
     val isShutdown: Boolean
         get() = threadpool.isShutdown
 
-    fun <T : Event?> waitForEvent(classType: Class<T>?, condition: Predicate<T>, action: Consumer<T>) {
+    fun <T : Event?> waitForEvent(classType: Class<T>, condition: Predicate<T>, action: Consumer<T>) {
         waitForEvent(classType, condition, action, -1, null, null)
     }
 
-    fun <T : Event?> waitForEvent(classType: Class<T>, condition: Predicate<T>, action: Consumer<T>, timeout: Long, unit: TimeUnit?, timeoutAction: Runnable?) {
+    private fun <T : Event?> waitForEvent(classType: Class<T>, condition: Predicate<T>, action: Consumer<T>, timeout: Long, unit: TimeUnit?, timeoutAction: Runnable?) {
 
         Checks.check(!isShutdown, "Attempted to register a WaitingEvent while the EventWaiter's threadpool was already shut down!")
         Checks.notNull(classType, "The provided class type")
@@ -43,7 +43,7 @@ class EventWaiter @JvmOverloads constructor(threadpool: ScheduledExecutorService
         val we: WaitingEvent<*> = WaitingEvent(condition, action)
         val set = classType.let { waitingEvents.computeIfAbsent(it) { HashSet() } }
 
-        // Where tf am i gonna get EventWaiter.WaitingEvent<GenericEvent>>> from to add it to set ?£45yi5
+        // Where tf am i gonna get EventWaiter.WaitingEvent<GenericEvent?>> from to add it to set
         //set?.add(we)
         if (timeout > 0 && unit != null) {
             threadpool.schedule({ if (set.remove(we) && timeoutAction != null) timeoutAction.run() }, timeout, unit)
