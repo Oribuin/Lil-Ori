@@ -4,17 +4,13 @@ import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import net.dv8tion.jda.api.requests.GatewayIntent
 import xyz.oribuin.lilori.commands.author.*
-import xyz.oribuin.lilori.commands.global.CmdColor
-import xyz.oribuin.lilori.commands.global.CmdHelp
-import xyz.oribuin.lilori.commands.global.CmdPing
-import xyz.oribuin.lilori.commands.global.CmdPrefix
-import xyz.oribuin.lilori.commands.global.administrative.CmdPerms
+import xyz.oribuin.lilori.commands.global.*
+import xyz.oribuin.lilori.commands.global.administrative.*
 import xyz.oribuin.lilori.commands.global.games.*
-import xyz.oribuin.lilori.commands.global.moderation.CmdBan
-import xyz.oribuin.lilori.commands.global.moderation.CmdPurge
+import xyz.oribuin.lilori.commands.global.moderation.*
 import xyz.oribuin.lilori.commands.global.music.*
-import xyz.oribuin.lilori.commands.support.ticket.CmdClose
-import xyz.oribuin.lilori.commands.support.ticket.CmdTicket
+import xyz.oribuin.lilori.commands.support.general.*
+import xyz.oribuin.lilori.commands.support.ticket.*
 import xyz.oribuin.lilori.database.DatabaseConnector
 import xyz.oribuin.lilori.database.SQLiteConnector
 import xyz.oribuin.lilori.handler.CommandExecutor
@@ -56,8 +52,9 @@ class LilOri private constructor() : ListenerAdapter() {
                 CmdEval(), CmdQuery(), CmdShutdown(), CmdTest(), CmdUpdate(),
                 // Admin Commands
                 CmdPerms(),
-
                 // Support Discord commands
+                // General
+                CmdAnnounce(),
                 // Ticket
                 CmdTicket(), CmdClose(eventWaiter)
         )

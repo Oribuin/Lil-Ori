@@ -59,8 +59,8 @@ class CmdBan : Command() {
 
             val embedBuilder = EmbedBuilder()
                     .setAuthor("\uD83D\uDC94 Banned User " + member.user.asTag)
-                    .setDescription("""Successfully banned ${member.user.asTag} (${member.id}) at ${msgTime.hour}h, ${msgTime.minute}m & ${msgTime.second}s on
-                            ${msgTime.dayOfMonth} ${msgTime.month.name.toLowerCase()} for $reason""".trimMargin())
+                    .setDescription("""Successfully banned ${member.user.asTag} (${member.id}) at
+                         ${msgTime.hour}h, ${msgTime.minute}m & ${msgTime.second}s on ${msgTime.dayOfMonth} ${msgTime.month.name.toLowerCase()} for $reason""".trimMargin())
                     .setColor(Settings.EMBED_COLOR)
                     .setFooter("get bonked", "https://img.oribuin.xyz/bot-images/bonk.gif")
 
