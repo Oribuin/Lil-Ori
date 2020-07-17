@@ -8,6 +8,8 @@ import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
+import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent
+import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionRemoveEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 
 class SupportListeners : ListenerAdapter() {
@@ -74,7 +76,7 @@ class SupportListeners : ListenerAdapter() {
         }
 
         // Anti Songoda | If any songoda lovers are reading this, I don't care for your opinion, It's wrong.
-        if (event.message.contentRaw.toLowerCase().contains("songoda")) {
+        if (event.message.contentRaw.toLowerCase().contains("songoda") && event.guild.id == "731659405958971413") {
             if (!event.guild.getMember(event.author)?.hasPermission(Permission.ADMINISTRATOR)!!) {
                 event.message.delete().queue()
                 event.channel.sendMessage("${event.author.asMention}, Please do not mention that company in this discord server.").queue()
@@ -106,5 +108,25 @@ class SupportListeners : ListenerAdapter() {
 
         val channel = event.guild.getTextChannelsByName("voice-talk", true)[0]
         (channel.getPermissionOverride(event.member) ?: return).delete().queue()
+    }
+
+    override fun onGuildMessageReactionAdd(event: GuildMessageReactionAddEvent) {
+        if (event.channel.id == "733084715736891502") {
+            when (event.reactionEmote.emoji) {
+                "⚠" -> {
+                    event.guild.addRoleToMember(event.member, event.guild.getRolesByName("Plugin Updates", true)[0]).queue()
+                }
+            }
+        }
+    }
+
+    override fun onGuildMessageReactionRemove(event: GuildMessageReactionRemoveEvent) {
+        if (event.channel.id == "733084715736891502") {
+            when (event.reactionEmote.emoji) {
+                "⚠" -> {
+                    event.guild.removeRoleFromMember(event.userId, event.guild.getRolesByName("Plugin Updates", true)[0]).queue()
+                }
+            }
+        }
     }
 }

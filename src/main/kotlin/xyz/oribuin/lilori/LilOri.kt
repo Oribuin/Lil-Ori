@@ -54,7 +54,7 @@ class LilOri private constructor() : ListenerAdapter() {
                 CmdPerms(),
                 // Support Discord commands
                 // General
-                CmdAnnounce(),
+                CmdAnnounce(), CmdReactionRole(),
                 // Ticket
                 CmdTicket(), CmdClose(eventWaiter)
         )

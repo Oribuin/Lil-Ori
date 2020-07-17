@@ -27,31 +27,65 @@ class CmdAnnounce : Command() {
             return
         }
 
-        val channel = event.guild.getTextChannelById("733084628696563772")
+        when (args[1].toLowerCase()) {
+            "announcement" -> {
+                // ;announce announcement <boolean> <message>
+                if (args.size < 3) {
+                    invalidArguments(event)
+                    return
+                }
 
-        if (!listOf("true", "false").contains(args[1].toLowerCase())) {
-            invalidBoolean(event)
-            return
+                val channel = event.guild.getTextChannelById("733084628696563772")
+
+                if (!listOf("true", "false").contains(args[2].toLowerCase())) {
+                    invalidBoolean(event)
+                    return
+                }
+
+                val announcement = event.message.contentRaw.substring(args[0].length + args[1].length + args[2].length + 3)
+
+                val embedBuilder = EmbedBuilder()
+                        .setColor(Color.BLUE)
+                        .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png")
+                        .setAuthor("Announcement By ${event.author.name}", null, "https://img.oribuin.xyz/bot-images/announcement.jpg")
+                        .setDescription(announcement)
+                        .setTimestamp(OffsetDateTime.now())
+
+
+                if (args[2].toBoolean()) {
+                    (channel ?: return).sendMessage(event.guild.publicRole.asMention).embed(embedBuilder.build()).queue()
+                    event.reply("${event.author.asMention} Successfully sent an announcement ${channel.asMention}")
+                    return
+                }
+
+                channel?.sendMessage(embedBuilder.build())?.queue()
+                event.reply("${event.author.asMention} Successfully sent an announcement to ${channel?.asMention}")
+
+            }
+            "plugin" -> {
+                // ;announce plugin <plugin> <version> <changelog>
+                if (args.size < 4) {
+                    invalidArguments(event)
+                    return
+                }
+
+                val channel = event.guild.getTextChannelById("733086809096978492")
+
+                val changelog = event.message.contentRaw.substring(args[0].length + args[1].length + args[2].length + args[3].length + 4)
+
+                val embedBuilder = EmbedBuilder()
+                        .setColor(Color.BLUE)
+                        .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png")
+                        .setAuthor("Plugin Update: ${args[2]}", null, "https://img.oribuin.xyz/bot-images/announcement.jpg")
+                        .setDescription("""$changelog
+                            
+                        Find the latest jar file on https://jars.oribuin.xyz/${args[2].toLowerCase()}/""".trimMargin())
+                        .setTimestamp(OffsetDateTime.now())
+
+                (channel?: return).sendMessage(event.guild.getRolesByName("Plugin Updates", true)[0].asMention).embed(embedBuilder.build()).queue()
+                event.reply("${event.author.asMention} Successfully sent plugin update to ${channel.asMention}")
+            }
         }
-
-        val announcement = event.message.contentRaw.substring(args[0].length + args[1].length + 2)
-
-        val embedBuilder = EmbedBuilder()
-                .setColor(Color.BLUE)
-                .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png")
-                .setAuthor("Announcement By ${event.author.name}", null, "https://img.oribuin.xyz/bot-images/announcement.jpg")
-                .setDescription(announcement)
-                .setTimestamp(OffsetDateTime.now())
-
-
-        if (args[1].toBoolean()) {
-            (channel?: return).sendMessage(event.guild.publicRole.asMention).embed(embedBuilder.build()).queue()
-            event.reply("${event.author.asMention} Successfully sent an announcement ${channel.asMention}")
-            return
-        }
-
-        channel?.sendMessage(embedBuilder.build())?.queue()
-        event.reply("${event.author.asMention} Successfully sent an announcement ${channel?.asMention}")
 
     }
 
@@ -60,7 +94,7 @@ class CmdAnnounce : Command() {
                 .setAuthor("Invalid Arguments")
                 .setDescription("You have provided invalid arguments for the command!")
                 .setColor(Settings.EMBED_COLOR)
-                .setAuthor("${event.prefix}announce #<channel> <should-mention(boolean)> <message>")
+                .setAuthor("${event.prefix}announce")
 
         event.channel.sendMessage(event.author.asMention).embed(embed.build()).queue()
     }
@@ -70,7 +104,7 @@ class CmdAnnounce : Command() {
                 .setAuthor("Invalid Boolean")
                 .setDescription("You have provided an invalid boolean!")
                 .setColor(Settings.EMBED_COLOR)
-                .setAuthor("${event.prefix}announce #<channel> <should-mention(boolean)> <message>")
+                .setAuthor("${event.prefix}announce")
 
         event.channel.sendMessage(event.author.asMention).embed(embed.build()).queue()
     }
