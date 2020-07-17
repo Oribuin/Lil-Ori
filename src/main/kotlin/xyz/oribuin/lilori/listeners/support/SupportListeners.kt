@@ -72,6 +72,14 @@ class SupportListeners : ListenerAdapter() {
                 event.message.delete().queue()
             }
         }
+
+        // Anti Songoda | If any songoda lovers are reading this, I don't care for your opinion, It's wrong.
+        if (event.message.contentRaw.toLowerCase().contains("songoda")) {
+            if (!event.guild.getMember(event.author)?.hasPermission(Permission.ADMINISTRATOR)!!) {
+                event.message.delete().queue()
+                event.channel.sendMessage("${event.author.asMention}, Please do not mention that company in this discord server.").queue()
+            }
+        }
     }
 
     override fun onGuildVoiceJoin(event: GuildVoiceJoinEvent) {

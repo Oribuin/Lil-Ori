@@ -24,6 +24,7 @@ class CmdClose(private val waiter: EventWaiter) : Command() {
             return
         }
 
+        /*
         event.channel.sendMessage(event.author.asMention + ", Are you sure you want to close the ticket channel?").queue { msg ->
             msg.addReaction("✅").queue()
             msg.addReaction("❌").queue()
@@ -45,5 +46,9 @@ class CmdClose(private val waiter: EventWaiter) : Command() {
 
         }
 
+         */
+
+        println("${event.author.asTag} has closed the ticket channel, #${event.textChannel.name}!")
+        event.textChannel.delete().queue()
     }
 }
