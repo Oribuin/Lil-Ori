@@ -1,7 +1,6 @@
 package xyz.oribuin.lilori.commands.author
 
-import com.jcraft.jsch.ChannelSftp
-import com.jcraft.jsch.JSch
+import com.jcraft.jsch.*
 import org.apache.commons.lang3.StringUtils
 import org.apache.commons.net.ftp.FTPClient
 import xyz.oribuin.lilori.Settings
@@ -74,6 +73,8 @@ class CmdUpdate : Command() {
 
                 msg.editMessage("<a:bee:730546474424729712> **Successfully updated ${StringUtils.capitalize(pluginName)}! (https://jars.oribuin.xyz/$pluginName/${file.name})**").queue()
                 file.delete()
+
+                event.deleteCmd()
             } catch (ex: Exception) {
                 ex.printStackTrace()
             }
@@ -98,6 +99,9 @@ class CmdUpdate : Command() {
                 val properties = Properties()
                 properties.setProperty("StrictHostKeyChecking", "no")
                 session.setConfig(properties)
+
+                // Weird proxy stuff
+                session.setProxy(ProxySOCKS4(Settings.JAR_FTP_URL, 2022))
 
                 // Connect stuff
                 session.connect()

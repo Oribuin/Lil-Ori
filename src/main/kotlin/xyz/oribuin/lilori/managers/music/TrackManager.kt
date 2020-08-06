@@ -18,7 +18,7 @@ import java.util.*
 import java.util.function.Consumer
 
 class TrackManager private constructor(guild: Guild) {
-    private val playerManager: AudioPlayerManager
+    val playerManager: AudioPlayerManager
     private val musicManagers: MutableMap<String, GuildMusicManager>
     private val guild: Guild
     var trackList: List<AudioTrack> = ArrayList()
@@ -34,6 +34,7 @@ class TrackManager private constructor(guild: Guild) {
         }
 
     fun loadAndPlay(author: Member, textChannel: TextChannel, trackUrl: String, addPlaylist: Boolean) {
+
         playerManager.loadItemOrdered(musicManager, trackUrl, object : AudioLoadResultHandler {
             override fun trackLoaded(track: AudioTrack) {
                 // Message Here
@@ -44,13 +45,8 @@ class TrackManager private constructor(guild: Guild) {
                 val embedBuilder = EmbedBuilder()
                         .setAuthor("\uD83C\uDFB5 Now Playing " + track.info.title)
                         .setColor(Color.RED)
-                        .setDescription("""**Song URL**
-${track.info.uri}
- 
-**Song Duration**
-$minutes minutes & $seconds seconds
- 
-""")
+                        .setDescription("""**Song URL** ${track.info.uri}
+                                        **Song Duration** $minutes minutes & $seconds seconds""")
                         .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png")
                 textChannel.sendMessage(author.asMention).embed(embedBuilder.build()).queue()
                 musicManager.scheduler.queue(track)

@@ -16,11 +16,11 @@ class CmdPlay : Command() {
     }
 
     override fun executeCommand(event: CommandEvent) {
-
-
         val tm = getInstance(event.guild)
         val musicManager = (tm?: return).musicManager
         val args = event.message.contentRaw.split(" ").toTypedArray()
+
+        (event.member?: return)
 
         if (event.member?.voiceState == null && event.member?.voiceState?.inVoiceChannel() == false) {
             event.deleteCmd(10, TimeUnit.SECONDS)

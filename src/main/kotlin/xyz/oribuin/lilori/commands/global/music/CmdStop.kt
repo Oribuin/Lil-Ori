@@ -22,6 +22,7 @@ class CmdStop : Command() {
             return
         }
 
+        tm.playerManager.shutdown()
         tm.musicManager.getAudioManager(event.guild).sendingHandler = null
         tm.musicManager.getAudioManager(event.guild).closeAudioConnection()
 

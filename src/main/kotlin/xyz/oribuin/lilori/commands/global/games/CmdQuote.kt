@@ -14,7 +14,7 @@ class CmdQuote : Command() {
         name = "Quote"
         description = "Quote command."
         aliases = emptyList()
-        arguments = listOf("select", "<quote_id>0")
+        arguments = listOf("select", "<quote_id>")
     }
 
 
@@ -26,8 +26,8 @@ class CmdQuote : Command() {
                     .setAuthor("Lil' Ori Quotes")
                     .setColor(Color.decode("#33539e"))
                     .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png")
-                    .setDescription("To view a quote, type ${event.prefix}quote get <id>" +
-                            "Quote Id Amount: $quoteCount".trimMargin())
+                    .setDescription("""To view a quote, type ${event.prefix}quote get <id>
+                            Quote Id Amount: $quoteCount""".trimMargin())
 
             event.reply(embedBuilder)
             return
@@ -96,8 +96,8 @@ class CmdQuote : Command() {
                                         .setTitle("Lil' Ori Quotes (ID: ${resultSet.getString(1)})")
                                         .setColor(Color.decode("#33539e"))
                                         .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png")
-                                        .setDescription("**Quote Author:** ${resultSet.getString(2)}" +
-                                                "**Quote:** ${resultSet.getString(3)}".trimIndent())
+                                        .setDescription("""**Quote Author:** ${resultSet.getString(2)}
+                                                **Quote:** ${resultSet.getString(3)}""".trimIndent())
                                 event.reply(embedBuilder.build())
                             }
                         }

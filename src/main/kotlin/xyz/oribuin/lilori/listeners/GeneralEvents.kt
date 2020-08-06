@@ -22,10 +22,13 @@ class GeneralEvents : ListenerAdapter() {
         }
 
         val activities = arrayOf(
+                Activity.watching("https://oribuin.xyz/"),
                 Activity.watching("#BlackLivesMatter"),
+                Activity.watching("https://jars.oribuin.xyz/"),
+                Activity.watching("#JusticeForBreonnaTaylor"),
+                Activity.watching("https://oribuin.xyz/support"),
                 Activity.watching("#BLM"),
-                Activity.watching("#JusticeForGeorgeFloyd"),
-                Activity.watching("#JusticeForBreonnaTaylor")
+                Activity.watching("https://oribuin.xyz/donate")
         )
 
         val timer = Timer()

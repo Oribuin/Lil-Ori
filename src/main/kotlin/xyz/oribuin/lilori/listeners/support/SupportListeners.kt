@@ -11,6 +11,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionRemoveEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
+import xyz.oribuin.lilori.LilOri
 
 class SupportListeners : ListenerAdapter() {
     override fun onGuildMemberJoin(event: GuildMemberJoinEvent) {
@@ -20,7 +21,7 @@ class SupportListeners : ListenerAdapter() {
         // Add role to member
         event.guild.addRoleToMember(event.member, event.guild.getRolesByName("Member", true)[0]).queue()
 
-        // Define the channel name
+        // Define the channel
         val channel = event.guild.getTextChannelById("733059354328170629")
 
         // Embed builder
@@ -33,7 +34,7 @@ class SupportListeners : ListenerAdapter() {
                 .addField("ID", event.member.user.id, false)
 
         // Send message to channel
-        (channel ?: return).sendMessage(embedBuilder.build()).queue()
+        channel?.sendMessage(embedBuilder.build())?.queue()
         println("${event.user.asTag} (${event.user.id}) has joined ${event.guild.name}!")
     }
 
@@ -55,6 +56,8 @@ class SupportListeners : ListenerAdapter() {
         // Send message to channel
         (channel ?: return).sendMessage(embedBuilder.build()).queue()
         println("${event.user.asTag} (${event.user.id}) has left ${event.guild.name}!")
+
+
     }
 
     override fun onGuildBan(event: GuildBanEvent) {
