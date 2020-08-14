@@ -7,7 +7,7 @@ import xyz.oribuin.lilori.utils.GuildSettings.Companion.default
 import java.sql.Connection
 import java.util.*
 
-class GuildSettingsManager(bot: LilOri?) : Manager(bot!!) {
+class GuildSettingsManager(bot: LilOri) : Manager(bot) {
     private val guildSettings: MutableMap<Long, GuildSettings?>
 
     init {
@@ -35,7 +35,8 @@ class GuildSettingsManager(bot: LilOri?) : Manager(bot!!) {
             connection.prepareStatement(commandPrefix).use { statement ->
                 statement.setLong(1, guild.idLong)
                 val resultSet = statement.executeQuery()
-                if (resultSet.next()) settings.setPrefix(resultSet.getString(1))
+                if (resultSet.next())
+                    settings.setPrefix(resultSet.getString(1))
             }
         }
     }

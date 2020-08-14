@@ -1,9 +1,7 @@
 package xyz.oribuin.lilori.commands.author
 
-import net.dv8tion.jda.api.EmbedBuilder
 import xyz.oribuin.lilori.handler.Command
 import xyz.oribuin.lilori.handler.CommandEvent
-import java.awt.Color
 
 class CmdTest : Command() {
     init {
@@ -16,5 +14,6 @@ class CmdTest : Command() {
 
     override fun executeCommand(event: CommandEvent) {
         event.deleteCmd()
+        println("Ticket count for ${event.author.asTag}: ${bot.ticketManager.getTicketCount(event.author)}")
     }
 }

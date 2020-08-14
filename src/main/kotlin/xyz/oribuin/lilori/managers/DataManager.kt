@@ -4,7 +4,7 @@ import net.dv8tion.jda.api.entities.Guild
 import xyz.oribuin.lilori.LilOri
 import java.sql.Connection
 
-class DataManager(bot: LilOri?) : Manager(bot!!) {
+class DataManager(bot: LilOri) : Manager(bot) {
     override fun enable() {
         createTables()
     }
@@ -18,7 +18,7 @@ class DataManager(bot: LilOri?) : Manager(bot!!) {
                     "CREATE TABLE IF NOT EXISTS guild_settings (guild_id LONG, prefix TXT, PRIMARY KEY(guild_id))",
                     "CREATE TABLE IF NOT EXISTS quotes (label TXT, author TXT, quote TXT)",
                     // Support team tables
-                    "CREATE TABLE IF NOT EXISTS ticket_count (user_id LONG, ticket_count INT, PRIMARY KEY(user_id))"
+                    "CREATE TABLE IF NOT EXISTS ticket_count (user_id LONG, count INT, PRIMARY KEY(user_id))"
             )
 
             for (query in queries) {

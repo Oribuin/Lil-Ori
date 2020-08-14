@@ -33,7 +33,7 @@ class CmdTicket : Command() {
                 .setDescription("""Welcome to your Ticket channel, ${event.member?.asMention}, Please describe your issue and
                     we will assist you with anything you need.
                     
-                    Please put any errors you have inside __https://haste.oribuin.xyz/__, Please do not type the errors in chat!""".trimMargin())
+                    Please put any errors you have inside __https://hasteb.in/__, Please do not type the errors in chat!""".trimMargin())
                 .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png")
 
         (event.guild.getCategoryById("733086484470694018") ?: return).createTextChannel(channelName)
@@ -51,5 +51,8 @@ class CmdTicket : Command() {
         event.deleteCmd()
         event.timedReply("${event.author.asMention}, Successfully created your ticket channel!", 30, TimeUnit.SECONDS)
         println("${event.author.asTag} has created the ticket channel, #$channelName")
+
+        // Update User
+        bot.ticketManager.updateUser(event.author, bot.ticketManager.getTicketCount(event.author))
     }
 }

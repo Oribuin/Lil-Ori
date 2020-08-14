@@ -4,13 +4,19 @@ import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import net.dv8tion.jda.api.requests.GatewayIntent
 import xyz.oribuin.lilori.commands.author.*
-import xyz.oribuin.lilori.commands.global.*
-import xyz.oribuin.lilori.commands.global.administrative.*
+import xyz.oribuin.lilori.commands.global.CmdColor
+import xyz.oribuin.lilori.commands.global.CmdHelp
+import xyz.oribuin.lilori.commands.global.CmdPing
+import xyz.oribuin.lilori.commands.global.CmdPrefix
+import xyz.oribuin.lilori.commands.global.administrative.CmdPerms
 import xyz.oribuin.lilori.commands.global.games.*
-import xyz.oribuin.lilori.commands.global.moderation.*
+import xyz.oribuin.lilori.commands.global.moderation.CmdBan
+import xyz.oribuin.lilori.commands.global.moderation.CmdPurge
 import xyz.oribuin.lilori.commands.global.music.*
-import xyz.oribuin.lilori.commands.support.general.*
-import xyz.oribuin.lilori.commands.support.ticket.*
+import xyz.oribuin.lilori.commands.support.general.CmdAnnounce
+import xyz.oribuin.lilori.commands.support.general.CmdReactionRole
+import xyz.oribuin.lilori.commands.support.ticket.CmdClose
+import xyz.oribuin.lilori.commands.support.ticket.CmdTicket
 import xyz.oribuin.lilori.database.DatabaseConnector
 import xyz.oribuin.lilori.database.SQLiteConnector
 import xyz.oribuin.lilori.handler.CommandExecutor
@@ -19,6 +25,7 @@ import xyz.oribuin.lilori.listeners.GeneralEvents
 import xyz.oribuin.lilori.listeners.support.SupportListeners
 import xyz.oribuin.lilori.managers.DataManager
 import xyz.oribuin.lilori.managers.GuildSettingsManager
+import xyz.oribuin.lilori.managers.TicketManager
 import xyz.oribuin.lilori.utils.EventWaiter
 import java.io.File
 import java.io.IOException
@@ -33,6 +40,7 @@ class LilOri private constructor() : ListenerAdapter() {
     // Define managers
     val dataManager: DataManager
     val guildSettingsManager: GuildSettingsManager
+    val ticketManager: TicketManager
 
     // Define others
     private val eventWaiter = EventWaiter()
@@ -49,7 +57,7 @@ class LilOri private constructor() : ListenerAdapter() {
                 // Moderation Commands
                 CmdPurge(), CmdBan(),
                 // Author Commands
-                CmdEval(), CmdQuery(), CmdShutdown(), CmdTest(), CmdUpdate(),
+                CmdEval(), CmdQuery(), CmdTest(), CmdUpdate(),
                 // Admin Commands
                 CmdPerms(),
                 // Support Discord commands
@@ -64,25 +72,26 @@ class LilOri private constructor() : ListenerAdapter() {
     private fun enable() {
         guildSettingsManager.enable()
         dataManager.enable()
-    }
-
-    companion object {
-        @JvmStatic
-        lateinit var instance: LilOri
-
-        @JvmStatic
-        fun main(args: Array<String>) {
-            try {
-                LilOri()
-            } catch (e: LoginException) {
-                e.printStackTrace()
-            }
-        }
-
+        ticketManager.enable()
     }
 
     init {
         instance = this
+
+        // PDM
+        /*
+        val classLoader = URLClassLoader(arrayOfNulls<URL>(0), javaClass.classLoader)
+        val libraryDirectory = Files.createTempDirectory("PDM").toFile()
+
+        val pdm = PDMBuilder()
+                .rootDirectory(libraryDirectory)
+                .classLoader(classLoader)
+                .applicationName("PDM-Test-Suite")
+                .applicationVersion("N/A")
+                .build()
+
+        pdm.loadAllDependencies().join()
+         */
 
         // Setup the SQLite Database
         val file = File("data", "lilori.db")
@@ -102,6 +111,7 @@ class LilOri private constructor() : ListenerAdapter() {
         guildSettingsManager = GuildSettingsManager(this)
         commandHandler = CommandHandler()
         dataManager = DataManager(this)
+        ticketManager = TicketManager(this)
 
         this.registerCommands()
         this.enable()
@@ -110,7 +120,7 @@ class LilOri private constructor() : ListenerAdapter() {
         val jda = JDABuilder.createDefault(Settings.TOKEN)
                 .enableIntents(GatewayIntent.GUILD_MEMBERS)
                 .addEventListeners(CommandExecutor(this, commandHandler), GeneralEvents(), SupportListeners(), eventWaiter, this)
-        
+
         val jdaBot = jda.build()
 
         println("*=* Loading Lil' Ori Commands *=*")
@@ -125,4 +135,18 @@ class LilOri private constructor() : ListenerAdapter() {
         println("*=* Loaded Up ${jdaBot.selfUser.name} with ${commandHandler.commands.size}  Command(s) *=*")
     }
 
+    companion object {
+        @JvmStatic
+        lateinit var instance: LilOri
+
+        @JvmStatic
+        fun main(args: Array<String>) {
+            try {
+                LilOri()
+            } catch (e: LoginException) {
+                e.printStackTrace()
+            }
+        }
+
+    }
 }
