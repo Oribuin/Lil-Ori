@@ -42,8 +42,5 @@ class CmdClose(private val waiter: EventWaiter) : Command() {
             })
 
         }
-
-        //println("${event.author.asTag} has closed the ticket channel, #${event.textChannel.name}!")
-        //event.textChannel.delete().queue()
     }
 }
