@@ -27,27 +27,6 @@ class DataManager(bot: LilOri) : Manager(bot) {
         }
     }
 
-    fun createGuild(guild: Guild, prefix: String?) {
-        bot.connector.connect { connection: Connection ->
-            val createGuild = "INSERT INTO guild_settings (guild_id, prefix) VALUES (?, ?)"
-            connection.prepareStatement(createGuild).use { statement ->
-                statement.setLong(1, guild.idLong)
-                statement.setString(2, prefix)
-                statement.executeUpdate()
-            }
-        }
-    }
-
-    fun removeGuild(guild: Guild) {
-        bot.connector.connect { connection: Connection ->
-            val deleteGuild = "REMOVE FROM guild_settings WHERE guild_id = ?"
-            connection.prepareStatement(deleteGuild).use { statement ->
-                statement.setLong(1, guild.idLong)
-                statement.executeUpdate()
-            }
-        }
-    }
-
     /**
      * Add or Change a quote inside the database
      *

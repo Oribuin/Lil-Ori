@@ -119,7 +119,7 @@ class LilOri private constructor() : ListenerAdapter() {
         // Login Bot
         val jda = JDABuilder.createDefault(Settings.TOKEN)
                 .enableIntents(GatewayIntent.GUILD_MEMBERS)
-                .addEventListeners(CommandExecutor(this, commandHandler), GeneralEvents(), SupportListeners(), eventWaiter, this)
+                .addEventListeners(CommandExecutor(this, commandHandler), GeneralEvents(this), SupportListeners(), eventWaiter, this)
 
         val jdaBot = jda.build()
 

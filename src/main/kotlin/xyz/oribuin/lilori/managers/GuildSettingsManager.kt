@@ -23,9 +23,26 @@ class GuildSettingsManager(bot: LilOri) : Manager(bot) {
      *
      * @param guild The guild being loaded.
      */
+
+    fun createGuild(guild: Guild) {
+        bot.connector.connect { connection ->
+            val settings = default
+            guildSettings[guild.idLong] = settings
+
+            val query = "REPLACE INTO guild_settings (guild_id, prefix) VALUES (?, ?"
+            connection.prepareStatement(query).use { statement ->
+                statement.setLong(1, guild.idLong)
+                statement.setString(2, settings.getPrefix())
+                statement.executeUpdate()
+            }
+        }
+    }
+
     fun loadGuildSettings(guild: Guild) {
-        if (guildSettings.containsKey(guild.idLong))
-            return
+        if (!guildSettings.containsKey(guild.idLong)) {
+            this.createGuild(guild)
+            println("Created Guild in Database: ${guild.name} (${guild.id})")
+        }
 
         bot.connector.connect { connection: Connection ->
             val settings = default
@@ -53,7 +70,12 @@ class GuildSettingsManager(bot: LilOri) : Manager(bot) {
     fun removeGuildSettings(guild: Guild) {
         this.unloadGuildSettings(guild)
         val removeGuild = "DELETE FROM guild_settings WHERE guild_id = ?"
-        bot.connector.connect { connection: Connection -> connection.prepareStatement(removeGuild).use { statement -> statement.setLong(1, guild.idLong) } }
+        bot.connector.connect { connection ->
+            connection.prepareStatement(removeGuild).use { statement ->
+                statement.setLong(1, guild.idLong)
+                statement.executeUpdate()
+            }
+        }
     }
 
     /**
@@ -86,6 +108,16 @@ class GuildSettingsManager(bot: LilOri) : Manager(bot) {
             connection.prepareStatement(updateSettings).use { statement ->
                 statement.setLong(1, guild.idLong)
                 statement.setString(2, prefix)
+                statement.executeUpdate()
+            }
+        }
+    }
+
+    fun removeGuild(guild: Guild) {
+        bot.connector.connect { connection: Connection ->
+            val deleteGuild = "REMOVE FROM guild_settings WHERE guild_id = ?"
+            connection.prepareStatement(deleteGuild).use { statement ->
+                statement.setLong(1, guild.idLong)
                 statement.executeUpdate()
             }
         }

@@ -15,10 +15,11 @@ import java.awt.Color
 import java.util.*
 import java.util.function.Consumer
 
-class GeneralEvents : ListenerAdapter() {
+class GeneralEvents(private val bot: LilOri) : ListenerAdapter() {
     override fun onReady(event: ReadyEvent) {
         for (guild in event.jda.guilds) {
-            LilOri.instance.guildSettingsManager.loadGuildSettings(guild!!)
+            bot.guildSettingsManager.loadGuildSettings(guild!!)
+            //println("Loaded Guild ${guild.name} (${guild.id})")
         }
 
         val activities = arrayOf(
@@ -46,13 +47,13 @@ class GeneralEvents : ListenerAdapter() {
     }
 
     override fun onGuildJoin(event: GuildJoinEvent) {
-        LilOri.instance.dataManager.createGuild(event.guild, Settings.DEFAULT_PREFIX)
-        LilOri.instance.guildSettingsManager.loadGuildSettings(event.guild)
+        bot.guildSettingsManager.createGuild(event.guild)
+        bot.guildSettingsManager.loadGuildSettings(event.guild)
     }
 
     override fun onGuildLeave(event: GuildLeaveEvent) {
-        LilOri.instance.dataManager.removeGuild(event.guild)
-        LilOri.instance.guildSettingsManager.removeGuildSettings(event.guild)
+        bot.guildSettingsManager.removeGuild(event.guild)
+        bot.guildSettingsManager.removeGuildSettings(event.guild)
     }
 
     override fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
@@ -62,7 +63,7 @@ class GeneralEvents : ListenerAdapter() {
                 .setColor(Color.decode("#33539e"))
                 .setDescription("""» Discord Utility Bot Created by Oribuin « 
                         
-                        • Find all my commands using **${LilOri.instance.guildSettingsManager.getGuildSettings(event.guild)?.getPrefix()}help** 
+                        • Find all my commands using **${bot.guildSettingsManager.getGuildSettings(event.guild)?.getPrefix()}help** 
                         • Find my source code on https://github.com/Oribuin/Lil-Ori/
                         • Website: https://oribuin.xyz/
                         • Donate: https://oribuin.xyz/donate""".trimIndent())

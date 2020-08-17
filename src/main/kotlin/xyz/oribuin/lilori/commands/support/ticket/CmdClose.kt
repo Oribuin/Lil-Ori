@@ -5,8 +5,6 @@ import xyz.oribuin.lilori.handler.Command
 import xyz.oribuin.lilori.handler.CommandEvent
 import xyz.oribuin.lilori.utils.EventWaiter
 import java.util.concurrent.TimeUnit
-import java.util.function.Consumer
-import java.util.function.Predicate
 
 class CmdClose(private val waiter: EventWaiter) : Command() {
     init {
@@ -24,12 +22,11 @@ class CmdClose(private val waiter: EventWaiter) : Command() {
             return
         }
 
-        /*
         event.channel.sendMessage(event.author.asMention + ", Are you sure you want to close the ticket channel?").queue { msg ->
             msg.addReaction("✅").queue()
             msg.addReaction("❌").queue()
 
-            waiter.waitForEvent(GuildMessageReactionAddEvent::class.java, Predicate { check -> check.user == event.author && check.messageId == msg.id }, Consumer { action ->
+            waiter.waitForEvent(GuildMessageReactionAddEvent::class.java, { check -> check.user == event.author && check.messageId == msg.id }, { action ->
                 when (action.reactionEmote.emoji) {
                     "✅" -> {
                         println("${event.author.asTag} has closed the ticket channel, #${event.textChannel.name}!")
@@ -46,9 +43,7 @@ class CmdClose(private val waiter: EventWaiter) : Command() {
 
         }
 
-         */
-
-        println("${event.author.asTag} has closed the ticket channel, #${event.textChannel.name}!")
-        event.textChannel.delete().queue()
+        //println("${event.author.asTag} has closed the ticket channel, #${event.textChannel.name}!")
+        //event.textChannel.delete().queue()
     }
 }
