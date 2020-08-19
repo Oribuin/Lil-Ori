@@ -59,7 +59,7 @@ class LilOri : ListenerAdapter() {
                 // Game Commands
                 CmdCoinflip(this), CmdColor(this), CmdEightball(this), CmdFeed(this), CmdGay(this), CmdQuote(this), CmdSlap(this),
                 // Moderation Commands
-                CmdPurge(this), CmdBan(this),
+                CmdPurge(this, eventWaiter), CmdBan(this),
                 // Author Commands
                 CmdEval(this), CmdQuery(this), CmdTest(this), CmdUpdate(this),
                 // Admin Commands

@@ -3,7 +3,6 @@ package xyz.oribuin.lilori.commands.support.general
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.Permission
 import xyz.oribuin.lilori.LilOri
-import xyz.oribuin.lilori.Settings
 import xyz.oribuin.lilori.handler.Command
 import xyz.oribuin.lilori.handler.CommandEvent
 import java.awt.Color
@@ -54,7 +53,8 @@ class CmdAnnounce(bot: LilOri) : Command(bot) {
 
 
                 if (args[2].toBoolean()) {
-                    (channel ?: return).sendMessage(event.guild.publicRole.asMention).embed(embedBuilder.build()).queue()
+                    (channel
+                            ?: return).sendMessage(event.guild.publicRole.asMention).embed(embedBuilder.build()).queue()
                     event.reply("${event.author.asMention} Successfully sent an announcement ${channel.asMention}")
                     return
                 }

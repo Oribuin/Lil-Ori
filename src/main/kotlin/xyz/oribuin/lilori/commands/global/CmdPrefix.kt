@@ -5,7 +5,6 @@ import net.dv8tion.jda.api.Permission
 import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.handler.Command
 import xyz.oribuin.lilori.handler.CommandEvent
-import java.awt.Color
 
 class CmdPrefix(bot: LilOri) : Command(bot) {
     init {
@@ -20,7 +19,7 @@ class CmdPrefix(bot: LilOri) : Command(bot) {
         val args = event.message.contentRaw.split(" ").toTypedArray()
 
         if (args.size == 1) {
-            event.reply("${event.author.asMention}, Please provide the correct args!");
+            event.reply("${event.author.asMention}, Please provide the correct args!")
             return
         }
 
@@ -39,9 +38,9 @@ class CmdPrefix(bot: LilOri) : Command(bot) {
                 .setTitle("Changed Lil' Ori Prefix")
                 .setColor(event.color)
                 .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png")
-                .setDescription("**Old Prefix** ${event.prefix}" +
-                        " " +
-                        "**New Prefix** ${args[1]}".trimIndent())
+                .setDescription("""**Old Prefix** ${event.prefix}
+                        
+                        **New Prefix** ${args[1]}""".trimMargin())
 
         event.reply(embedBuilder)
         bot.guildSettingsManager.updateGuild(event.guild, args[1])

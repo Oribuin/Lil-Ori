@@ -6,6 +6,7 @@ import xyz.oribuin.lilori.Settings
 import java.awt.Color
 
 class GuildSettings(var guild: Guild?) {
+
     fun getPrefix(): String {
         var prefix = Settings.DEFAULT_PREFIX
 
@@ -36,7 +37,7 @@ class GuildSettings(var guild: Guild?) {
     }
 
     fun getColor(): Color {
-        var prefix = Settings.EMBED_COLOR
+        var color = Settings.EMBED_COLOR
 
         LilOri.instance.connector.connect { connection ->
             val getColor = "SELECT color FROM guild_settings WHERE guild_id = ?"
@@ -45,12 +46,12 @@ class GuildSettings(var guild: Guild?) {
 
                 val result = statement.executeQuery()
                 if (result.next()) {
-                    prefix = Color.decode(result.getString(1))
+                    color = Color.decode(result.getString(1))
                 }
             }
         }
 
-        return prefix
+        return Settings.EMBED_COLOR
     }
 
     fun setColor(color: String) {

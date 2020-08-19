@@ -12,17 +12,16 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.utils.GuildSettings
-import java.awt.Color
 import java.util.*
 import java.util.function.Consumer
 
 class GeneralEvents(private val bot: LilOri) : ListenerAdapter() {
     override fun onReady(event: ReadyEvent) {
-            for (guild in event.jda.guilds) {
-                val guildSettings = GuildSettings(guild)
+        for (guild in event.jda.guilds) {
+            val guildSettings = GuildSettings(guild)
 
-                bot.guildSettingsManager.updateGuild(guild, guildSettings.getPrefix())
-            }
+            bot.guildSettingsManager.updateGuild(guild, guildSettings.getPrefix())
+        }
 
         val activities = arrayOf(
                 Activity.watching("https://oribuin.xyz/"),
