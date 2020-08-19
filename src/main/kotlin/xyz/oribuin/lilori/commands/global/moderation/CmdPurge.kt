@@ -1,11 +1,12 @@
 package xyz.oribuin.lilori.commands.global.moderation
 
 import net.dv8tion.jda.api.Permission
+import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.handler.Command
 import xyz.oribuin.lilori.handler.CommandEvent
 import java.util.concurrent.TimeUnit
 
-class CmdPurge : Command() {
+class CmdPurge(bot: LilOri) : Command(bot) {
 
     init {
         name = "Purge"
@@ -32,8 +33,6 @@ class CmdPurge : Command() {
             event.timedReply(event.author.asMention + ", Correct Format: ;purge " + arguments, 10, TimeUnit.SECONDS)
             return
         }
-
-
 
 
     }

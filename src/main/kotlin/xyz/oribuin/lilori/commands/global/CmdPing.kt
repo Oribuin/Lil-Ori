@@ -2,12 +2,13 @@ package xyz.oribuin.lilori.commands.global
 
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.Message
+import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.handler.Command
 import xyz.oribuin.lilori.handler.CommandEvent
 import java.awt.Color
 import java.util.concurrent.TimeUnit
 
-class CmdPing : Command() {
+class CmdPing(bot: LilOri) : Command(bot) {
     private var emoji: String? = null
 
     init {

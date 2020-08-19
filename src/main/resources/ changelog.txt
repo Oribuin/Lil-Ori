@@ -1,0 +1,14 @@
+;announce plugin eternalreports 1.0
+
+oh lord what is the changelog, lemme just find my notes...
+
+• Added report ids
+• Made report-menu actually generate and create the contents.
+• Added ability to resolve/delete reports
+• Added report cooldowns
+• Made values in config.yml and messages.yml automatically update.
+• Added ability to see when a report was made
+• Added support for MySQL
+• Fixed Tab Complete
+• Fixed reports duplicating
+• Might of added support to toggle alerts?

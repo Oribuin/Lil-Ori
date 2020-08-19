@@ -1,12 +1,13 @@
 package xyz.oribuin.lilori.commands.global.music
 
 import net.dv8tion.jda.api.EmbedBuilder
+import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.handler.Command
 import xyz.oribuin.lilori.handler.CommandEvent
 import xyz.oribuin.lilori.managers.music.TrackManager.Companion.getInstance
 import java.awt.Color
 
-class CmdPause : Command() {
+class CmdPause(bot: LilOri) : Command(bot) {
     init {
         name = "Pause"
         aliases = emptyList()
@@ -16,7 +17,7 @@ class CmdPause : Command() {
 
     override fun executeCommand(event: CommandEvent) {
         val tm = getInstance(event.guild)
-        (tm?: return)
+        (tm ?: return)
 
         if (event.member?.voiceState == null || event.member?.voiceState?.inVoiceChannel() == false) {
             event.reply(event.author.asMention + ", Could not change volume since you are not in the voice channel")

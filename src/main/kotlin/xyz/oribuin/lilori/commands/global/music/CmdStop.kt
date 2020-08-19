@@ -1,12 +1,13 @@
 package xyz.oribuin.lilori.commands.global.music
 
 import net.dv8tion.jda.api.EmbedBuilder
+import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.handler.Command
 import xyz.oribuin.lilori.handler.CommandEvent
 import xyz.oribuin.lilori.managers.music.TrackManager.Companion.getInstance
 import java.awt.Color
 
-class CmdStop : Command() {
+class CmdStop(bot: LilOri) : Command(bot) {
     init {
         name = "Stop"
         description = "Stops playing Music."
@@ -17,7 +18,7 @@ class CmdStop : Command() {
     override fun executeCommand(event: CommandEvent) {
 
         val tm = getInstance(event.guild)
-        (tm?: return)
+        (tm ?: return)
 
         if (!event.guild.audioManager.isConnected) {
             event.reply(event.author.toString() + ", There is no active Audio Track.")

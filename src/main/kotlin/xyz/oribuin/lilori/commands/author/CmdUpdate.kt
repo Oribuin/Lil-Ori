@@ -1,16 +1,15 @@
 package xyz.oribuin.lilori.commands.author
 
-import com.jcraft.jsch.*
 import org.apache.commons.lang3.StringUtils
 import org.apache.commons.net.ftp.FTPClient
+import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.Settings
 import xyz.oribuin.lilori.handler.Command
 import xyz.oribuin.lilori.handler.CommandEvent
 import java.io.File
 import java.io.FileInputStream
-import java.util.*
 
-class CmdUpdate : Command() {
+class CmdUpdate(bot: LilOri) : Command(bot) {
 
     init {
         name = "Update"
@@ -18,6 +17,7 @@ class CmdUpdate : Command() {
         description = "Update the jar file on the latest ."
         arguments = emptyList()
         isOwnerOnly = true
+        isEnabled = false
     }
 
     override fun executeCommand(event: CommandEvent) {
@@ -30,10 +30,6 @@ class CmdUpdate : Command() {
         }
 
         when (args[1].toLowerCase()) {
-            "jar", "bot" -> {
-                this.updateJar(event)
-            }
-
             "plugin" -> {
 
                 if (event.message.attachments.size == 0) {
@@ -75,54 +71,6 @@ class CmdUpdate : Command() {
                 file.delete()
 
                 event.deleteCmd()
-            } catch (ex: Exception) {
-                ex.printStackTrace()
-            }
-        }
-    }
-
-    private fun updateJar(event: CommandEvent) {
-        event.channel.sendMessage("<a:bee:730546474424729712> **Starting to update JAR file.**").queue { msg ->
-            try {
-                val file = File("build/libs", "Lil-Ori-1.0-all.jar")
-                // Edit message
-                msg.editMessage("<a:bee:730546474424729712> **Logging into SFTP.**").queue()
-
-                // Lesson of the day: Logging into SFTP is a little bitch
-                val jsch = JSch()
-
-                // Get the session
-                val session = jsch.getSession(Settings.JAR_FTP_USERNAME, Settings.JAR_FTP_URL, 2022)
-                session.setPassword(Settings.JAR_FTP_PASSWORD)
-
-                // Config stuff i don't understand
-                val properties = Properties()
-                properties.setProperty("StrictHostKeyChecking", "no")
-                session.setConfig(properties)
-
-                // Weird proxy stuff
-                session.setProxy(ProxySOCKS4(Settings.JAR_FTP_URL, 2022))
-
-                // Connect stuff
-                session.connect()
-
-                val channel = session.openChannel("sftp")
-                val sftp = channel as ChannelSftp
-                sftp.connect()
-
-
-                // More messages :)
-                msg.editMessage("<a:bee:730546474424729712> **Uploading new LilOri.jar File.**").queue()
-
-                // Save file
-                sftp.put(FileInputStream(file), file.name)
-                msg.editMessage("<a:bee:730546474424729712> **Logging out of SFTP.**").queue()
-
-                // Logout
-                sftp.disconnect()
-                session.disconnect()
-
-                msg.editMessage("<a:bee:730546474424729712> **Successfully updated Jar File! Restart bot to see the changes.**").queue()
             } catch (ex: Exception) {
                 ex.printStackTrace()
             }

@@ -8,10 +8,10 @@ import xyz.oribuin.lilori.handler.CommandEvent
 import xyz.oribuin.lilori.managers.music.TrackManager.Companion.getInstance
 import java.util.concurrent.TimeUnit
 
-class CmdPlay(bot: LilOri) : Command(bot) {
+class CmdQueue(bot: LilOri) : Command(bot) {
     init {
-        name = "Play"
-        description = "Play Music"
+        name = "Queue"
+        description = "Queue music onto the playlist"
         aliases = emptyList()
         arguments = listOf("<youtube_url>")
         botPermissions = arrayOf(Permission.MESSAGE_MANAGE)
@@ -44,8 +44,7 @@ class CmdPlay(bot: LilOri) : Command(bot) {
         }
 
         event.deleteCmd()
-
-        tm.loadAndPlay(event.member!!, event.textChannel, url, false, false)
+        tm.loadAndPlay(event.member!!, event.textChannel, url, false, true)
 
         musicManager.getAudioManager(event.guild).openAudioConnection(event.member?.voiceState?.channel)
         tm.trackScheduler.onTrackEnd(tm.musicManager.player, musicManager.player.playingTrack, AudioTrackEndReason.FINISHED)

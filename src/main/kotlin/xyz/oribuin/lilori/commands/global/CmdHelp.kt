@@ -1,9 +1,10 @@
 package xyz.oribuin.lilori.commands.global
 
+import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.handler.Command
 import xyz.oribuin.lilori.handler.CommandEvent
 
-class CmdHelp : Command() {
+class CmdHelp(bot: LilOri) : Command(bot) {
     init {
         name = "Help"
         aliases = listOf("Support")

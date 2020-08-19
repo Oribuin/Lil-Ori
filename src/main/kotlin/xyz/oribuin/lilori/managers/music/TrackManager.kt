@@ -13,11 +13,12 @@ import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.entities.TextChannel
+import xyz.oribuin.lilori.LilOri
 import java.awt.Color
 import java.util.*
 import java.util.function.Consumer
 
-class TrackManager private constructor(guild: Guild) {
+class TrackManager private constructor(private val bot: LilOri, guild: Guild) {
     val playerManager: AudioPlayerManager
     private val musicManagers: MutableMap<String, GuildMusicManager>
     private val guild: Guild
@@ -26,14 +27,14 @@ class TrackManager private constructor(guild: Guild) {
         get() {
             var musicManager = musicManagers[guild.id]
             if (musicManager == null) {
-                musicManager = GuildMusicManager(playerManager)
+                musicManager = GuildMusicManager(bot, playerManager)
                 musicManagers[guild.id] = musicManager
             }
             musicManager.getAudioManager(guild).sendingHandler = musicManager.getSendHandler()
             return musicManager
         }
 
-    fun loadAndPlay(author: Member, textChannel: TextChannel, trackUrl: String, addPlaylist: Boolean) {
+    fun loadAndPlay(author: Member, textChannel: TextChannel, trackUrl: String, addPlaylist: Boolean, queued: Boolean) {
 
         playerManager.loadItemOrdered(musicManager, trackUrl, object : AudioLoadResultHandler {
             override fun trackLoaded(track: AudioTrack) {
@@ -42,14 +43,25 @@ class TrackManager private constructor(guild: Guild) {
                 totalSeconds %= 3600
                 val minutes = totalSeconds / 60
                 val seconds = totalSeconds % 60
-                val embedBuilder = EmbedBuilder()
-                        .setAuthor("\uD83C\uDFB5 Now Playing " + track.info.title)
-                        .setColor(Color.RED)
-                        .setDescription("""**Song URL** ${track.info.uri}
+
+                if (!queued) {
+                    val embedBuilder = EmbedBuilder()
+                            .setAuthor("\uD83C\uDFB5 Now Playing " + track.info.title)
+                            .setColor(Color.RED)
+                            .setDescription("""**Song URL** ${track.info.uri}
                                         **Song Duration** $minutes minutes & $seconds seconds""")
-                        .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png")
-                textChannel.sendMessage(author.asMention).embed(embedBuilder.build()).queue()
-                musicManager.scheduler.queue(track)
+                            .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png")
+                    textChannel.sendMessage(author.asMention).embed(embedBuilder.build()).queue()
+                } else {
+                    val embedBuilder = EmbedBuilder()
+                            .setAuthor("\uD83C\uDFB5 Playing Next " + track.info.title)
+                            .setColor(Color.RED)
+                            .setDescription("""**Song URL** ${track.info.uri}
+                                        **Song Duration** $minutes minutes & $seconds seconds""")
+                            .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png")
+                    textChannel.sendMessage(author.asMention).embed(embedBuilder.build()).queue()
+                }
+                musicManager.scheduler.queue(track, queued)
             }
 
             override fun playlistLoaded(playlist: AudioPlaylist) {
@@ -60,10 +72,10 @@ class TrackManager private constructor(guild: Guild) {
                 }
                 if (addPlaylist) {
                     textChannel.sendMessage(author.asMention + ", Adding " + playlist.tracks.size + " to the playlist").queue()
-                    trackList.forEach(Consumer { track: AudioTrack? -> musicManager.scheduler.queue(track!!) })
+                    trackList.forEach(Consumer { track: AudioTrack? -> musicManager.scheduler.queue(track!!, queued) })
                     return
                 }
-                musicManager.scheduler.queue(firstTrack)
+                musicManager.scheduler.queue(firstTrack, queued)
             }
 
             override fun noMatches() {
@@ -97,15 +109,17 @@ class TrackManager private constructor(guild: Guild) {
         }
 
     val trackScheduler: TrackScheduler
-        get() = TrackScheduler(musicManager.player)
+        get() = TrackScheduler(bot, musicManager.player)
 
     companion object {
         private var instance: TrackManager? = null
+
         @JvmStatic
         fun getInstance(guild: Guild): TrackManager? {
             if (instance == null) {
-                instance = TrackManager(guild)
+                instance = TrackManager(LilOri.instance, guild)
             }
+
             return instance
         }
     }

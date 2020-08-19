@@ -3,7 +3,10 @@ package xyz.oribuin.lilori
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import net.dv8tion.jda.api.requests.GatewayIntent
-import xyz.oribuin.lilori.commands.author.*
+import xyz.oribuin.lilori.commands.author.CmdEval
+import xyz.oribuin.lilori.commands.author.CmdQuery
+import xyz.oribuin.lilori.commands.author.CmdTest
+import xyz.oribuin.lilori.commands.author.CmdUpdate
 import xyz.oribuin.lilori.commands.global.CmdColor
 import xyz.oribuin.lilori.commands.global.CmdHelp
 import xyz.oribuin.lilori.commands.global.CmdPing
@@ -27,20 +30,21 @@ import xyz.oribuin.lilori.managers.DataManager
 import xyz.oribuin.lilori.managers.GuildSettingsManager
 import xyz.oribuin.lilori.managers.TicketManager
 import xyz.oribuin.lilori.utils.EventWaiter
+import xyz.oribuin.lilori.utils.FileUtils
 import java.io.File
-import java.io.IOException
 import javax.security.auth.login.LoginException
 
-class LilOri private constructor() : ListenerAdapter() {
+
+class LilOri : ListenerAdapter() {
 
     // Define handlers
-    private val commandHandler: CommandHandler
-    lateinit var connector: DatabaseConnector
+    private var commandHandler: CommandHandler
+    var connector: DatabaseConnector
 
     // Define managers
-    val dataManager: DataManager
-    val guildSettingsManager: GuildSettingsManager
-    val ticketManager: TicketManager
+    var dataManager: DataManager
+    var guildSettingsManager: GuildSettingsManager
+    var ticketManager: TicketManager
 
     // Define others
     private val eventWaiter = EventWaiter()
@@ -49,77 +53,63 @@ class LilOri private constructor() : ListenerAdapter() {
     private fun registerCommands() {
         commandHandler.registerCommands(
                 // General Commands
-                CmdHelp(), CmdPing(), CmdPrefix(),
+                CmdHelp(this), CmdPing(this), CmdPrefix(this),
                 // Music Commands
-                CmdLoop(), CmdPause(), CmdPlay(), CmdStop(), CmdVolume(),
+                CmdLoop(this), CmdPause(this), CmdPlay(this), CmdQueue(this), CmdStop(this), CmdVolume(this),
                 // Game Commands
-                CmdCoinflip(), CmdColor(), CmdEightball(), CmdFeed(), CmdGay(), CmdQuote(), CmdSlap(),
+                CmdCoinflip(this), CmdColor(this), CmdEightball(this), CmdFeed(this), CmdGay(this), CmdQuote(this), CmdSlap(this),
                 // Moderation Commands
-                CmdPurge(), CmdBan(),
+                CmdPurge(this), CmdBan(this),
                 // Author Commands
-                CmdEval(), CmdQuery(), CmdTest(), CmdUpdate(),
+                CmdEval(this), CmdQuery(this), CmdTest(this), CmdUpdate(this),
                 // Admin Commands
-                CmdPerms(),
+                CmdPerms(this),
                 // Support Discord commands
                 // General
-                CmdAnnounce(), CmdReactionRole(),
+                CmdAnnounce(this), CmdReactionRole(this),
                 // Ticket
-                CmdTicket(), CmdClose(eventWaiter)
+                CmdTicket(this), CmdClose(eventWaiter, this)
         )
     }
 
-
     private fun enable() {
-        guildSettingsManager.enable()
         dataManager.enable()
+        guildSettingsManager.enable()
         ticketManager.enable()
     }
 
     init {
         instance = this
-
-        // PDM
-        /*
-        val classLoader = URLClassLoader(arrayOfNulls<URL>(0), javaClass.classLoader)
-        val libraryDirectory = Files.createTempDirectory("PDM").toFile()
-
-        val pdm = PDMBuilder()
-                .rootDirectory(libraryDirectory)
-                .classLoader(classLoader)
-                .applicationName("PDM-Test-Suite")
-                .applicationVersion("N/A")
-                .build()
-
-        pdm.loadAllDependencies().join()
-         */
-
         // Setup the SQLite Database
         val file = File("data", "lilori.db")
-        try {
-            if (!file.exists()) {
-                file.createNewFile()
-                println("Created SQLite Database File: lilori.db")
-            }
-
-            // Register SQLite Connector
-            connector = SQLiteConnector(file)
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
+        FileUtils.createFile(file)
+        connector = SQLiteConnector(file)
 
         // Setup Managers
+        dataManager = DataManager(this)
         guildSettingsManager = GuildSettingsManager(this)
         commandHandler = CommandHandler()
-        dataManager = DataManager(this)
         ticketManager = TicketManager(this)
 
         this.registerCommands()
         this.enable()
 
         // Login Bot
-        val jda = JDABuilder.createDefault(Settings.TOKEN)
-                .enableIntents(GatewayIntent.GUILD_MEMBERS)
-                .addEventListeners(CommandExecutor(this, commandHandler), GeneralEvents(this), SupportListeners(), eventWaiter, this)
+        val jda = JDABuilder.createDefault(
+                Settings.TOKEN,
+                GatewayIntent.GUILD_MEMBERS,
+                GatewayIntent.GUILD_MESSAGES,
+                GatewayIntent.GUILD_BANS,
+                GatewayIntent.GUILD_EMOJIS,
+                GatewayIntent.GUILD_INVITES,
+                GatewayIntent.GUILD_VOICE_STATES,
+                GatewayIntent.GUILD_PRESENCES,
+                GatewayIntent.GUILD_MESSAGE_REACTIONS,
+                GatewayIntent.GUILD_MESSAGE_TYPING
+        ).addEventListeners(CommandExecutor(this, commandHandler), GeneralEvents(this), SupportListeners(), eventWaiter, this)
+
+        for (intent in GatewayIntent.values())
+            jda.enableIntents(intent)
 
         val jdaBot = jda.build()
 
@@ -128,11 +118,12 @@ class LilOri private constructor() : ListenerAdapter() {
 
         for (command in commandHandler.commands)
             if (command.aliases == null)
-                throw NullPointerException("Command aliases is null")
+                throw IllegalArgumentException("Command aliases does not exists")
             else
                 println("Loaded Command: ${command.name} | (${++i}/${commandHandler.commands.size}) ")
 
         println("*=* Loaded Up ${jdaBot.selfUser.name} with ${commandHandler.commands.size}  Command(s) *=*")
+
     }
 
     companion object {

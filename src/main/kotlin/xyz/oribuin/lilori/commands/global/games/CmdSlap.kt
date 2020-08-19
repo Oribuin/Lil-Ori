@@ -2,13 +2,14 @@ package xyz.oribuin.lilori.commands.global.games
 
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.Member
+import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.handler.Command
 import xyz.oribuin.lilori.handler.CommandEvent
 import java.util.*
 import java.util.concurrent.TimeUnit
 import java.util.function.Consumer
 
-class CmdSlap : Command() {
+class CmdSlap(bot: LilOri) : Command(bot) {
     init {
         name = "Slap"
         aliases = emptyList()

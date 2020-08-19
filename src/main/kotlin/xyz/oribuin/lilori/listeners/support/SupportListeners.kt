@@ -11,7 +11,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionRemoveEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
-import xyz.oribuin.lilori.LilOri
+import java.awt.Color
 
 class SupportListeners : ListenerAdapter() {
     override fun onGuildMemberJoin(event: GuildMemberJoinEvent) {
@@ -27,14 +27,13 @@ class SupportListeners : ListenerAdapter() {
         // Embed builder
         val embedBuilder = EmbedBuilder()
                 .setAuthor("A new member has joined!")
-                .setColor(event.member.roles[0].color)
+                .setColor(Color.decode("#49fff6"))
                 .setFooter("Lil' Ori created by Oribuin", "https://img.oribuin.xyz/profile.png")
                 .setThumbnail(event.member.user.avatarUrl)
                 .addField("Member", "${event.member.asMention} (${event.member.user.asTag})", false)
-                .addField("ID", event.member.user.id, false)
+                .addField("ID", event.member.user.id, false).build()
 
-        // Send message to channel
-        channel?.sendMessage(embedBuilder.build())?.queue()
+        channel?.sendMessage(embedBuilder)?.queue()
         println("${event.user.asTag} (${event.user.id}) has joined ${event.guild.name}!")
     }
 
@@ -48,7 +47,7 @@ class SupportListeners : ListenerAdapter() {
         // Embed builder
         val embedBuilder = EmbedBuilder()
                 .setAuthor("A new member has left!")
-                .setColor(event.guild.owner?.color)
+                .setColor(Color.decode("#fe4747"))
                 .setFooter("Lil' Ori created by Oribuin", "https://img.oribuin.xyz/profile.png")
                 .addField("Member", event.user.asTag, false)
                 .addField("ID", event.user.id, false)

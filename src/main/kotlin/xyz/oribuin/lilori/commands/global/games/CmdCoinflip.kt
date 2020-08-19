@@ -1,12 +1,13 @@
 package xyz.oribuin.lilori.commands.global.games
 
 import net.dv8tion.jda.api.entities.Message
+import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.handler.Command
 import xyz.oribuin.lilori.handler.CommandEvent
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-class CmdCoinflip : Command() {
+class CmdCoinflip(bot: LilOri) : Command(bot) {
     init {
         name = "Coinflip"
         aliases = listOf("Flip")

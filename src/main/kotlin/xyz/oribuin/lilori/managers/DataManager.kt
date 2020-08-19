@@ -1,6 +1,5 @@
 package xyz.oribuin.lilori.managers
 
-import net.dv8tion.jda.api.entities.Guild
 import xyz.oribuin.lilori.LilOri
 import java.sql.Connection
 
@@ -15,9 +14,9 @@ class DataManager(bot: LilOri) : Manager(bot) {
     private fun createTables() {
         bot.connector.connect { connection: Connection ->
             val queries = arrayOf(
-                    "CREATE TABLE IF NOT EXISTS guild_settings (guild_id LONG, prefix TXT, PRIMARY KEY(guild_id))",
+                    "CREATE TABLE IF NOT EXISTS guild_settings (guild_id LONG, guild_name TXT, prefix TXT, color TXT, PRIMARY KEY(guild_id))",
                     "CREATE TABLE IF NOT EXISTS quotes (label TXT, author TXT, quote TXT)",
-                    // Support team tables
+                    // Support tables
                     "CREATE TABLE IF NOT EXISTS ticket_count (user_id LONG, count INT, PRIMARY KEY(user_id))"
             )
 

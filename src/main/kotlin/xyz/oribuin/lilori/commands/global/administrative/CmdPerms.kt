@@ -3,13 +3,14 @@ package xyz.oribuin.lilori.commands.global.administrative
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.Permission
 import org.apache.commons.lang3.StringUtils
+import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.handler.Command
 import xyz.oribuin.lilori.handler.CommandEvent
 import java.awt.Color
 import java.util.*
 import java.util.function.Consumer
 
-class CmdPerms : Command() {
+class CmdPerms(bot: LilOri) : Command(bot) {
     init {
         name = "Permissions"
         aliases = listOf("Perms")

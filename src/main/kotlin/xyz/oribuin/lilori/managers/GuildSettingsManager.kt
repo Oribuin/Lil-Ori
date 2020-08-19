@@ -29,10 +29,14 @@ class GuildSettingsManager(bot: LilOri) : Manager(bot) {
             val settings = default
             guildSettings[guild.idLong] = settings
 
-            val query = "REPLACE INTO guild_settings (guild_id, prefix) VALUES (?, ?"
+            val hex: String = String.format("%02x%02x%02x", settings.getColor().red, settings.getColor().green, settings.getColor().blue)
+
+            val query = "REPLACE INTO guild_settings (guild_id, guild_name, prefix, color) VALUES (?, ?, ?, ?)"
             connection.prepareStatement(query).use { statement ->
                 statement.setLong(1, guild.idLong)
-                statement.setString(2, settings.getPrefix())
+                statement.setString(2, guild.name)
+                statement.setString(3, settings.getPrefix())
+                statement.setString(4, hex)
                 statement.executeUpdate()
             }
         }
@@ -41,7 +45,6 @@ class GuildSettingsManager(bot: LilOri) : Manager(bot) {
     fun loadGuildSettings(guild: Guild) {
         if (!guildSettings.containsKey(guild.idLong)) {
             this.createGuild(guild)
-            println("Created Guild in Database: ${guild.name} (${guild.id})")
         }
 
         bot.connector.connect { connection: Connection ->
@@ -78,36 +81,19 @@ class GuildSettingsManager(bot: LilOri) : Manager(bot) {
         }
     }
 
-    /**
-     * Get the guild settings if they exist, if not, load them
-     *
-     * @param guild the guild being loaded
-     * @return Guild's Settings
-     */
-    fun getGuildSettings(guild: Guild): GuildSettings? {
-        if (!guildSettings.containsKey(guild.idLong))
-            loadGuildSettings(guild)
 
-        return guildSettings[guild.idLong]
-    }
-
-    /**
-     * Update the command prefix in a guild
-     *
-     * @param guild  represents the guild the command is sent in
-     * @param prefix represents the new command prefix
-     */
     fun updateGuild(guild: Guild, prefix: String?) {
         if (prefix != null) {
-            getGuildSettings(guild)?.setPrefix(prefix)
+            GuildSettings(guild).setPrefix(prefix)
         }
 
         bot.connector.connect { connection: Connection ->
-            val updateSettings = "REPLACE INTO guild_settings (guild_id, prefix) VALUES (?, ?)"
+            val updateSettings = "REPLACE INTO guild_settings (guild_id, guild_name, prefix) VALUES (?, ?, ?)"
 
             connection.prepareStatement(updateSettings).use { statement ->
                 statement.setLong(1, guild.idLong)
-                statement.setString(2, prefix)
+                statement.setString(2, guild.name)
+                statement.setString(3, prefix)
                 statement.executeUpdate()
             }
         }

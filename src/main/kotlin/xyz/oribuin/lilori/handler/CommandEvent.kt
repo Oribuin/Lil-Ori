@@ -6,6 +6,8 @@ import net.dv8tion.jda.api.entities.*
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import net.dv8tion.jda.api.exceptions.ErrorResponseException
 import xyz.oribuin.lilori.LilOri
+import xyz.oribuin.lilori.utils.GuildSettings
+import java.awt.Color
 import java.util.concurrent.TimeUnit
 
 class CommandEvent(private val bot: LilOri, val event: GuildMessageReceivedEvent) {
@@ -46,8 +48,11 @@ class CommandEvent(private val bot: LilOri, val event: GuildMessageReceivedEvent
         }
     }
 
-    val prefix: String?
-        get() = bot.guildSettingsManager.getGuildSettings(event.guild)?.getPrefix()
+    val prefix: String
+        get() = GuildSettings(guild).getPrefix()
+
+    val color: Color
+        get() = GuildSettings(guild).getColor()
 
     val selfMember: Member
         get() = event.guild.selfMember

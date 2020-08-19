@@ -1,9 +1,10 @@
 package xyz.oribuin.lilori.commands.global.music
 
+import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.handler.Command
 import xyz.oribuin.lilori.handler.CommandEvent
 
-class CmdLoop : Command() {
+class CmdLoop(bot: LilOri) : Command(bot) {
     var isLooping = false
         private set
 
@@ -22,7 +23,7 @@ class CmdLoop : Command() {
         }
 
         if (isLooping) {
-            event.reply("Now ")
+            event.reply("✅ No Longer Looping. ")
             isLooping = false
         } else {
             event.reply("✅ Now Looping.")

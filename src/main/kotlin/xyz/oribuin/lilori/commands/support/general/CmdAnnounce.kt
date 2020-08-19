@@ -2,6 +2,7 @@ package xyz.oribuin.lilori.commands.support.general
 
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.Permission
+import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.Settings
 import xyz.oribuin.lilori.handler.Command
 import xyz.oribuin.lilori.handler.CommandEvent
@@ -9,7 +10,7 @@ import java.awt.Color
 import java.time.OffsetDateTime
 
 // ;announce #channel true <message>
-class CmdAnnounce : Command() {
+class CmdAnnounce(bot: LilOri) : Command(bot) {
     init {
         name = "Announce"
         description = "Announce a message into a channel"
@@ -79,10 +80,11 @@ class CmdAnnounce : Command() {
                         .setAuthor("Plugin Update: ${args[2]}", null, "https://img.oribuin.xyz/bot-images/announcement.jpg")
                         .setDescription("""$changelog
                             
-                        Find the latest jar file on https://jars.oribuin.xyz/${args[2].toLowerCase()}/""".trimMargin())
+                        Find the latest jar file on https://jars.oribuin.xyz/""".trimMargin())
                         .setTimestamp(OffsetDateTime.now())
 
-                (channel?: return).sendMessage(event.guild.getRolesByName("Plugin Updates", true)[0].asMention).embed(embedBuilder.build()).queue()
+                (channel
+                        ?: return).sendMessage(event.guild.getRolesByName("Plugin Updates", true)[0].asMention).embed(embedBuilder.build()).queue()
                 event.reply("${event.author.asMention} Successfully sent plugin update to ${channel.asMention}")
             }
         }
@@ -93,7 +95,7 @@ class CmdAnnounce : Command() {
         val embed = EmbedBuilder()
                 .setAuthor("Invalid Arguments")
                 .setDescription("You have provided invalid arguments for the command!")
-                .setColor(Settings.EMBED_COLOR)
+                .setColor(event.color)
                 .setAuthor("${event.prefix}announce")
 
         event.channel.sendMessage(event.author.asMention).embed(embed.build()).queue()
@@ -103,7 +105,7 @@ class CmdAnnounce : Command() {
         val embed = EmbedBuilder()
                 .setAuthor("Invalid Boolean")
                 .setDescription("You have provided an invalid boolean!")
-                .setColor(Settings.EMBED_COLOR)
+                .setColor(event.color)
                 .setAuthor("${event.prefix}announce")
 
         event.channel.sendMessage(event.author.asMention).embed(embed.build()).queue()

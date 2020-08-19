@@ -4,15 +4,16 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayer
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.managers.AudioManager
+import xyz.oribuin.lilori.LilOri
 
-class GuildMusicManager(manager: AudioPlayerManager) {
+class GuildMusicManager(private val bot: LilOri, manager: AudioPlayerManager) {
     @JvmField
     val player: AudioPlayer = manager.createPlayer()
     val scheduler: TrackScheduler
     private val sendHandler: AudioPlayerSendHandler
 
     init {
-        scheduler = TrackScheduler(player)
+        scheduler = TrackScheduler(bot, player)
         sendHandler = AudioPlayerSendHandler(player)
         player.addListener(scheduler)
     }

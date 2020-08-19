@@ -6,16 +6,17 @@ import net.dv8tion.jda.api.exceptions.PermissionException
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.Settings
+import xyz.oribuin.lilori.utils.GuildSettings
 
 class CommandExecutor(private val bot: LilOri, private val commandHandler: CommandHandler) : ListenerAdapter() {
 
     override fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
 
         // TODO: Create a command client to store owner id
-        val guildSettings = bot.guildSettingsManager.getGuildSettings(event.guild)
+        val guildSettings = GuildSettings(event.guild)
         val content = event.message.contentRaw.toLowerCase()
 
-        if (guildSettings?.getPrefix()?.toLowerCase()?.let { content.startsWith(it) } == false)
+        if (!guildSettings.getPrefix().toLowerCase().let { content.startsWith(it) })
             return
 
         // Filter through each command
@@ -25,8 +26,7 @@ class CommandExecutor(private val bot: LilOri, private val commandHandler: Comma
                 requireNotNull(cmd.aliases) { "Null Aliases in command " + cmd.name }
 
                 // Check if command name or alias
-                if (!cmd.name.equals(args[0].substring(1), ignoreCase = true) &&
-                        cmd.aliases?.stream()?.noneMatch { x: String -> x.equals(args[0].substring(1), ignoreCase = true) } == true) continue
+                if (!cmd.name.equals(args[0].substring(1), ignoreCase = true) && cmd.aliases?.stream()?.noneMatch { x: String -> x.equals(args[0].substring(1), ignoreCase = true) } == true) continue
 
                 // Check if command is enabled
                 if (!cmd.isEnabled) return
@@ -38,7 +38,7 @@ class CommandExecutor(private val bot: LilOri, private val commandHandler: Comma
                 if (cmd.isOwnerOnly && event.author.id != Settings.OWNER_ID) {
                     val embed = EmbedBuilder()
                             .setAuthor("\uD83D\uDC94 No Permission!")
-                            .setColor(Settings.EMBED_COLOR)
+                            .setColor(GuildSettings(event.guild).getColor())
                             .setDescription("Only a developer can access this command!")
                             .setFooter("Sorry :(")
                     event.channel.sendMessage(event.author.asMention).embed(embed.build()).queue()
@@ -52,7 +52,7 @@ class CommandExecutor(private val bot: LilOri, private val commandHandler: Comma
                 if (cmd.botPermissions.isNotEmpty() && !event.guild.selfMember.permissions.containsAll(cmd.botPermissions.toList())) {
                     val embed = EmbedBuilder()
                             .setAuthor("\uD83D\uDC94 No Permission!")
-                            .setColor(Settings.EMBED_COLOR)
+                            .setColor(GuildSettings(event.guild).getColor())
                             .setDescription("I do not have enough permissions for this command!")
                             .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png")
                     event.channel.sendMessage(event.author.asMention).embed(embed.build()).queue()
@@ -63,7 +63,7 @@ class CommandExecutor(private val bot: LilOri, private val commandHandler: Comma
                 if (cmd.userPermissions.isNotEmpty() && event.member?.permissions?.containsAll(cmd.userPermissions.toList()) == false) {
                     val embed = EmbedBuilder()
                             .setAuthor("\uD83D\uDC94 No Permission!")
-                            .setColor(Settings.EMBED_COLOR)
+                            .setColor(GuildSettings(event.guild).getColor())
                             .setDescription("You do not have enough permissions for this command!")
                             .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png")
                     event.channel.sendMessage(event.author.asMention).embed(embed.build()).queue()

@@ -27,7 +27,6 @@ public class EventWaiter implements EventListener {
         this(Executors.newSingleThreadScheduledExecutor(), true);
     }
 
-
     public EventWaiter(ScheduledExecutorService threadpool, boolean shutdownAutomatically) {
         Checks.notNull(threadpool, "ScheduledExecutorService");
         Checks.check(!threadpool.isShutdown(), "Cannot construct EventWaiter with a closed ScheduledExecutorService!");
@@ -36,7 +35,6 @@ public class EventWaiter implements EventListener {
         this.threadpool = threadpool;
         this.shutdownAutomatically = shutdownAutomatically;
     }
-
 
     public boolean isShutdown() {
         return threadpool.isShutdown();
@@ -75,11 +73,8 @@ public class EventWaiter implements EventListener {
         while (c != null) {
             if (waitingEvents.containsKey(c)) {
                 Set<WaitingEvent> set = waitingEvents.get(c);
-                WaitingEvent[] toRemove = set.toArray(new WaitingEvent[0]);
+                WaitingEvent[] toRemove = set.toArray(new WaitingEvent[set.size()]);
 
-                // WaitingEvent#attempt invocations that return true have passed their condition tests
-                // and executed the action. We filter the ones that return false out of the toRemove and
-                // remove them all from the set.
                 set.removeAll(Stream.of(toRemove).filter(i -> i.attempt(event)).collect(Collectors.toSet()));
             }
             if (event instanceof ShutdownEvent && shutdownAutomatically) {

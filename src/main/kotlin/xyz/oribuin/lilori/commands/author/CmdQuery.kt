@@ -7,7 +7,7 @@ import xyz.oribuin.lilori.handler.CommandEvent
 import java.awt.Color
 import java.sql.Connection
 
-class CmdQuery : Command() {
+class CmdQuery(bot: LilOri) : Command(bot) {
     init {
         name = "Query"
         aliases = emptyList()
@@ -24,7 +24,7 @@ class CmdQuery : Command() {
             return
         }
 
-        LilOri.instance.connector.connect { connection: Connection ->
+        bot.connector.connect { connection: Connection ->
 
             val query = event.message.contentRaw.substring(args[0].length + 1)
             connection.prepareStatement(query).use { getStatement ->

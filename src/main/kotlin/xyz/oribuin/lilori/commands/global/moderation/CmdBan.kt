@@ -3,11 +3,12 @@ package xyz.oribuin.lilori.commands.global.moderation
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.exceptions.HierarchyException
+import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.Settings
 import xyz.oribuin.lilori.handler.Command
 import xyz.oribuin.lilori.handler.CommandEvent
 
-class CmdBan : Command() {
+class CmdBan(bot: LilOri) : Command(bot) {
     init {
         name = "Ban"
         aliases = listOf("bean")
@@ -61,7 +62,7 @@ class CmdBan : Command() {
                     .setAuthor("\uD83D\uDC94 Banned User " + member.user.asTag)
                     .setDescription("""Successfully banned ${member.user.asTag} (${member.id}) at
                          ${msgTime.hour}h, ${msgTime.minute}m & ${msgTime.second}s on ${msgTime.dayOfMonth} ${msgTime.month.name.toLowerCase()} for $reason""".trimMargin())
-                    .setColor(Settings.EMBED_COLOR)
+                    .setColor(event.color)
                     .setFooter("get bonked", "https://img.oribuin.xyz/bot-images/bonk.gif")
 
             event.channel.sendMessage(event.author.asMention).embed(embedBuilder.build()).queue()
@@ -77,7 +78,7 @@ class CmdBan : Command() {
         val embed = EmbedBuilder()
                 .setAuthor("Invalid Arguments")
                 .setDescription("You have provided invalid arguments for the command!")
-                .setColor(Settings.EMBED_COLOR)
+                .setColor(event.color)
                 .setAuthor("~ban @<User> <Delete-Days> <Reason>")
         event.channel.sendMessage(event.author.asMention).embed(embed.build()).queue()
     }
@@ -86,7 +87,7 @@ class CmdBan : Command() {
         val embed = EmbedBuilder()
                 .setAuthor("\uD83D\uDC94 Invalid User")
                 .setDescription("Please include a valid user!")
-                .setColor(Settings.EMBED_COLOR)
+                .setColor(event.color)
                 .setAuthor("~ban @<User> <Delete-Days> <Reason>")
         event.channel.sendMessage(event.author.asMention).embed(embed.build()).queue()
     }
@@ -95,7 +96,7 @@ class CmdBan : Command() {
         val embed = EmbedBuilder()
                 .setAuthor("\uD83D\uDC94 Invalid Number")
                 .setDescription("Please make your third argument a number between 0-100!")
-                .setColor(Settings.EMBED_COLOR)
+                .setColor(event.color)
                 .setAuthor("~ban @<User> <Delete-Days> <Reason>")
         event.channel.sendMessage(event.author.asMention).embed(embed.build()).queue()
     }
@@ -104,7 +105,7 @@ class CmdBan : Command() {
         val embed = EmbedBuilder()
                 .setAuthor("\uD83D\uDC94 Can't ban that user")
                 .setDescription("Cannot ban this user due to hierarchy!")
-                .setColor(Settings.EMBED_COLOR)
+                .setColor(event.color)
                 .setAuthor("~ban @<User> <Delete-Days> <Reason>")
         event.channel.sendMessage(event.author.asMention).embed(embed.build()).queue()
     }

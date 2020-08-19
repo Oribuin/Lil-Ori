@@ -1,6 +1,7 @@
 package xyz.oribuin.lilori.listeners
 
 import net.dv8tion.jda.api.EmbedBuilder
+import net.dv8tion.jda.api.OnlineStatus
 import net.dv8tion.jda.api.entities.Activity
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.events.DisconnectEvent
@@ -10,17 +11,18 @@ import net.dv8tion.jda.api.events.guild.GuildLeaveEvent
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import xyz.oribuin.lilori.LilOri
-import xyz.oribuin.lilori.Settings
+import xyz.oribuin.lilori.utils.GuildSettings
 import java.awt.Color
 import java.util.*
 import java.util.function.Consumer
 
 class GeneralEvents(private val bot: LilOri) : ListenerAdapter() {
     override fun onReady(event: ReadyEvent) {
-        for (guild in event.jda.guilds) {
-            bot.guildSettingsManager.loadGuildSettings(guild!!)
-            //println("Loaded Guild ${guild.name} (${guild.id})")
-        }
+            for (guild in event.jda.guilds) {
+                val guildSettings = GuildSettings(guild)
+
+                bot.guildSettingsManager.updateGuild(guild, guildSettings.getPrefix())
+            }
 
         val activities = arrayOf(
                 Activity.watching("https://oribuin.xyz/"),
@@ -36,10 +38,11 @@ class GeneralEvents(private val bot: LilOri) : ListenerAdapter() {
         val timerTask: TimerTask = object : TimerTask() {
             override fun run() {
                 val randomAnswer = Random().nextInt(activities.size)
-                event.jda.presence.activity = activities[randomAnswer]
+                event.jda.presence.setPresence(OnlineStatus.DO_NOT_DISTURB, activities[randomAnswer])
             }
         }
-        timer.schedule(timerTask, 0, 10000)
+
+        timer.schedule(timerTask, 0, 20000)
     }
 
     override fun onDisconnect(event: DisconnectEvent) {
@@ -59,11 +62,11 @@ class GeneralEvents(private val bot: LilOri) : ListenerAdapter() {
     override fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
 
         val embedBuilder = EmbedBuilder()
-                .setAuthor("Lil' Ori Bot | Prefix: " + LilOri.instance.guildSettingsManager.getGuildSettings(event.guild)?.getPrefix(), "https://discordapp.com/oauth2/authorize?client_id=581203970203189269&permissions=121498961&scope=bot")
-                .setColor(Color.decode("#33539e"))
+                .setAuthor("Lil' Ori Bot | Prefix: " + GuildSettings(event.guild).getPrefix(), "https://discordapp.com/oauth2/authorize?client_id=581203970203189269&permissions=121498961&scope=bot")
+                .setColor(GuildSettings(event.guild).getColor())
                 .setDescription("""» Discord Utility Bot Created by Oribuin « 
                         
-                        • Find all my commands using **${bot.guildSettingsManager.getGuildSettings(event.guild)?.getPrefix()}help** 
+                        • Find all my commands using **$${GuildSettings(event.guild).getPrefix()}help** 
                         • Find my source code on https://github.com/Oribuin/Lil-Ori/
                         • Website: https://oribuin.xyz/
                         • Donate: https://oribuin.xyz/donate""".trimIndent())

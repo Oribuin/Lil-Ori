@@ -8,7 +8,7 @@ import xyz.oribuin.lilori.handler.CommandEvent
 import java.awt.Color
 import java.sql.Connection
 
-class CmdQuote : Command() {
+class CmdQuote(bot: LilOri) : Command(bot) {
 
     init {
         name = "Quote"
@@ -57,7 +57,7 @@ class CmdQuote : Command() {
             }
             "select" -> {
                 if (args.size == 3) {
-                    LilOri.instance.connector.connect { connection: Connection ->
+                    bot.connector.connect { connection: Connection ->
                         val query = "SELECT quote FROM quotes WHERE label = ?"
                         connection.prepareStatement(query).use { statement ->
                             statement.setString(1, args[2])
@@ -86,7 +86,7 @@ class CmdQuote : Command() {
             }
             "get" -> {
                 if (args.size == 3) {
-                    LilOri.instance.connector.connect { connection: Connection ->
+                    bot.connector.connect { connection: Connection ->
                         val query = "SELECT * FROM quotes WHERE label = ?"
                         connection.prepareStatement(query).use { getStatement ->
                             getStatement.setString(1, args[2])
@@ -114,7 +114,7 @@ class CmdQuote : Command() {
 
     private var quoteCount = 0
         get() {
-            LilOri.instance.connector.connect { connection: Connection ->
+            bot.connector.connect { connection: Connection ->
                 val query = "SELECT COUNT(*) FROM quotes"
                 connection.prepareStatement(query).use { statement ->
                     val result = statement.executeQuery()

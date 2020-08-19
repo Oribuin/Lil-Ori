@@ -1,10 +1,11 @@
 package xyz.oribuin.lilori.commands.global.music
 
+import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.handler.Command
 import xyz.oribuin.lilori.handler.CommandEvent
 import xyz.oribuin.lilori.managers.music.TrackManager.Companion.getInstance
 
-class CmdVolume : Command() {
+class CmdVolume(bot: LilOri) : Command(bot) {
     init {
         name = "Volume"
         aliases = emptyList()
@@ -15,7 +16,7 @@ class CmdVolume : Command() {
     override fun executeCommand(event: CommandEvent) {
 
         val tm = getInstance(event.guild)
-        (tm?: return)
+        (tm ?: return)
 
         val args = event.message.contentRaw.split(" ").toTypedArray()
         if (args.size < 2) {
