@@ -51,7 +51,7 @@ class GuildSettings(var guild: Guild?) {
             }
         }
 
-        return Settings.EMBED_COLOR
+        return color
     }
 
     fun setColor(color: String) {

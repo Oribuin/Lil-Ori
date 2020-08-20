@@ -83,17 +83,20 @@ class GuildSettingsManager(bot: LilOri) : Manager(bot) {
 
 
     fun updateGuild(guild: Guild, prefix: String?) {
+        val guildSettings = GuildSettings(guild)
         if (prefix != null) {
-            GuildSettings(guild).setPrefix(prefix)
+            guildSettings.setPrefix(prefix)
         }
 
         bot.connector.connect { connection: Connection ->
-            val updateSettings = "REPLACE INTO guild_settings (guild_id, guild_name, prefix) VALUES (?, ?, ?)"
+            val updateSettings = "REPLACE INTO guild_settings (guild_id, guild_name, prefix, color),  VALUES (?, ?, ?, ?)"
+            val hex: String = String.format("%02x%02x%02x", guildSettings.getColor().red, guildSettings.getColor().green, guildSettings.getColor().blue)
 
             connection.prepareStatement(updateSettings).use { statement ->
                 statement.setLong(1, guild.idLong)
                 statement.setString(2, guild.name)
                 statement.setString(3, prefix)
+                statement.setString(4, hex)
                 statement.executeUpdate()
             }
         }
@@ -101,7 +104,7 @@ class GuildSettingsManager(bot: LilOri) : Manager(bot) {
 
     fun removeGuild(guild: Guild) {
         bot.connector.connect { connection: Connection ->
-            val deleteGuild = "REMOVE FROM guild_settings WHERE guild_id = ?"
+            val deleteGuild = "DELETE FROM guild_settings WHERE guild_id = ?"
             connection.prepareStatement(deleteGuild).use { statement ->
                 statement.setLong(1, guild.idLong)
                 statement.executeUpdate()
