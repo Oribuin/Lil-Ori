@@ -43,7 +43,7 @@ class CmdPrefix(bot: LilOri) : Command(bot) {
                         **New Prefix** ${args[1]}""".trimMargin())
 
         event.reply(embedBuilder)
-        bot.guildSettingsManager.updateGuild(event.guild, args[1])
+        bot.guildSettingsManager.updateGuild(event.guild, args[1], null)
         println(event.author.asTag + " Updated \"" + event.guild.name + "\" Prefix to " + args[1])
     }
 }

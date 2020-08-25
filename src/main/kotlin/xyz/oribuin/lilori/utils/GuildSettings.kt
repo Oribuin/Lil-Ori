@@ -56,7 +56,7 @@ class GuildSettings(var guild: Guild?) {
 
     fun setColor(color: String) {
         LilOri.instance.connector.connect { connection ->
-            val getPrefix = "REPLACE INTO guild_settings (guild_id, prefix) VALUES (?, ?)"
+            val getPrefix = "REPLACE INTO guild_settings (guild_id, color) VALUES (?, ?)"
             connection.prepareStatement(getPrefix).use { statement ->
                 guild?.idLong?.let { statement.setLong(1, it) }
                 statement.setString(2, color)

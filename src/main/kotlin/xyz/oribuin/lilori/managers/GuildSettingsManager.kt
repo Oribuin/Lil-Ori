@@ -4,6 +4,7 @@ import net.dv8tion.jda.api.entities.Guild
 import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.utils.GuildSettings
 import xyz.oribuin.lilori.utils.GuildSettings.Companion.default
+import java.awt.Color
 import java.sql.Connection
 import java.util.*
 
@@ -50,13 +51,15 @@ class GuildSettingsManager(bot: LilOri) : Manager(bot) {
         bot.connector.connect { connection: Connection ->
             val settings = default
             guildSettings[guild.idLong] = settings
-            val commandPrefix = "SELECT prefix FROM guild_settings WHERE guild_id = ?"
+            val commandPrefix = "SELECT * FROM guild_settings WHERE guild_id = ?"
 
             connection.prepareStatement(commandPrefix).use { statement ->
                 statement.setLong(1, guild.idLong)
                 val resultSet = statement.executeQuery()
-                if (resultSet.next())
-                    settings.setPrefix(resultSet.getString(1))
+                if (resultSet.next()) {
+                    settings.setPrefix(resultSet.getString("prefix"))
+                    settings.setColor(resultSet.getString("color"))
+                }
             }
         }
     }
@@ -82,15 +85,19 @@ class GuildSettingsManager(bot: LilOri) : Manager(bot) {
     }
 
 
-    fun updateGuild(guild: Guild, prefix: String?) {
+    fun updateGuild(guild: Guild, prefix: String?, color: Color?) {
         val guildSettings = GuildSettings(guild)
         if (prefix != null) {
             guildSettings.setPrefix(prefix)
         }
 
+        if (color != null) {
+            guildSettings.setColor(String.format("%02x%02x%02x", color.red, color.green, color.blue))
+        }
+
         bot.connector.connect { connection: Connection ->
             val updateSettings = "REPLACE INTO guild_settings (guild_id, guild_name, prefix, color),  VALUES (?, ?, ?, ?)"
-            val hex: String = String.format("%02x%02x%02x", guildSettings.getColor().red, guildSettings.getColor().green, guildSettings.getColor().blue)
+            val hex = String.format("%02x%02x%02x", color?.red, color?.green, color?.blue)
 
             connection.prepareStatement(updateSettings).use { statement ->
                 statement.setLong(1, guild.idLong)

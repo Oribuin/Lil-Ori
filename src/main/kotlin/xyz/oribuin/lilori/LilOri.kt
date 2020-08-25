@@ -29,9 +29,12 @@ import xyz.oribuin.lilori.listeners.support.SupportListeners
 import xyz.oribuin.lilori.managers.DataManager
 import xyz.oribuin.lilori.managers.GuildSettingsManager
 import xyz.oribuin.lilori.managers.TicketManager
+import xyz.oribuin.lilori.utils.BotUtils
 import xyz.oribuin.lilori.utils.EventWaiter
 import xyz.oribuin.lilori.utils.FileUtils
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.security.auth.login.LoginException
 
 
@@ -80,6 +83,7 @@ class LilOri : ListenerAdapter() {
 
     init {
         instance = this
+
         // Setup the SQLite Database
         val file = File("data", "lilori.db")
         FileUtils.createFile(file)

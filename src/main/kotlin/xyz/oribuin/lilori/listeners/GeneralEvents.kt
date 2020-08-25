@@ -20,7 +20,7 @@ class GeneralEvents(private val bot: LilOri) : ListenerAdapter() {
         for (guild in event.jda.guilds) {
             val guildSettings = GuildSettings(guild)
 
-            bot.guildSettingsManager.updateGuild(guild, guildSettings.getPrefix())
+            bot.guildSettingsManager.updateGuild(guild, guildSettings.getPrefix(), guildSettings.getColor())
         }
 
         val activities = arrayOf(
@@ -65,7 +65,7 @@ class GeneralEvents(private val bot: LilOri) : ListenerAdapter() {
                 .setColor(GuildSettings(event.guild).getColor())
                 .setDescription("""» Discord Utility Bot Created by Oribuin « 
                         
-                        • Find all my commands using **$${GuildSettings(event.guild).getPrefix()}help** 
+                        • Find all my commands using **${GuildSettings(event.guild).getPrefix()}help** 
                         • Find my source code on https://github.com/Oribuin/Lil-Ori/
                         • Website: https://oribuin.xyz/
                         • Donate: https://oribuin.xyz/donate""".trimIndent())

@@ -22,18 +22,22 @@ class CmdColor(bot: LilOri) : Command(bot) {
     override fun executeCommand(event: CommandEvent) {
         val args = event.message.contentRaw.split(" ").toTypedArray()
         println(args.size)
-
-
         if (args[1].toLowerCase() == "set") {
 
+
+            if (args.size < 3 ) {
+                event.reply(event.author.asMention + ", **Usage 1 ${event.prefix}color set 255 0 255**")
+                return
+            }
+
             if (args.size != 3 && args.size != 5) {
-                event.reply(event.author.asMention + ", Correct usage example: " + event.prefix + "color set 255 0 255")
+                event.reply(event.author.asMention + ", **Usage 2 ${event.prefix}color set 255 0 255**")
                 return
             }
 
             try {
-                color = if (args[1].startsWith("#")) {
-                    Color.decode(args[2])
+                color = if (args[2].startsWith("#")) {
+                    Color.decode(args[3])
 
                 } else {
                     val red = args[2].toInt()
@@ -56,6 +60,15 @@ class CmdColor(bot: LilOri) : Command(bot) {
                             Color: #$hex (${embedColor.red},${embedColor.green},${embedColor.blue})""".trimMargin())
 
                 event.channel.sendFile(file).embed(embedBuilder.build()).queue()
+                bot.connector.connect { connection ->
+                    val getPrefix = "REPLACE INTO guild_settings (guild_id, color) VALUES (?, ?)"
+                    connection.prepareStatement(getPrefix).use { statement ->
+                        statement.setLong(1, event.guild.idLong)
+                        statement.setString(2, hex)
+
+                        statement.executeUpdate()
+                    }
+                }
 
             } catch (ex: NumberFormatException) {
                 event.reply(event.author.asMention + ", Correct usage example " + event.prefix + "color 255 0 255")
@@ -63,7 +76,7 @@ class CmdColor(bot: LilOri) : Command(bot) {
             return
         }
 
-        if (args.size < 2 && args[0].toLowerCase() != "select") {
+        if (args.size < 2) {
             event.reply(event.author.asMention + ", Please include the correct arguments. " + event.prefix + "color <#HEX-CODE/Red,Green,Blue>")
             return
         }
