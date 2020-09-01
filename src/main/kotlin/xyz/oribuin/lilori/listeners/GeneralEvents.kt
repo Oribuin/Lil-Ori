@@ -12,36 +12,18 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.utils.GuildSettings
+import java.text.SimpleDateFormat
 import java.util.*
 import java.util.function.Consumer
 
 class GeneralEvents(private val bot: LilOri) : ListenerAdapter() {
     override fun onReady(event: ReadyEvent) {
+
         for (guild in event.jda.guilds) {
             val guildSettings = GuildSettings(guild)
 
             bot.guildSettingsManager.updateGuild(guild, guildSettings.getPrefix(), guildSettings.getColor())
         }
-
-        val activities = arrayOf(
-                Activity.watching("https://oribuin.xyz/"),
-                Activity.watching("#BlackLivesMatter"),
-                Activity.watching("https://jars.oribuin.xyz/"),
-                Activity.watching("#JusticeForBreonnaTaylor"),
-                Activity.watching("https://oribuin.xyz/support"),
-                Activity.watching("#BLM"),
-                Activity.watching("https://oribuin.xyz/donate")
-        )
-
-        val timer = Timer()
-        val timerTask: TimerTask = object : TimerTask() {
-            override fun run() {
-                val randomAnswer = Random().nextInt(activities.size)
-                event.jda.presence.setPresence(OnlineStatus.DO_NOT_DISTURB, activities[randomAnswer])
-            }
-        }
-
-        timer.schedule(timerTask, 0, 20000)
     }
 
     override fun onDisconnect(event: DisconnectEvent) {

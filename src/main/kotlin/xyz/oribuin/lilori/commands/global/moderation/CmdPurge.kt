@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEve
 import org.apache.commons.lang3.StringUtils
 import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.Settings
+import xyz.oribuin.lilori.handler.Category
 import xyz.oribuin.lilori.handler.Command
 import xyz.oribuin.lilori.handler.CommandEvent
 import xyz.oribuin.lilori.utils.EventWaiter
@@ -17,6 +18,7 @@ class CmdPurge(bot: LilOri, private val waiter: EventWaiter) : Command(bot) {
 
     init {
         name = "Purge"
+        category = Category(Category.Type.MODERATION)
         aliases = listOf("clear")
         description = "Mass clear server messages."
         arguments = listOf("<msg-count>/channel [#Channel]")

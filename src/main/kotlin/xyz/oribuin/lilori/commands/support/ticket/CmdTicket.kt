@@ -3,6 +3,7 @@ package xyz.oribuin.lilori.commands.support.ticket
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.Permission
 import xyz.oribuin.lilori.LilOri
+import xyz.oribuin.lilori.handler.Category
 import xyz.oribuin.lilori.handler.Command
 import xyz.oribuin.lilori.handler.CommandEvent
 import java.awt.Color
@@ -11,11 +12,11 @@ import java.util.concurrent.TimeUnit
 class CmdTicket(bot: LilOri) : Command(bot) {
     init {
         name = "Ticket"
+        category = Category(Category.Type.SUPPORT)
         description = "Create a ticket!"
         aliases = emptyList()
         arguments = emptyList()
         guildId = "731659405958971413"
-
     }
 
     override fun executeCommand(event: CommandEvent) {

@@ -2,6 +2,7 @@ package xyz.oribuin.lilori.commands.support.ticket
 
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent
 import xyz.oribuin.lilori.LilOri
+import xyz.oribuin.lilori.handler.Category
 import xyz.oribuin.lilori.handler.Command
 import xyz.oribuin.lilori.handler.CommandEvent
 import xyz.oribuin.lilori.utils.EventWaiter
@@ -12,6 +13,7 @@ class CmdClose(private val waiter: EventWaiter, bot: LilOri) : Command(bot) {
 
     init {
         name = "Close"
+        category = Category(Category.Type.SUPPORT)
         description = "Close a ticket!"
         aliases = emptyList()
         arguments = emptyList()

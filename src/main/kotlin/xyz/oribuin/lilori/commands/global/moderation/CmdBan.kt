@@ -4,12 +4,14 @@ import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.exceptions.HierarchyException
 import xyz.oribuin.lilori.LilOri
+import xyz.oribuin.lilori.handler.Category
 import xyz.oribuin.lilori.handler.Command
 import xyz.oribuin.lilori.handler.CommandEvent
 
 class CmdBan(bot: LilOri) : Command(bot) {
     init {
         name = "Ban"
+        category = Category(Category.Type.MODERATION)
         aliases = listOf("bean")
         description = "Ban a member from a server!"
         userPermissions = arrayOf(Permission.BAN_MEMBERS)

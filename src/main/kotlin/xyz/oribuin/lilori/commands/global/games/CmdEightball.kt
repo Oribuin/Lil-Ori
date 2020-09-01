@@ -2,6 +2,7 @@ package xyz.oribuin.lilori.commands.global.games
 
 import net.dv8tion.jda.api.EmbedBuilder
 import xyz.oribuin.lilori.LilOri
+import xyz.oribuin.lilori.handler.Category
 import xyz.oribuin.lilori.handler.Command
 import xyz.oribuin.lilori.handler.CommandEvent
 import java.util.*
@@ -10,6 +11,7 @@ import java.util.concurrent.TimeUnit
 class CmdEightball(bot: LilOri) : Command(bot) {
     init {
         name = "Eightball"
+        category = Category(Category.Type.GAMES)
         aliases = listOf("Ball")
         description = "Ask the 8ball any question?"
         arguments = emptyList()

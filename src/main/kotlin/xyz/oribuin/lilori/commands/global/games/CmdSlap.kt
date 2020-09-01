@@ -3,6 +3,7 @@ package xyz.oribuin.lilori.commands.global.games
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.Member
 import xyz.oribuin.lilori.LilOri
+import xyz.oribuin.lilori.handler.Category
 import xyz.oribuin.lilori.handler.Command
 import xyz.oribuin.lilori.handler.CommandEvent
 import java.util.*
@@ -12,6 +13,7 @@ import java.util.function.Consumer
 class CmdSlap(bot: LilOri) : Command(bot) {
     init {
         name = "Slap"
+        category = Category(Category.Type.GAMES)
         aliases = emptyList()
         description = "Slap a user"
         arguments = listOf("<@users>")

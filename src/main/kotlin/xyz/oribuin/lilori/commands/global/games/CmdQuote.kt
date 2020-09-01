@@ -3,6 +3,7 @@ package xyz.oribuin.lilori.commands.global.games
 import net.dv8tion.jda.api.EmbedBuilder
 import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.Settings
+import xyz.oribuin.lilori.handler.Category
 import xyz.oribuin.lilori.handler.Command
 import xyz.oribuin.lilori.handler.CommandEvent
 import java.awt.Color
@@ -12,6 +13,7 @@ class CmdQuote(bot: LilOri) : Command(bot) {
 
     init {
         name = "Quote"
+        category = Category(Category.Type.GAMES)
         description = "Quote command."
         aliases = emptyList()
         arguments = listOf("select", "<quote_id>")

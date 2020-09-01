@@ -1,5 +1,7 @@
 package xyz.oribuin.lilori.handler
 
+import java.util.*
+
 class CommandHandler {
     val commands = mutableListOf<Command>()
 
@@ -13,11 +15,16 @@ class CommandHandler {
         }
     }
 
-    fun commandList(): List<Command> {
-        return this.commands.toList()
-    }
+    fun getCommandList(): List<Command> {
+        val list = mutableListOf<Command>()
 
+        commands.toList().forEach { cmd ->
+            list.add(cmd)
+        }
+
+        return list
+    }
     fun getCommand(name: String): Command {
-        return commandList().stream().filter { command: Command -> command.name?.toLowerCase() == name }.findFirst().get()
+        return commands.stream().filter { command: Command -> command.name?.toLowerCase() == name }.findFirst().get()
     }
 }

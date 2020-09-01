@@ -2,6 +2,7 @@ package xyz.oribuin.lilori.commands.global.music
 
 import net.dv8tion.jda.api.EmbedBuilder
 import xyz.oribuin.lilori.LilOri
+import xyz.oribuin.lilori.handler.Category
 import xyz.oribuin.lilori.handler.Command
 import xyz.oribuin.lilori.handler.CommandEvent
 import xyz.oribuin.lilori.managers.music.TrackManager.Companion.getInstance
@@ -10,6 +11,7 @@ import java.awt.Color
 class CmdStop(bot: LilOri) : Command(bot) {
     init {
         name = "Stop"
+        category = Category(Category.Type.MUSIC)
         description = "Stops playing Music."
         aliases = emptyList()
         arguments = emptyList()

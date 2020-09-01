@@ -3,6 +3,7 @@ package xyz.oribuin.lilori.commands.global
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.Message
 import xyz.oribuin.lilori.LilOri
+import xyz.oribuin.lilori.handler.Category
 import xyz.oribuin.lilori.handler.Command
 import xyz.oribuin.lilori.handler.CommandEvent
 import java.awt.Color
@@ -13,6 +14,7 @@ class CmdPing(bot: LilOri) : Command(bot) {
 
     init {
         name = "Ping"
+        category = Category(Category.Type.GENERAL)
         aliases = listOf("latency", "connection")
         description = "Get the latency ping for the bot."
         arguments = emptyList()

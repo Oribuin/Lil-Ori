@@ -1,16 +1,18 @@
 package xyz.oribuin.lilori.commands.global.music
 
 import xyz.oribuin.lilori.LilOri
+import xyz.oribuin.lilori.handler.Category
 import xyz.oribuin.lilori.handler.Command
 import xyz.oribuin.lilori.handler.CommandEvent
 
 class CmdLoop(bot: LilOri) : Command(bot) {
     var isLooping = false
-        private set
+        set
 
 
     init {
         name = "Loop"
+        category = Category(Category.Type.MUSIC)
         aliases = emptyList()
         description = "Toggle song looping on/off"
         arguments = emptyList()

@@ -3,6 +3,7 @@ package xyz.oribuin.lilori.commands.support.general
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.Message
 import xyz.oribuin.lilori.LilOri
+import xyz.oribuin.lilori.handler.Category
 import xyz.oribuin.lilori.handler.Command
 import xyz.oribuin.lilori.handler.CommandEvent
 import java.awt.Color
@@ -10,6 +11,7 @@ import java.awt.Color
 class CmdReactionRole(bot: LilOri) : Command(bot) {
     init {
         name = "Reaction"
+        category = Category(Category.Type.SUPPORT)
         aliases = emptyList()
         description = "Reaction Role Embed."
         arguments = emptyList()

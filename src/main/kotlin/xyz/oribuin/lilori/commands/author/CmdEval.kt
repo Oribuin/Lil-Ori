@@ -2,6 +2,7 @@ package xyz.oribuin.lilori.commands.author
 
 import net.dv8tion.jda.api.EmbedBuilder
 import xyz.oribuin.lilori.LilOri
+import xyz.oribuin.lilori.handler.Category
 import xyz.oribuin.lilori.handler.Command
 import xyz.oribuin.lilori.handler.CommandEvent
 import java.awt.Color
@@ -12,6 +13,7 @@ import javax.script.ScriptException
 class CmdEval(bot: LilOri) : Command(bot) {
     init {
         name = "Eval"
+        category = Category(Category.Type.AUTHOR)
         aliases = emptyList()
         description = "An evaluation."
         arguments = emptyList()

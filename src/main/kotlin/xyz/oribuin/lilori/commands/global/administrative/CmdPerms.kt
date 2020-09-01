@@ -4,6 +4,7 @@ import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.Permission
 import org.apache.commons.lang3.StringUtils
 import xyz.oribuin.lilori.LilOri
+import xyz.oribuin.lilori.handler.Category
 import xyz.oribuin.lilori.handler.Command
 import xyz.oribuin.lilori.handler.CommandEvent
 import java.awt.Color
@@ -13,6 +14,7 @@ import java.util.function.Consumer
 class CmdPerms(bot: LilOri) : Command(bot) {
     init {
         name = "Permissions"
+        category = Category(Category.Type.ADMIN)
         aliases = listOf("Perms")
         description = "List of permissions the bot has."
         arguments = emptyList()

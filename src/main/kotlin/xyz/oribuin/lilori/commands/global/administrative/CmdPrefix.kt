@@ -1,14 +1,16 @@
-package xyz.oribuin.lilori.commands.global
+package xyz.oribuin.lilori.commands.global.administrative
 
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.Permission
 import xyz.oribuin.lilori.LilOri
+import xyz.oribuin.lilori.handler.Category
 import xyz.oribuin.lilori.handler.Command
 import xyz.oribuin.lilori.handler.CommandEvent
 
 class CmdPrefix(bot: LilOri) : Command(bot) {
     init {
         name = "Prefix"
+        category = Category(Category.Type.ADMIN)
         description = "Change the bot permission"
         aliases = emptyList()
         arguments = listOf("<prefix>")

@@ -2,6 +2,7 @@ package xyz.oribuin.lilori.commands.global
 
 import net.dv8tion.jda.api.EmbedBuilder
 import xyz.oribuin.lilori.LilOri
+import xyz.oribuin.lilori.handler.Category
 import xyz.oribuin.lilori.handler.Command
 import xyz.oribuin.lilori.handler.CommandEvent
 import java.awt.Color
@@ -12,6 +13,7 @@ import javax.imageio.ImageIO
 class CmdColor(bot: LilOri) : Command(bot) {
     init {
         name = "Color"
+        category = Category(Category.Type.GENERAL)
         description = "See a color in an embed."
         aliases = emptyList()
         arguments = listOf("<#hex>/<r,g,b>")

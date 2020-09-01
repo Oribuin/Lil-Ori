@@ -8,6 +8,8 @@ abstract class Command(val bot: LilOri) : ListenerAdapter() {
 
     var name: String? = null
         protected set
+    lateinit var category: Category
+        protected set
     var description: String? = null
         protected set
     var arguments: List<String>? = null

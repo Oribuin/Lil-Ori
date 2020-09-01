@@ -1,6 +1,7 @@
 package xyz.oribuin.lilori.commands.global.music
 
 import xyz.oribuin.lilori.LilOri
+import xyz.oribuin.lilori.handler.Category
 import xyz.oribuin.lilori.handler.Command
 import xyz.oribuin.lilori.handler.CommandEvent
 import xyz.oribuin.lilori.managers.music.TrackManager.Companion.getInstance
@@ -8,6 +9,7 @@ import xyz.oribuin.lilori.managers.music.TrackManager.Companion.getInstance
 class CmdVolume(bot: LilOri) : Command(bot) {
     init {
         name = "Volume"
+        category = Category(Category.Type.MUSIC)
         aliases = emptyList()
         description = "Change the volume of the volume"
         arguments = listOf("<volume>")

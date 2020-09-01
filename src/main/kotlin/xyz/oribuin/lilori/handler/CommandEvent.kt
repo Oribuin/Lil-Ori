@@ -13,7 +13,6 @@ import java.util.concurrent.TimeUnit
 class CommandEvent(private val bot: LilOri, val event: GuildMessageReceivedEvent) {
 
     fun reply(message: String) {
-
         event.channel.sendMessage(message).queue()
     }
 
@@ -97,8 +96,8 @@ class CommandEvent(private val bot: LilOri, val event: GuildMessageReceivedEvent
     val jda: JDA
         get() = event.jda
 
-    val member: Member?
-        get() = event.member
+    val member: Member
+        get() = event.member!!
 
     val message: Message
         get() = event.message
@@ -109,4 +108,13 @@ class CommandEvent(private val bot: LilOri, val event: GuildMessageReceivedEvent
     val responseNumber: Long
         get() = event.responseNumber
 
+    fun sendEmbedReply(authorMessage: String, description: String) {
+        val embedBuilder = EmbedBuilder()
+                .setFooter("Created by Ori#0004", "https://img.oribuin.xyz/profile.png")
+                .setColor(Color.PINK)
+                .setDescription(description)
+                .setAuthor(authorMessage)
+
+        event.channel.sendMessage(embedBuilder.build()).queue()
+    }
 }

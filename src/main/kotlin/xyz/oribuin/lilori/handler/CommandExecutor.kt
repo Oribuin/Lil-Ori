@@ -20,13 +20,14 @@ class CommandExecutor(private val bot: LilOri, private val commandHandler: Comma
             return
 
         // Filter through each command
-        for (cmd in commandHandler.commandList()) {
+        for (cmd in commandHandler.commands) {
             try {
                 val args = event.message.contentRaw.split(" ").toTypedArray()
                 requireNotNull(cmd.aliases) { "Null Aliases in command " + cmd.name }
 
                 // Check if command name or alias
-                if (!cmd.name.equals(args[0].substring(1), ignoreCase = true) && cmd.aliases?.stream()?.noneMatch { x: String -> x.equals(args[0].substring(1), ignoreCase = true) } == true) continue
+                if (!cmd.name.equals(args[0].substring(1), ignoreCase = true) && cmd.aliases?.stream()?.noneMatch { x: String -> x.equals(args[0].substring(1), ignoreCase = true) } == true)
+                    continue
 
                 // Check if command is enabled
                 if (!cmd.isEnabled) return
