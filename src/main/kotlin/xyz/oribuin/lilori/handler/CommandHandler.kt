@@ -21,7 +21,7 @@ class CommandHandler(bot: LilOri): Manager(bot) {
     }
 
     fun getCommand(name: String): Command {
-        return commands.stream().filter { command: Command -> command.name?.toLowerCase() == name }.findFirst().get()
+        return commands.stream().filter { command: Command -> command.name.toLowerCase() == name }.findFirst().get()
     }
 
     override fun enable() {
