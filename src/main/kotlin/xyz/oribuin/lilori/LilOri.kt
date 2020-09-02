@@ -4,26 +4,12 @@ import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import net.dv8tion.jda.api.requests.GatewayIntent
-import xyz.oribuin.lilori.commands.administrative.CmdPerms
-import xyz.oribuin.lilori.commands.administrative.CmdPrefix
-import xyz.oribuin.lilori.commands.author.CmdQuery
-import xyz.oribuin.lilori.commands.author.CmdTest
-import xyz.oribuin.lilori.commands.author.CmdUpdate
-import xyz.oribuin.lilori.commands.games.*
-import xyz.oribuin.lilori.commands.general.CmdColor
-import xyz.oribuin.lilori.commands.general.CmdHelp
-import xyz.oribuin.lilori.commands.general.CmdPing
-import xyz.oribuin.lilori.commands.moderation.CmdBan
-import xyz.oribuin.lilori.commands.moderation.CmdPurge
-import xyz.oribuin.lilori.commands.music.*
-import xyz.oribuin.lilori.commands.support.general.CmdAnnounce
-import xyz.oribuin.lilori.commands.support.general.CmdReactionRole
-import xyz.oribuin.lilori.commands.support.ticket.CmdClose
-import xyz.oribuin.lilori.commands.support.ticket.CmdTicket
 import xyz.oribuin.lilori.database.DatabaseConnector
 import xyz.oribuin.lilori.database.SQLiteConnector
 import xyz.oribuin.lilori.handler.CommandExecutor
 import xyz.oribuin.lilori.handler.CommandHandler
+import xyz.oribuin.lilori.handler.console.ConsoleCMDHandler
+import xyz.oribuin.lilori.handler.console.ConsoleCmdExecutor
 import xyz.oribuin.lilori.listeners.GeneralEvents
 import xyz.oribuin.lilori.listeners.support.SupportListeners
 import xyz.oribuin.lilori.managers.*
@@ -43,30 +29,7 @@ class LilOri : ListenerAdapter() {
 
 
     // Define others
-    private val eventWaiter = EventWaiter()
-
-    // Register all commands
-    private fun registerCommands() {
-        getManager(CommandHandler::class).registerCommands(
-                // General Commands
-                CmdHelp(this), CmdPing(this),
-                // Music Commands
-                CmdPause(this), CmdPlay(this), CmdQueue(this), CmdStop(this), CmdVolume(this),
-                // Game Commands
-                CmdCoinflip(this), CmdColor(this), CmdEightball(this), CmdFeed(this), CmdQuote(this), CmdSlap(this),
-                // Moderation Commands
-                CmdPurge(this, eventWaiter), CmdBan(this),
-                // Author Commands
-                CmdQuery(this), CmdTest(this), CmdUpdate(this),
-                // Admin Commands
-                CmdPerms(this), CmdPrefix(this),
-                // Support Discord commands
-                // General
-                CmdAnnounce(this), CmdReactionRole(this),
-                // Ticket
-                CmdTicket(this), CmdClose(eventWaiter, this)
-        )
-    }
+    val eventWaiter = EventWaiter()
 
     init {
         instance = this
@@ -79,6 +42,8 @@ class LilOri : ListenerAdapter() {
         // Setup Managers
         getManager(DataManager::class)
         getManager(BotManager::class)
+        getManager(CommandHandler::class)
+        getManager(ConsoleCMDHandler::class)
         getManager(GuildSettingsManager::class)
         getManager(QuoteManager::class)
         getManager(TicketManager::class)
@@ -86,7 +51,8 @@ class LilOri : ListenerAdapter() {
         this.managers.values.forEach { manager -> manager.enable() }
 
         // Register plugin commands
-        this.registerCommands()
+        this.getManager(CommandHandler::class).registerCommands()
+        this.getManager(ConsoleCMDHandler::class).registerCommands()
 
         // Login Bot
         val jda = JDABuilder.createDefault(
@@ -116,6 +82,9 @@ class LilOri : ListenerAdapter() {
 
         // Startup Log
         this.logStartup(jdaBot)
+
+        // Register console commands
+        ConsoleCmdExecutor(this, getManager(ConsoleCMDHandler::class))
     }
 
     companion object {
