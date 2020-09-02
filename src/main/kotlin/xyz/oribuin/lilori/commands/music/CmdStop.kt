@@ -19,23 +19,28 @@ class CmdStop(bot: LilOri) : Command(bot) {
 
     override fun executeCommand(event: CommandEvent) {
 
-        val tm = getInstance(event.guild)
-        (tm ?: return)
+        val tm = getInstance(event.guild)?: return
 
         if (!event.guild.audioManager.isConnected) {
-            event.reply(event.author.toString() + ", There is no active Audio Track.")
+            event.sendEmbedReply("❗ No Track", "There is currently no active audio track playing!")
             return
         }
 
+        // Shutdown player manager
         tm.playerManager.shutdown()
+
+        // Disconnect from voice channel
         tm.musicManager.getAudioManager(event.guild).sendingHandler = null
         tm.musicManager.getAudioManager(event.guild).closeAudioConnection()
+
+        // Define the embed
         val embedBuilder = EmbedBuilder()
                 .setAuthor("\uD83C\uDFB5 Stopping music")
-                .setColor(Color.RED)
+                .setColor(event.color)
                 .setDescription("Successfully stopped playing music, Leaving Voice Channel!")
-                .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png")
+                .setFooter("Created by Ori", "https://img.oribuin.xyz/profile.png")
 
+        // Send embed to channel
         event.channel.sendMessage(event.author.asMention).embed(embedBuilder.build()).queue()
     }
 }

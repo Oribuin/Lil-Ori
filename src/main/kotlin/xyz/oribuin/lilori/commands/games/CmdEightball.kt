@@ -5,8 +5,8 @@ import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.handler.Category
 import xyz.oribuin.lilori.handler.Command
 import xyz.oribuin.lilori.handler.CommandEvent
+import xyz.oribuin.lilori.utils.BotUtils
 import java.util.*
-import java.util.concurrent.TimeUnit
 
 class CmdEightball(bot: LilOri) : Command(bot) {
     init {
@@ -14,19 +14,19 @@ class CmdEightball(bot: LilOri) : Command(bot) {
         category = Category(Category.Type.GAMES)
         aliases = listOf("Ball")
         description = "Ask the 8ball any question?"
-        arguments = emptyList()
+        arguments = listOf("<question>")
     }
 
     override fun executeCommand(event: CommandEvent) {
 
-        val args = event.message.contentRaw.split(" ").toTypedArray()
-        if (args.size < 2) {
-            event.deleteCmd(10, TimeUnit.SECONDS)
-            event.timedReply(event.author.asMention + ", Please mention a user to slap.", 10, TimeUnit.SECONDS)
+        // Check if the right amount of args were provided
+        if (event.args.size < 2) {
+            event.sendEmbedReply("❗ Invalid Arguments", "The correct usage is ${event.prefix}${name.toLowerCase()} ${arguments?.let { BotUtils.formatList(it) }}")
             return
         }
 
-        val ballAnswers = arrayOf(
+        // Define the list of answers possible inside the 8ball
+        val ballAnswers = listOf(
                 "It is certain.",
                 "It is decidedly so.",
                 "Without a doubt.",
@@ -49,26 +49,32 @@ class CmdEightball(bot: LilOri) : Command(bot) {
                 "Very doubtful."
         )
 
+        // Get a random answer from the list
         val randomAnswer = Random().nextInt(ballAnswers.size)
-        val input: String
 
-        input = if (event.message.contentRaw.substring(args[0].length + 1).endsWith("?")) {
-            event.message.contentRaw.substring(args[0].length + 1)
-        } else {
-            event.message.contentRaw.substring(args[0].length + 1) + "?"
+        // Define the question
+        val stringBuilder = StringBuilder(java.lang.String.join(" ", *event.args).substring(event.args[0].length + 1))
+
+        // Add a question mark at the end for grammar.
+        if (!stringBuilder.toString().endsWith("?")) {
+            stringBuilder.append("?")
         }
 
+        // Define the embed.
         val embedBuilder = EmbedBuilder()
-                .setAuthor("Ori's Magic 8Ball")
-                .setThumbnail("https://imgur.com/FAfsGzj.png")
-                .setDescription("**Question**" +
-                        input +
-                        "**Answer**" +
-                        ballAnswers[randomAnswer].trimIndent())
-                .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png")
+                .setAuthor("\uD83D\uDD2E Lil' Ori's Magic 8Ball")
+                .setThumbnail("https://img.oribuin.xyz/lilori/8ball.png")
+                .setDescription("""**»** Question
+                    $stringBuilder
+                    
+                    **»** Answer
+                    ${ballAnswers[randomAnswer]}""".trimIndent())
+                .setFooter("Created by Ori#0004", "https://img.oribuin.xyz/profile.png")
+                .setColor(event.color)
 
 
-        event.reply(embedBuilder.build())
+        // Send the embed to the channel
+        event.channel.sendMessage(embedBuilder.build()).queue()
     }
 
 }

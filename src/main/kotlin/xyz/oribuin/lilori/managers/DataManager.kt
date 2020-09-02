@@ -15,7 +15,7 @@ class DataManager(bot: LilOri) : Manager(bot) {
         bot.connector.connect { connection: Connection ->
             val queries = arrayOf(
                     "CREATE TABLE IF NOT EXISTS guild_settings (guild_id LONG, guild_name TXT, prefix TXT, color TXT, PRIMARY KEY(guild_id))",
-                    "CREATE TABLE IF NOT EXISTS quotes (label TXT, author TXT, quote TXT)",
+                    "CREATE TABLE IF NOT EXISTS quotes (id INT, author TXT, quote TXT)",
                     // Support tables
                     "CREATE TABLE IF NOT EXISTS ticket_count (user_id LONG, count INT, PRIMARY KEY(user_id))"
             )
@@ -25,44 +25,4 @@ class DataManager(bot: LilOri) : Manager(bot) {
             }
         }
     }
-
-    /**
-     * Add or Change a quote inside the database
-     *
-     * @param label  The quote label
-     * @param author The quote sender
-     * @param quote  The quote text
-     */
-    fun updateQuote(label: String, author: String, quote: String) {
-        bot.connector.connect { connection: Connection ->
-            val addQuote = "REPLACE INTO quotes (label, author, quote) VALUES (?, ?, ?)"
-            connection.prepareStatement(addQuote).use { statement ->
-                statement.setString(1, label)
-                statement.setString(2, author)
-                statement.setString(3, quote)
-                statement.executeUpdate()
-            }
-        }
-    }
-
-    /**
-     * Remove a quote based on the label
-     *
-     * @param label the label being checked
-     */
-    fun removeQuote(label: String?) {
-        bot.connector.connect { connection: Connection ->
-            val removeQuote = "DELETE FROM quotes WHERE label = ?"
-            connection.prepareStatement(removeQuote).use { statement ->
-                statement.setString(1, label)
-                statement.executeUpdate()
-            }
-        }
-    }
-
-
-    /**
-     * SELECT prefix FROM guild_settings WHERE guild_id = 103213245
-    REPLACE INTO guild_settings (prefix) VALUES ("!!")
-     */
 }

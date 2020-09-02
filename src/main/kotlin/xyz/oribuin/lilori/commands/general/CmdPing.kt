@@ -21,11 +21,10 @@ class CmdPing(bot: LilOri) : Command(bot) {
     }
 
     override fun executeCommand(event: CommandEvent) {
-        val ping: Long? = event.jda.gatewayPing
-        val embedBuilder = EmbedBuilder()
 
-        if (ping == null)
-            return
+        // Define the bot ping
+        val ping = event.jda.gatewayPing
+        val embedBuilder = EmbedBuilder().setDescription("Pinging Lil' Ori")
 
         if (ping < 101) {
             emoji = "<a:PanGLoveG:702322097195712523>"
@@ -50,13 +49,16 @@ class CmdPing(bot: LilOri) : Command(bot) {
             embedBuilder.setColor(Color.red)
         }
 
-        embedBuilder.setDescription("Pinging Lil' Ori")
+        // Send the embed to the channel
+        event.channel.sendMessage(embedBuilder.build()).queue { message  ->
 
-        event.channel.sendMessage(embedBuilder.build()).queue { message: Message ->
+            // Define a new embed
             val newEmbed = EmbedBuilder()
                     .setColor(message.embeds[0].color)
                     .setDescription("**${ping}ms latency** $emoji")
-            message.editMessage(newEmbed.build()).queueAfter(2, TimeUnit.SECONDS)
+
+            // Edit the message after three seconds
+            message.editMessage(newEmbed.build()).queueAfter(3, TimeUnit.SECONDS)
         }
     }
 }

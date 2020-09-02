@@ -1,4 +1,4 @@
-package xyz.oribuin.lilori.utils
+package xyz.oribuin.lilori.data
 
 import net.dv8tion.jda.api.entities.Guild
 import xyz.oribuin.lilori.LilOri

@@ -2,13 +2,10 @@ package xyz.oribuin.lilori
 
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
-import net.dv8tion.jda.api.OnlineStatus
-import net.dv8tion.jda.api.entities.Activity
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import net.dv8tion.jda.api.requests.GatewayIntent
 import xyz.oribuin.lilori.commands.administrative.CmdPerms
 import xyz.oribuin.lilori.commands.administrative.CmdPrefix
-import xyz.oribuin.lilori.commands.author.CmdEval
 import xyz.oribuin.lilori.commands.author.CmdQuery
 import xyz.oribuin.lilori.commands.author.CmdTest
 import xyz.oribuin.lilori.commands.author.CmdUpdate
@@ -29,47 +26,40 @@ import xyz.oribuin.lilori.handler.CommandExecutor
 import xyz.oribuin.lilori.handler.CommandHandler
 import xyz.oribuin.lilori.listeners.GeneralEvents
 import xyz.oribuin.lilori.listeners.support.SupportListeners
-import xyz.oribuin.lilori.managers.DataManager
-import xyz.oribuin.lilori.managers.GuildSettingsManager
-import xyz.oribuin.lilori.managers.TicketManager
+import xyz.oribuin.lilori.managers.*
 import xyz.oribuin.lilori.utils.ConsoleColors
 import xyz.oribuin.lilori.utils.EventWaiter
 import xyz.oribuin.lilori.utils.FileUtils
-import xyz.oribuin.lilori.utils.GuildSettings
 import java.io.File
-import java.util.*
 import javax.security.auth.login.LoginException
+import kotlin.reflect.KClass
 
 
 class LilOri : ListenerAdapter() {
+    private val managers = mutableMapOf<KClass<out Manager>, Manager>()
 
     // Define handlers
-    var commandHandler: CommandHandler
     var connector: DatabaseConnector
 
-    // Define managers
-    var dataManager: DataManager
-    var guildSettingsManager: GuildSettingsManager
-    var ticketManager: TicketManager
 
     // Define others
     private val eventWaiter = EventWaiter()
 
     // Register all commands
     private fun registerCommands() {
-        commandHandler.registerCommands(
+        getManager(CommandHandler::class).registerCommands(
                 // General Commands
-                CmdHelp(this), CmdPing(this), CmdPrefix(this),
+                CmdHelp(this), CmdPing(this),
                 // Music Commands
-                CmdLoop(this), CmdPause(this), CmdPlay(this), CmdQueue(this), CmdStop(this), CmdVolume(this),
+                CmdPause(this), CmdPlay(this), CmdQueue(this), CmdStop(this), CmdVolume(this),
                 // Game Commands
-                CmdCoinflip(this), CmdColor(this), CmdEightball(this), CmdFeed(this), CmdGay(this), CmdQuote(this), CmdSlap(this),
+                CmdCoinflip(this), CmdColor(this), CmdEightball(this), CmdFeed(this), CmdQuote(this), CmdSlap(this),
                 // Moderation Commands
                 CmdPurge(this, eventWaiter), CmdBan(this),
                 // Author Commands
-                CmdEval(this), CmdQuery(this), CmdTest(this), CmdUpdate(this),
+                CmdQuery(this), CmdTest(this), CmdUpdate(this),
                 // Admin Commands
-                CmdPerms(this),
+                CmdPerms(this), CmdPrefix(this),
                 // Support Discord commands
                 // General
                 CmdAnnounce(this), CmdReactionRole(this),
@@ -78,31 +68,25 @@ class LilOri : ListenerAdapter() {
         )
     }
 
-    private fun enable() {
-        dataManager.enable()
-        guildSettingsManager.enable()
-        ticketManager.enable()
-    }
-
     init {
         instance = this
-
         // Setup the SQLite Database
         val file = File("data", "lilori.db")
         FileUtils.createFile(file)
         connector = SQLiteConnector(file)
 
+
         // Setup Managers
-        dataManager = DataManager(this)
-        guildSettingsManager = GuildSettingsManager(this)
-        commandHandler = CommandHandler()
-        ticketManager = TicketManager(this)
+        getManager(DataManager::class)
+        getManager(BotManager::class)
+        getManager(GuildSettingsManager::class)
+        getManager(QuoteManager::class)
+        getManager(TicketManager::class)
+
+        this.managers.values.forEach { manager -> manager.enable() }
 
         // Register plugin commands
         this.registerCommands()
-
-        // Enable all the managers
-        this.enable()
 
         // Login Bot
         val jda = JDABuilder.createDefault(
@@ -116,31 +100,22 @@ class LilOri : ListenerAdapter() {
                 GatewayIntent.GUILD_PRESENCES,
                 GatewayIntent.GUILD_MESSAGE_REACTIONS,
                 GatewayIntent.GUILD_MESSAGE_TYPING
-        ).addEventListeners(CommandExecutor(this, commandHandler), GeneralEvents(this), SupportListeners(), eventWaiter, this)
+        ).addEventListeners(CommandExecutor(this, getManager(CommandHandler::class)), GeneralEvents(this), SupportListeners(), eventWaiter, this)
 
         for (intent in GatewayIntent.values())
             jda.enableIntents(intent)
 
         val jdaBot = jda.build()
 
-        // Register the statuses
-        this.registerStatus(jdaBot)
+        // Get the BotManager
+        val botManager = getManager(BotManager::class)
 
-        // Register the guilds
-        this.registerGuilds(jdaBot)
+        // Register values specifically
+        botManager.registerGuilds(jdaBot)
+        botManager.registerStatus(jdaBot)
 
-        // Startup Command Log
-        println(ConsoleColors.BLUE_BOLD_BRIGHT + "*=* Loading Lil' Ori Commands *=*" + ConsoleColors.RESET)
-        var i = 0
-
-        // Add every command into the console with a number
-        for (command in commandHandler.commands)
-            if (command.aliases == null)
-                throw IllegalArgumentException(ConsoleColors.RED_BOLD_BRIGHT + "Command aliases does not exists")
-            else
-                println(ConsoleColors.BLUE_BRIGHT + "Loaded Command: (${command.category.type.categoryName}) ${command.name} | (${++i}/${commandHandler.commands.size})" + ConsoleColors.RESET)
-
-        println(ConsoleColors.GREEN_UNDERLINED + "*=* Loaded Up ${jdaBot.selfUser.name} with ${commandHandler.commands.size}  Command(s) *=*" + ConsoleColors.RESET)
+        // Startup Log
+        this.logStartup(jdaBot)
     }
 
     companion object {
@@ -158,42 +133,36 @@ class LilOri : ListenerAdapter() {
 
     }
 
-    private fun registerStatus(jda: JDA) {
-        jda.presence.setStatus(OnlineStatus.DO_NOT_DISTURB)
+    fun <M : Manager> getManager(managerClass: KClass<M>): M {
+        synchronized(this.managers) {
+            @Suppress("UNCHECKED_CAST")
+            if (this.managers.containsKey(managerClass))
+                return this.managers[managerClass] as M
 
-        val activities = listOf(
-                Activity.watching("https://oribuin.xyz/"),
-                Activity.watching("#BlackLivesMatter"),
-                Activity.watching("https://jars.oribuin.xyz/"),
-                Activity.watching("#JusticeForBreonnaTaylor"),
-                Activity.watching("https://oribuin.xyz/support"),
-                Activity.watching("#BLM"),
-                Activity.watching("https://oribuin.xyz/donate")
-        )
-
-        val timer = Timer()
-        val timerTask: TimerTask = object : TimerTask() {
-            override fun run() {
-                val randomAnswer = Random().nextInt(activities.size)
-                jda.presence.activity = activities[randomAnswer]
+            return try {
+                val manager = managerClass.constructors.first().call(this)
+                manager.enable()
+                this.managers[managerClass] = manager
+                manager
+            } catch (ex: ReflectiveOperationException) {
+                error("Failed to load manager for ${managerClass.simpleName}")
             }
         }
-        timer.schedule(timerTask, 0, 20000)
     }
 
-    private fun registerGuilds(jda: JDA) {
+    private fun logStartup(jdaBot: JDA) {
 
-        val timer = Timer()
-        val timerTask: TimerTask = object : TimerTask() {
-            override fun run() {
-                for (guild in jda.guilds) {
-                    val guildSettings = GuildSettings(guild)
-                    guildSettingsManager.updateGuild(guild, guildSettings.getPrefix(), guildSettings.getColor())
+        // Startup Command Log
+        println(ConsoleColors.BLUE_BOLD_BRIGHT + "*=* Loading Lil' Ori Commands *=*" + ConsoleColors.RESET)
+        var i = 0
 
-                }
-            }
-        }
+        // Add every command into the console with a number
+        for (command in getManager(CommandHandler::class).commands)
+            if (command.aliases == null)
+                throw IllegalArgumentException(ConsoleColors.RED_BOLD_BRIGHT + "Command aliases does not exists")
+            else
+                println(ConsoleColors.BLUE_BRIGHT + "Loaded Command: (${command.category.type.categoryName}) ${command.name} | (${++i}/${getManager(CommandHandler::class).commands.size})" + ConsoleColors.RESET)
 
-        timer.schedule(timerTask, 5000)
+        println(ConsoleColors.GREEN_UNDERLINED + "*=* Loaded Up ${jdaBot.selfUser.name} with ${getManager(CommandHandler::class).commands.size}  Command(s) *=*" + ConsoleColors.RESET)
     }
 }

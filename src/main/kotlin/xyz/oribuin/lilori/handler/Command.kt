@@ -6,7 +6,7 @@ import xyz.oribuin.lilori.LilOri
 
 abstract class Command(val bot: LilOri) : ListenerAdapter() {
 
-    var name: String? = null
+    lateinit var name: String
         protected set
     lateinit var category: Category
         protected set

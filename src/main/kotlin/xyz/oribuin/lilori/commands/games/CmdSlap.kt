@@ -6,9 +6,8 @@ import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.handler.Category
 import xyz.oribuin.lilori.handler.Command
 import xyz.oribuin.lilori.handler.CommandEvent
+import xyz.oribuin.lilori.utils.BotUtils
 import java.util.*
-import java.util.concurrent.TimeUnit
-import java.util.function.Consumer
 
 class CmdSlap(bot: LilOri) : Command(bot) {
     init {
@@ -21,37 +20,32 @@ class CmdSlap(bot: LilOri) : Command(bot) {
 
     override fun executeCommand(event: CommandEvent) {
 
-
-        val args = event.message.contentRaw.split(" ").toTypedArray()
-
-        // Check argument length
-        if (args.size < 2) {
-            event.deleteCmd(10, TimeUnit.SECONDS)
-            event.timedReply(event.author.asMention + ", Please mention a user to slap.", 10, TimeUnit.SECONDS)
+        // Check if the author has provided the right amount of arguments
+        if (event.args.size < 2) {
+            event.sendEmbedReply("❗ Invalid Arguments", "The correct usage is ${event.prefix}${name.toLowerCase()} ${arguments?.let { BotUtils.formatList(it) }}")
             return
         }
 
-        // Check member size
+        // Check if the author has mentioned a user
         if (event.message.mentionedMembers.size == 0) {
-            event.deleteCmd(10, TimeUnit.SECONDS)
-            event.timedReply(event.author.asMention + ", Please mention a user to slap.", 10, TimeUnit.SECONDS)
+            event.sendEmbedReply("❗ Invalid Arguments", "Please include a user(s) to slap!")
             return
         }
 
-        // Check if member is author
+        // Check if the members they mentioned contains themself
         if (event.message.mentionedMembers.contains(event.member)) {
-            event.reply(event.author.asMention + ", Why would you slap yourself?")
+            event.sendEmbedReply("\uD83D\uDE2C Confused Ori", "Why would you slap yourself?")
             return
         }
 
-        // Check if member is bot
+        // Check if the members they mentioned contains the bot.
         if (event.message.mentionedMembers.contains(event.selfMember)) {
-            event.reply(event.author.asMention + ", Why would you want to slap me?? <a:PepeSad:616330488063328266>")
+            event.sendEmbedReply("\uD83D\uDE2D Sad Ori", "Why would you slap me? :(")
             return
         }
 
-        // Define gifs
-        val gifUrls = arrayOf(
+        // Define the list of gifs for the slap command
+        val gifUrls = listOf(
                 "https://media1.tenor.com/images/612e257ab87f30568a9449998d978a22/tenor.gif",
                 "https://media1.tenor.com/images/153b2f1bfd3c595c920ce60f1553c5f7/tenor.gif",
                 "https://media1.tenor.com/images/3fd96f4dcba48de453f2ab3acd657b53/tenor.gif",
@@ -60,17 +54,23 @@ class CmdSlap(bot: LilOri) : Command(bot) {
                 "https://media1.tenor.com/images/477821d58203a6786abea01d8cf1030e/tenor.gif"
         )
 
-        // Generate random gif
+        // Get a random gif url from the list
         val randomGif = Random().nextInt(gifUrls.size)
-        val userMentions: MutableList<String> = ArrayList()
-        event.message.mentionedMembers.forEach(Consumer { member: Member -> userMentions.add(member.asMention) })
 
+        // Define a new mutable list
+        val userMentions = mutableListOf<String>()
+
+        // Add all the users mentions into the list
+        event.message.mentionedMembers.forEach { member -> userMentions.add(member.asMention) }
+
+        // Define the embed with the gif
         val embedBuilder = EmbedBuilder()
-                .setDescription(event.author.asMention + " **Slapped** " + userMentions.toString()
-                        .replace("\\[".toRegex(), "").replace("]", "") + "**!**")
+                .setDescription("${event.author.asMention} **Slapped** ${BotUtils.formatList(userMentions)}**!**")
                 .setImage(gifUrls[randomGif])
-                .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png")
+                .setFooter("Created by Ori#0004", "https://img.oribuin.xyz/profile.png")
+                .setColor(event.color)
 
+        // Send the embed to chat.
         event.reply(embedBuilder.build())
     }
 }

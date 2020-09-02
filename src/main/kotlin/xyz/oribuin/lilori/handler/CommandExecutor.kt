@@ -6,7 +6,7 @@ import net.dv8tion.jda.api.exceptions.PermissionException
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.Settings
-import xyz.oribuin.lilori.utils.GuildSettings
+import xyz.oribuin.lilori.data.GuildSettings
 
 class CommandExecutor(private val bot: LilOri, private val commandHandler: CommandHandler) : ListenerAdapter() {
 

@@ -22,29 +22,29 @@ class CmdAnnounce(bot: LilOri) : Command(bot) {
     }
 
     override fun executeCommand(event: CommandEvent) {
-        val args = event.message.contentRaw.split(" ").toTypedArray()
 
-        if (args.size < 2) {
+
+        if (event.args.size < 2) {
             invalidArguments(event)
             return
         }
 
-        when (args[1].toLowerCase()) {
+        when (event.args[1].toLowerCase()) {
             "announcement" -> {
                 // ;announce announcement <boolean> <message>
-                if (args.size < 3) {
+                if (event.args.size < 3) {
                     invalidArguments(event)
                     return
                 }
 
                 val channel = event.guild.getTextChannelById("733084628696563772")
 
-                if (!listOf("true", "false").contains(args[2].toLowerCase())) {
+                if (!listOf("true", "false").contains(event.args[2].toLowerCase())) {
                     invalidBoolean(event)
                     return
                 }
 
-                val announcement = event.message.contentRaw.substring(args[0].length + args[1].length + args[2].length + 3)
+                val announcement = event.message.contentRaw.substring(event.args[0].length + event.args[1].length + event.args[2].length + 3)
 
                 val embedBuilder = EmbedBuilder()
                         .setColor(Color.BLUE)
@@ -54,7 +54,7 @@ class CmdAnnounce(bot: LilOri) : Command(bot) {
                         .setTimestamp(OffsetDateTime.now())
 
 
-                if (args[2].toBoolean()) {
+                if (event.args[2].toBoolean()) {
                     (channel
                             ?: return).sendMessage(event.guild.publicRole.asMention).embed(embedBuilder.build()).queue()
                     event.reply("${event.author.asMention} Successfully sent an announcement ${channel.asMention}")
@@ -67,19 +67,19 @@ class CmdAnnounce(bot: LilOri) : Command(bot) {
             }
             "plugin" -> {
                 // ;announce plugin <plugin> <version> <changelog>
-                if (args.size < 4) {
+                if (event.args.size < 4) {
                     invalidArguments(event)
                     return
                 }
 
                 val channel = event.guild.getTextChannelById("733086809096978492")
 
-                val changelog = event.message.contentRaw.substring(args[0].length + args[1].length + args[2].length + args[3].length + 4)
+                val changelog = event.message.contentRaw.substring(event.args[0].length + event.args[1].length + event.args[2].length + event.args[3].length + 4)
 
                 val embedBuilder = EmbedBuilder()
                         .setColor(Color.BLUE)
                         .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png")
-                        .setAuthor("Plugin Update: ${args[2]}", null, "https://img.oribuin.xyz/bot-images/announcement.jpg")
+                        .setAuthor("Plugin Update: ${event.args[2]}", null, "https://img.oribuin.xyz/bot-images/announcement.jpg")
                         .setDescription("""$changelog
                             
                         Find the latest jar file on https://jars.oribuin.xyz/""".trimMargin())

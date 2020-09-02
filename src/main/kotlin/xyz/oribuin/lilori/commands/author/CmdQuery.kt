@@ -4,8 +4,7 @@ import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.handler.Category
 import xyz.oribuin.lilori.handler.Command
 import xyz.oribuin.lilori.handler.CommandEvent
-import java.lang.Exception
-import java.sql.Connection
+import xyz.oribuin.lilori.utils.BotUtils
 import java.sql.ResultSet
 import kotlin.math.max
 
@@ -15,36 +14,58 @@ class CmdQuery(bot: LilOri) : Command(bot) {
         category = Category(Category.Type.AUTHOR)
         aliases = emptyList()
         description = "Query a command in SQLite."
-        arguments = emptyList()
+        arguments = listOf("<update/result>", "<query>")
         isOwnerOnly = true
     }
 
     override fun executeCommand(event: CommandEvent) {
-        val args = event.message.contentRaw.split(" ").toTypedArray()
 
-        if (args.size < 3) {
-            event.reply("${event.author.asMention}, Please provide valid arguments, ${event.prefix}query <update/result> <query>")
+        // Check arguments
+        if (event.args.size < 3) {
+            event.sendEmbedReply("❗ Invalid Arguments", "The correct usage is ${event.prefix}${name.toLowerCase()} ${arguments?.let { BotUtils.formatList(it) }}")
             return
         }
 
-        bot.connector.connect { connection: Connection ->
+        // Check if author included the right query type
+        if (!event.args[1].equals("update", true) && !event.args[1].equals("result", false)) {
+            event.sendEmbedReply("❗ Invalid Arguments", "The correct usage is ${event.prefix}${name.toLowerCase()} ${arguments?.let { BotUtils.formatList(it) }}")
+            return
+        }
 
-            val query = event.message.contentRaw.substring(args[0].length + args[1].length + 2)
+        val query = event.message.contentRaw.substring(event.args[0].length + event.args[1].length + 2)
+
+        // Connect to the database
+        bot.connector.connect { connection ->
+
+            // Get the query that is being executed
             try {
+                // Execute query into the database
                 connection.prepareStatement(query).use { statement ->
-                    if (args[1] == "update") {
-                        statement.executeUpdate()
-                        event.reply("${event.author.asMention}, You have executed the query, \"$query\"")
-                    } else if (args[1].toLowerCase() == "result") {
-                        for (result in getResultStrings(statement.executeQuery())) {
-                            event.reply("```$result```")
+                    when (event.args[1].toLowerCase()) {
+
+                        // If the second argument is "update", Execute an update to the database
+                        "update" -> {
+                            statement.executeUpdate()
+                            event.reply("${event.author.asMention}, You have executed the query, \"$query\"")
                         }
-                    } else {
-                        event.reply("${event.author.asMention}, Invalid input type.")
+
+                        // If the second argument is "result". Return the result of the query
+                        "result" -> {
+                            for (result in getResultStrings(statement.executeQuery())) {
+                                event.reply("```$result```")
+                            }
+                        }
+
+                        // If the second argument is not update or result, Send error message.
+                        else -> {
+                            event.sendEmbedReply("❗ Invalid Query Type", "Please replace ${event.args[1]} with either \"result\" or \"update\"")
+                        }
                     }
                 }
+
+                // Catch exception and print it in chat
             } catch (ex: Exception) {
-                event.reply("${event.author.asMention}, Exception Occurred: ${ex.message}")
+                event.sendEmbedReply("❗ An exception has occured", "Here is the exception message.\n \n${ex.message}")
             }
         }
     }
@@ -118,7 +139,7 @@ class CmdQuery(bot: LilOri) : Command(bot) {
                 val rowValue = rowValues[n][i]
                 line.append(rowValue).append(columnLengthPaddings[n].substring(rowValue.length))
             }
-            line.append(" |\n");
+            line.append(" |\n")
             addToMessage(line.toString())
         }
 

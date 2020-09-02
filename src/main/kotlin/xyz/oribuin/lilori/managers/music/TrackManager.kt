@@ -14,22 +14,29 @@ import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.entities.TextChannel
 import xyz.oribuin.lilori.LilOri
+import xyz.oribuin.lilori.data.GuildSettings
 import java.awt.Color
 import java.util.*
 import java.util.function.Consumer
 
 class TrackManager private constructor(private val bot: LilOri, guild: Guild) {
+    // Define the variables required
     val playerManager: AudioPlayerManager
-    private val musicManagers: MutableMap<String, GuildMusicManager>
+    private val musicManagers = mutableMapOf<String, GuildMusicManager>()
     private val guild: Guild
-    var trackList: List<AudioTrack> = ArrayList()
+
+    var trackList = mutableListOf<AudioTrack>()
+
+    // Get the music manager
     val musicManager: GuildMusicManager
         get() {
             var musicManager = musicManagers[guild.id]
+
             if (musicManager == null) {
                 musicManager = GuildMusicManager(bot, playerManager)
                 musicManagers[guild.id] = musicManager
             }
+
             musicManager.getAudioManager(guild).sendingHandler = musicManager.getSendHandler()
             return musicManager
         }
@@ -38,7 +45,7 @@ class TrackManager private constructor(private val bot: LilOri, guild: Guild) {
 
         playerManager.loadItemOrdered(musicManager, trackUrl, object : AudioLoadResultHandler {
             override fun trackLoaded(track: AudioTrack) {
-                // Message Here
+
                 var totalSeconds = track.duration / 1000
                 totalSeconds %= 3600
                 val minutes = totalSeconds / 60
@@ -47,11 +54,13 @@ class TrackManager private constructor(private val bot: LilOri, guild: Guild) {
                 if (!queued) {
                     val embedBuilder = EmbedBuilder()
                             .setAuthor("\uD83C\uDFB5 Now Playing " + track.info.title)
-                            .setColor(Color.RED)
+                            .setColor(GuildSettings(guild).getColor())
                             .setDescription("""**Song URL** ${track.info.uri}
                                         **Song Duration** $minutes minutes & $seconds seconds""")
                             .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png")
+
                     textChannel.sendMessage(author.asMention).embed(embedBuilder.build()).queue()
+
                 } else {
                     val embedBuilder = EmbedBuilder()
                             .setAuthor("\uD83C\uDFB5 Playing Next " + track.info.title)
@@ -59,6 +68,7 @@ class TrackManager private constructor(private val bot: LilOri, guild: Guild) {
                             .setDescription("""**Song URL** ${track.info.uri}
                                         **Song Duration** $minutes minutes & $seconds seconds""")
                             .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png")
+
                     textChannel.sendMessage(author.asMention).embed(embedBuilder.build()).queue()
                 }
                 musicManager.scheduler.queue(track, queued)
@@ -130,6 +140,5 @@ class TrackManager private constructor(private val bot: LilOri, guild: Guild) {
         playerManager.registerSourceManager(HttpAudioSourceManager())
         playerManager.registerSourceManager(LocalAudioSourceManager())
         this.guild = guild
-        musicManagers = HashMap()
     }
 }

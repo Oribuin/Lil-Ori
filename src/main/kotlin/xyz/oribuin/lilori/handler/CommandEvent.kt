@@ -6,7 +6,7 @@ import net.dv8tion.jda.api.entities.*
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import net.dv8tion.jda.api.exceptions.ErrorResponseException
 import xyz.oribuin.lilori.LilOri
-import xyz.oribuin.lilori.utils.GuildSettings
+import xyz.oribuin.lilori.data.GuildSettings
 import java.awt.Color
 import java.util.concurrent.TimeUnit
 
@@ -79,6 +79,8 @@ class CommandEvent(private val bot: LilOri, val event: GuildMessageReceivedEvent
     fun banMember(guild: Guild, user: User, days: Int, reason: String) {
         guild.getMember(user)?.ban(days, reason)?.queue()
     }
+
+    val args = event.message.contentRaw.split(" ").toTypedArray()
 
     // GuildMessageReceivedEvent shortcuts
     val author: User

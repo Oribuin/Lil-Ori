@@ -1,7 +1,5 @@
 package xyz.oribuin.lilori.commands.author
 
-import com.jcraft.jsch.ChannelSftp
-import com.jcraft.jsch.JSch
 import org.apache.commons.lang3.StringUtils
 import org.apache.commons.net.ftp.FTPClient
 import xyz.oribuin.lilori.LilOri
@@ -9,11 +7,9 @@ import xyz.oribuin.lilori.Settings
 import xyz.oribuin.lilori.handler.Category
 import xyz.oribuin.lilori.handler.Command
 import xyz.oribuin.lilori.handler.CommandEvent
+import xyz.oribuin.lilori.utils.BotUtils
 import java.io.File
 import java.io.FileInputStream
-import java.io.FileOutputStream
-import java.text.SimpleDateFormat
-import java.util.*
 
 class CmdUpdate(bot: LilOri) : Command(bot) {
 
@@ -22,29 +18,29 @@ class CmdUpdate(bot: LilOri) : Command(bot) {
         category = Category(Category.Type.AUTHOR)
         aliases = emptyList()
         description = "Update the jar file on the latest ."
-        arguments = emptyList()
+        arguments = listOf("plugin", "<plugin>")
         isOwnerOnly = true
         isEnabled = true
     }
 
     override fun executeCommand(event: CommandEvent) {
 
-        val args = event.message.contentRaw.split(" ").toTypedArray()
 
-        if (args.size < 2) {
-            event.reply("<a:bee:730546474424729712> Please select a correct update type.")
+        if (event.args.size < 2) {
+            event.sendEmbedReply("❗ Invalid Arguments", "The correct usage is ${event.prefix}${name.toLowerCase()} ${arguments?.let { BotUtils.formatList(it) }}")
             return
         }
 
-        when (args[1].toLowerCase()) {
+        when (event.args[1].toLowerCase()) {
             "plugin" -> {
 
+                // Require a jar file
                 if (event.message.attachments.size == 0) {
-                    event.reply("<a:bee:730546474424729712> Please include a jar file to upload.")
+                    event.sendEmbedReply("❗ No Jar File Attached", "Please include the jar file you want to update.")
                     return
                 }
 
-                this.updatePlugin(event, args[2].toLowerCase())
+                this.updatePlugin(event, event.args[2].toLowerCase())
             }
         }
     }
@@ -54,32 +50,36 @@ class CmdUpdate(bot: LilOri) : Command(bot) {
         val fileName = event.message.attachments[0].fileName
         val file = File("plugins", fileName)
 
-        // Download file
         event.channel.sendMessage("<a:bee:730546474424729712> **Starting to update of plugin ${StringUtils.capitalize(pluginName)} file.**").queue { msg ->
             try {
 
+                // Download the file into the bot
                 msg.editMessage("<a:bee:730546474424729712> **Downloading jar file onto bot!.**").queue()
 
                 event.message.attachments[0].downloadToFile(file)
 
+                // Log into website
                 msg.editMessage("<a:bee:730546474424729712> **Logging into website FTP!**").queue()
                 client.connect(Settings.FTP_URL)
                 client.login(Settings.FTP_USERNAME, Settings.FTP_PASSWORD)
 
+                // Store the file into the folder required
                 msg.editMessage("<a:bee:730546474424729712> **Storing $fileName into website FTP.**").queue()
+                client.storeFile("/web/jars.oribuin.xyz/public_html/${pluginName}/${file.name}", FileInputStream(file.path))
 
-                client.storeFile("/web/jars.oribuin.xyz/public_html/eternalreports/${file.name}", FileInputStream(file.path))
-                println(client.replyCode)
+                // Logout the ftp
                 msg.editMessage("<a:bee:730546474424729712> **Logging out of FTP..**").queue()
-                client.logout()
                 FileInputStream(file.path).close()
+                client.logout()
                 client.disconnect()
 
+                // Send the update message
                 msg.editMessage("<a:bee:730546474424729712> **Successfully updated ${StringUtils.capitalize(pluginName)}! (https://jars.oribuin.xyz/$pluginName/${file.name})**").queue()
                 file.delete()
-
                 event.deleteCmd()
+
             } catch (ex: Exception) {
+                event.sendEmbedReply("❗ An exception has occured", "Here is the exception message.\n \n${ex.message}")
                 ex.printStackTrace()
             }
         }

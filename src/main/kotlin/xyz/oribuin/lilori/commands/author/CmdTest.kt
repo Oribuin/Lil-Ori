@@ -5,6 +5,7 @@ import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.handler.Category
 import xyz.oribuin.lilori.handler.Command
 import xyz.oribuin.lilori.handler.CommandEvent
+import xyz.oribuin.lilori.managers.TicketManager
 
 class CmdTest(bot: LilOri) : Command(bot) {
     init {
@@ -20,10 +21,10 @@ class CmdTest(bot: LilOri) : Command(bot) {
         event.deleteCmd()
 
         val embed = EmbedBuilder()
-                .setAuthor("Test")
+                .setAuthor("Current Ticket Count")
+                .setDescription("Ticket Count: ${bot.getManager(TicketManager::class).getTicketCount(event.author)}")
                 .setColor(event.color).build()
 
         event.reply(embed)
-        println("Ticket count for ${event.author.asTag}: ${bot.ticketManager.getTicketCount(event.author)}")
     }
 }

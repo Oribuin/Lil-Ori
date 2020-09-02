@@ -1,19 +1,15 @@
 package xyz.oribuin.lilori.listeners
 
 import net.dv8tion.jda.api.EmbedBuilder
-import net.dv8tion.jda.api.OnlineStatus
-import net.dv8tion.jda.api.entities.Activity
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.events.DisconnectEvent
-import net.dv8tion.jda.api.events.ReadyEvent
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import xyz.oribuin.lilori.LilOri
-import xyz.oribuin.lilori.utils.GuildSettings
-import java.text.SimpleDateFormat
-import java.util.*
+import xyz.oribuin.lilori.data.GuildSettings
+import xyz.oribuin.lilori.managers.GuildSettingsManager
 import java.util.function.Consumer
 
 class GeneralEvents(private val bot: LilOri) : ListenerAdapter() {
@@ -22,13 +18,13 @@ class GeneralEvents(private val bot: LilOri) : ListenerAdapter() {
     }
 
     override fun onGuildJoin(event: GuildJoinEvent) {
-        bot.guildSettingsManager.createGuild(event.guild)
-        bot.guildSettingsManager.loadGuildSettings(event.guild)
+        bot.getManager(GuildSettingsManager::class).createGuild(event.guild)
+        bot.getManager(GuildSettingsManager::class).loadGuildSettings(event.guild)
     }
 
     override fun onGuildLeave(event: GuildLeaveEvent) {
-        bot.guildSettingsManager.removeGuild(event.guild)
-        bot.guildSettingsManager.removeGuildSettings(event.guild)
+        bot.getManager(GuildSettingsManager::class).removeGuild(event.guild)
+        bot.getManager(GuildSettingsManager::class).removeGuildSettings(event.guild)
     }
 
     override fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {

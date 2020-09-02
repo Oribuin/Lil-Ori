@@ -18,31 +18,24 @@ class CmdPause(bot: LilOri) : Command(bot) {
     }
 
     override fun executeCommand(event: CommandEvent) {
-        val tm = getInstance(event.guild)
-        (tm ?: return)
+        val tm = getInstance(event.guild)?: return
 
+        // Check if the user is in a voice channel
         if (event.member.voiceState == null || event.member.voiceState?.inVoiceChannel() == false) {
-            event.reply(event.author.asMention + ", Could not change volume since you are not in the voice channel")
+            event.sendEmbedReply("❗ Unable to pause", "You cannot toggle the pausing because you are not in a voice channel!")
             return
         }
 
+        // Define the player
         val player = tm.musicManager.player
-        val msg: String
 
+        // Toggle pausing
         if (player.isPaused) {
             player.isPaused = false
-            msg = "Playback is no longer paused"
+            event.sendEmbedReply("\uD83C\uDFA7 Paused Music", "You have paused the music!")
         } else {
             player.isPaused = true
-            msg = "Playback is now paused"
+            event.sendEmbedReply("\uD83C\uDFA7 Unpaused Music", "You have unpaused the music!")
         }
-
-        val embedBuilder = EmbedBuilder()
-                .setAuthor("\uD83C\uDFB5 $msg")
-                .setColor(Color.RED)
-                .setDescription("Type " + event.prefix + "pause to pause/unpause!")
-                .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png")
-
-        event.textChannel.sendMessage(event.author.asMention).embed(embedBuilder.build()).queue()
     }
 }

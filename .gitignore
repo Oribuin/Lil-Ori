@@ -41,3 +41,5 @@ data/quotes.json
 src/main/kotlin/xyz/oribuin/lilori/Settings.kt
 src/main/kotlin/xyz/oribuin/lilori/commands/author/CmdTest.kt
 *.png
+images
+images

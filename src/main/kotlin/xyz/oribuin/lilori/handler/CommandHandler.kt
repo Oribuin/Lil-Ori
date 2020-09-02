@@ -1,16 +1,13 @@
 package xyz.oribuin.lilori.handler
 
-class CommandHandler {
+import xyz.oribuin.lilori.LilOri
+import xyz.oribuin.lilori.managers.Manager
+
+class CommandHandler(bot: LilOri): Manager(bot) {
     val commands = mutableListOf<Command>()
 
     fun registerCommands(vararg cmds: Command) {
         this.commands.addAll(cmds)
-    }
-
-    fun registerCommand(cmd: Command) {
-        if (!commands.contains(cmd)) {
-            commands.add(cmd)
-        }
     }
 
     fun getCommandList(): List<Command> {
@@ -25,5 +22,9 @@ class CommandHandler {
 
     fun getCommand(name: String): Command {
         return commands.stream().filter { command: Command -> command.name?.toLowerCase() == name }.findFirst().get()
+    }
+
+    override fun enable() {
+        // Unused
     }
 }

@@ -1,11 +1,9 @@
 package xyz.oribuin.lilori.commands.games
 
-import net.dv8tion.jda.api.EmbedBuilder
 import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.handler.Category
 import xyz.oribuin.lilori.handler.Command
 import xyz.oribuin.lilori.handler.CommandEvent
-import java.awt.Color
 
 class CmdFeed(bot: LilOri) : Command(bot) {
     init {
@@ -16,24 +14,14 @@ class CmdFeed(bot: LilOri) : Command(bot) {
         arguments = emptyList()
     }
 
-    private var cookies = 0
 
     override fun executeCommand(event: CommandEvent) {
+        // Put command in maintenance mode.
+        if (event.author.id != "345406020450779149") {
+        event.sendEmbedReply("\uD83D\uDC99 Command in Maintenance!", "Hey! This command is currently being rewritten into a currency system where you'll " +
+                "be able to use cookies to buy stuff!")
+        return
+            }
 
-        val args = event.message.contentRaw.split(" ").toTypedArray()
-
-        if (args.size >= 2) {
-            event.reply("**Lil' Ori now has $cookies cookies!**")
-            return
-        }
-
-        cookies++
-        val embedBuilder = EmbedBuilder()
-                .setAuthor("You gave Lil' Ori A Cookie!")
-                .setColor(Color.decode("#33539e"))
-                .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png")
-                .setDescription("**He now has $cookies Cookies**")
-
-        event.reply(embedBuilder.build())
     }
 }

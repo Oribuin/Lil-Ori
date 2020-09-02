@@ -7,8 +7,6 @@ import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.handler.Category
 import xyz.oribuin.lilori.handler.Command
 import xyz.oribuin.lilori.handler.CommandEvent
-import java.awt.Color
-import java.util.*
 import java.util.function.Consumer
 
 class CmdPerms(bot: LilOri) : Command(bot) {
@@ -21,15 +19,17 @@ class CmdPerms(bot: LilOri) : Command(bot) {
     }
 
     override fun executeCommand(event: CommandEvent) {
+        val perms = mutableSetOf<String>()
 
-        val perms: MutableList<String> = ArrayList()
+        /// Add all the permissions to the set.
         event.selfMember.permissions.forEach(Consumer { permission: Permission -> perms.add(StringUtils.capitalize(permission.getName()).replace("_", " ")) })
 
+        // Define the embed
         val embedBuilder = EmbedBuilder()
-                .setAuthor("Lil' Ori Permissions")
-                .setColor(Color.decode("#babaeb"))
-                .setDescription(perms.toString().replace("\\[", "").replace("]", "").replace(",", "\n •"))
-                .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png")
+                .setAuthor("\uD83D\uDCD5 Lil' Ori Permissions")
+                .setColor(event.color)
+                .setDescription(perms.toString().removePrefix("[").removeSuffix("]").replace(",", "\n **»**"))
+                .setFooter("Created by Ori#0004", "https://img.oribuin.xyz/profile.png")
 
         event.reply(embedBuilder.build())
     }

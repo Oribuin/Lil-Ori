@@ -2,9 +2,8 @@ package xyz.oribuin.lilori.managers
 
 import net.dv8tion.jda.api.entities.Guild
 import xyz.oribuin.lilori.LilOri
-import xyz.oribuin.lilori.Settings
-import xyz.oribuin.lilori.utils.GuildSettings
-import xyz.oribuin.lilori.utils.GuildSettings.Companion.default
+import xyz.oribuin.lilori.data.GuildSettings
+import xyz.oribuin.lilori.data.GuildSettings.Companion.default
 import java.awt.Color
 import java.sql.Connection
 import java.util.*

@@ -1,14 +1,17 @@
 package xyz.oribuin.lilori.commands.general
 
 import net.dv8tion.jda.api.EmbedBuilder
+import net.dv8tion.jda.api.Permission
 import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.handler.Category
 import xyz.oribuin.lilori.handler.Command
 import xyz.oribuin.lilori.handler.CommandEvent
-import xyz.oribuin.lilori.utils.GuildSettings
+import xyz.oribuin.lilori.managers.GuildSettingsManager
+import xyz.oribuin.lilori.utils.BotUtils
 import java.awt.Color
 import java.awt.image.BufferedImage
 import java.io.File
+import java.lang.NumberFormatException
 import javax.imageio.ImageIO
 
 class CmdColor(bot: LilOri) : Command(bot) {
@@ -17,105 +20,137 @@ class CmdColor(bot: LilOri) : Command(bot) {
         category = Category(Category.Type.GENERAL)
         description = "See a color in an embed."
         aliases = emptyList()
-        arguments = listOf("<#hex>/<r,g,b>")
+        arguments = listOf("[set]", "<#hex>/<r g b>")
     }
 
     private lateinit var embedColor: Color
     private lateinit var color: Color
+
+    /*
+    Normal Color Command:
+    ;color[0] <#hex[1] / red[1]> <green[2]> <blue[3]> if (args.size != 2 && args.size != 4) // return invalid args
+    Color set Command:
+    ;color[0] set[1] <#hex[2] / red[2]> <green[3]> <blue[4]> - if (args[1] == "set && args.size != 3 && args.size != 5) // return invalid args
+     */
+
     override fun executeCommand(event: CommandEvent) {
-        val args = event.message.contentRaw.split(" ").toTypedArray()
-        if (args[1].toLowerCase() == "set") {
 
+        // Check if sub command is "set"
 
-            if (args.size < 3) {
-                event.reply(event.author.asMention + ", **Usage 1 ${event.prefix}color set 255 0 255**")
+        if (event.args[1].equals("set", true)) {
+
+            // Check if the user has permission for the command.
+            if (!event.member.hasPermission(Permission.ADMINISTRATOR)) {
+                event.sendEmbedReply("❗ Invalid Permission", "You must be an admin for this command!")
                 return
             }
 
-            if (args.size != 3 && args.size != 5) {
-                event.reply(event.author.asMention + ", **Usage 2 ${event.prefix}color set 255 0 255**")
+            // Check if the user has provided the right arguments.
+            if (event.args.size != 3 && event.args.size != 5) {
+                event.sendEmbedReply("❗ Invalid Arguments", "The correct usage is ${event.prefix}${name.toLowerCase()} ${arguments?.let { BotUtils.formatList(it) }}")
                 return
             }
 
             try {
-                color = if (args[2].startsWith("#")) {
-                    Color.decode(args[3])
-
+                // Check if the third argument starts with a #, If so, assign color as #Hex
+                color = if (event.args[2].startsWith("#")) {
+                    Color.decode(event.args[2])
                 } else {
-                    val red = args[2].toInt()
-                    val green = args[3].toInt()
-                    val blue = args[4].toInt()
+
+                    // If the arguments provided are as rgb, Assign color to the rgb code
+                    val red = event.args[2].toInt()
+                    val green = event.args[3].toInt()
+                    val blue = event.args[4].toInt()
                     Color(red, green, blue)
                 }
 
+                // Define the color file & hex code for the color
                 val file = File("images", "color.png")
-                val hex: String = String.format("%02x%02x%02x", color.red, color.green, color.blue)
-                this.createImage()
+                val hex = BotUtils.formatToHex(color)
 
+                // Create the image
+                this.createImage(color)
+
+                // Create the embed
                 val embedBuilder = EmbedBuilder()
-                        .setTitle("Changed Embed Color")
-                        .setColor(color)
-                        .setImage("attachment://color.png")
-                        .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png")
-                        .setDescription("""Changed the guild embed color!
+                        .setTitle("\uD83D\uDD8C Changed Guild Color")
+                        .setFooter("Created by Ori#0004", "https://img.oribuin.xyz/profile.png")
+                        .setDescription("""You have changed the guild's embed color, Try it out by tagging ${event.selfMember.asMention} in chat!
                             
-                            Color: #$hex (${embedColor.red},${embedColor.green},${embedColor.blue})""".trimMargin())
+                            **»** Color: $hex (${color.red},${color.green},${color.blue})
+                        """.trimIndent())
+                        .setImage("attachment://color.png")
+                        .setColor(color)
 
+                // Send the embed to channel
                 event.channel.sendFile(file).embed(embedBuilder.build()).queue()
-                bot.guildSettingsManager.updateGuild(event.guild, event.prefix, Color.decode("#$hex"))
-                println("${event.author.asTag} Updated \"${event.guild.name}\" Color to #$hex")
 
+                // Update the embed in the database
+                bot.getManager(GuildSettingsManager::class).updateGuild(event.guild, event.prefix, color)
+
+                // Print the change to console
+                println("${event.author.asTag} Updated \"${event.guild.name}\" Color to $hex")
+
+                // If the rgb defined are not numbers, send invalid format message.
             } catch (ex: NumberFormatException) {
-                event.reply(event.author.asMention + ", Correct usage example " + event.prefix + "color 255 0 255")
+                event.sendEmbedReply("❗ Invalid Format", "The correct usage is ${event.prefix}${name.toLowerCase()} ${arguments?.let { BotUtils.formatList(it) }}")
             }
+
             return
         }
 
-        if (args.size < 2) {
-            event.reply(event.author.asMention + ", Please include the correct arguments. " + event.prefix + "color <#HEX-CODE/Red,Green,Blue>")
-            return
-        }
-
-        if (args.size > 2 && args.size != 4) {
-            event.reply(event.author.asMention + ", Correct usage example: " + event.prefix + "color 255 0 255")
+        // Start the check for normal color command.
+        // Check if the user has provided the right arguments.
+        if (event.args.size != 2 && event.args.size != 4) {
+            event.sendEmbedReply("❗ Invalid Arguments", "The correct usage is ${event.prefix}${name.toLowerCase()} ${arguments?.let { BotUtils.formatList(it) }}")
             return
         }
 
         try {
-            embedColor = if (args[1].startsWith("#")) {
-                Color.decode(args[1])
-
+            // Check if the third argument starts with a #, If so, assign color as #Hex
+            embedColor = if (event.args[1].startsWith("#")) {
+                Color.decode(event.args[1])
             } else {
-                val red = args[1].toInt()
-                val green = args[2].toInt()
-                val blue = args[3].toInt()
+
+                // If the arguments provided are as rgb, Assign color to the rgb code
+                val red = event.args[1].toInt()
+                val green = event.args[2].toInt()
+                val blue = event.args[3].toInt()
                 Color(red, green, blue)
             }
 
-            val hex: String = String.format("%02x%02x%02x", embedColor.red, embedColor.green, embedColor.blue)
+            // Define the color file & hex code for the color
             val file = File("images", "color.png")
-            this.createImage()
+            val hex = BotUtils.formatToHex(embedColor)
 
+            // Create the image
+            this.createImage(embedColor)
+
+            // Create the embed
             val embedBuilder = EmbedBuilder()
-                    .setTitle("Lil' Ori Colors")
-                    .setColor(embedColor)
-                    .setImage("attachment://color.png")
-                    .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png")
-                    .setDescription("""Use this command to show your favourite hex codes!
+                    .setTitle("\uD83D\uDD8C Colour Showcase")
+                    .setFooter("Created by Ori#0004", "https://img.oribuin.xyz/profile.png")
+                    .setDescription("""Here is the color you request, ${event.member.asMention}!
                             
-                            Color: #$hex (${embedColor.red},${embedColor.green},${embedColor.blue})""".trimMargin())
+                            **»** Color: $hex (${embedColor.red},${embedColor.green},${embedColor.blue})
+                        """.trimIndent())
+                    .setImage("attachment://color.png")
+                    .setColor(embedColor)
 
+            // Send the embed to channel
             event.channel.sendFile(file).embed(embedBuilder.build()).queue()
 
+            // If the rgb defined are not numbers, send invalid format message.
         } catch (ex: NumberFormatException) {
-            event.reply(event.author.asMention + ", Correct usage example: " + event.prefix + "color 255 0 255")
+            event.sendEmbedReply("❗ Invalid Format", "The correct usage is ${event.prefix}${name.toLowerCase()} ${arguments?.let { BotUtils.formatList(it) }}")
         }
+
     }
 
-    private fun createImage() {
+    private fun createImage(imgColor: Color) {
         val bufferedImage = BufferedImage(750, 175, BufferedImage.TYPE_INT_RGB)
         val graphics = bufferedImage.createGraphics()
-        graphics.color = Color(embedColor.rgb)
+        graphics.color = Color(imgColor.rgb)
         graphics.fillRect(0, 0, bufferedImage.width, bufferedImage.height)
         graphics.dispose()
 

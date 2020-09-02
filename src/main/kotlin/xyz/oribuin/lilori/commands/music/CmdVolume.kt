@@ -5,6 +5,7 @@ import xyz.oribuin.lilori.handler.Category
 import xyz.oribuin.lilori.handler.Command
 import xyz.oribuin.lilori.handler.CommandEvent
 import xyz.oribuin.lilori.managers.music.TrackManager.Companion.getInstance
+import xyz.oribuin.lilori.utils.BotUtils
 
 class CmdVolume(bot: LilOri) : Command(bot) {
     init {
@@ -16,27 +17,32 @@ class CmdVolume(bot: LilOri) : Command(bot) {
     }
 
     override fun executeCommand(event: CommandEvent) {
+        val tm = getInstance(event.guild)?: return
 
-        val tm = getInstance(event.guild)
-        (tm ?: return)
-
-        val args = event.message.contentRaw.split(" ").toTypedArray()
-        if (args.size < 2) {
-            event.reply("**Current Volume: ${tm.musicManager.player.volume}**")
+        if (event.args.size < 2) {
+            event.sendEmbedReply("\uD83C\uDFA7 Current Volume", "The volume for the bot is set at ${tm.musicManager.player.volume}")
             return
         }
-        if (event.member?.voiceState == null || !event.member?.voiceState?.inVoiceChannel()!!) {
-            event.reply("${event.author.asMention}, Could not change volume since you are not in the voice channel")
+
+
+        if (event.member.voiceState == null || !event.member.voiceState?.inVoiceChannel()!!) {
+            event.sendEmbedReply("❗ Can't change volume!", "You cannot change the volume because you are not in a voice channel!")
             return
         }
 
         try {
-            val volume = args[1].toInt()
+            val volume = event.args[1].toInt()
+
+            if (volume > 200 || volume < 0) {
+                event.sendEmbedReply("❗ Invalid Volume", "The volume can only be between 0 and 200.")
+                return
+            }
+
             tm.musicManager.player.volume = volume
 
-            event.reply(event.author.asMention + ", Successfully changed volume to " + volume)
+            event.sendEmbedReply("\uD83C\uDFA7 Changed Volume", "You have set the music volume to $volume/200!")
         } catch (ex: NumberFormatException) {
-            event.reply(event.author.asMention + ", Please include the correct arguments." + event.prefix + name + " <volume>")
+            event.sendEmbedReply("❗ Invalid Arguments", "The correct usage is ${event.prefix}${name.toLowerCase()} ${arguments?.let { BotUtils.formatList(it) }}")
         }
     }
 }

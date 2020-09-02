@@ -1,6 +1,5 @@
 package xyz.oribuin.lilori.database
 
-import org.sqlite.SQLiteException
 import java.io.File
 import java.sql.Connection
 import java.sql.DriverManager
@@ -11,32 +10,36 @@ class SQLiteConnector(directory: File) : DatabaseConnector {
     private var connection: Connection? = null
 
     init {
-        Class.forName("org.sqlite.JDBC")
+        try {
+            Class.forName("org.sqlite.JDBC")
+        } catch (e: ClassNotFoundException) {
+            e.printStackTrace()
+        }
     }
 
     override fun closeConnection() {
         try {
-            if (this.connection != null) {
-                this.connection?.close()
+            if (connection != null) {
+                connection?.close()
             }
-        } catch (ex: SQLiteException) {
-            error("An error occured closing the SQLITE database connection: ${ex.message}")
+        } catch (ex: SQLException) {
+            println("An error occurred closing the SQLite database connection: " + ex.message)
         }
     }
 
     override fun connect(callback: (Connection) -> Unit) {
-        if (this.connection == null) {
+        if (connection == null) {
             try {
-                this.connection = DriverManager.getConnection(this.connectionString)
+                connection = DriverManager.getConnection(connectionString)
             } catch (ex: SQLException) {
-                error("An error occurred retrieving the SQLite database connection: " + ex.message)
+                println("An error occurred retrieving the SQLite database connection: " + ex.message)
             }
         }
-
         try {
             this.connection?.let { callback(it) }
         } catch (ex: Exception) {
-            error("An error occurred executing an SQLite query: " + ex.message)
+            println("An error occurred executing an SQLite query: " + ex.message)
+            ex.printStackTrace()
         }
     }
 }

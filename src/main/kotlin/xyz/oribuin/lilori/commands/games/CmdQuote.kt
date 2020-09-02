@@ -6,6 +6,8 @@ import xyz.oribuin.lilori.Settings
 import xyz.oribuin.lilori.handler.Category
 import xyz.oribuin.lilori.handler.Command
 import xyz.oribuin.lilori.handler.CommandEvent
+import xyz.oribuin.lilori.managers.QuoteManager
+import xyz.oribuin.lilori.utils.BotUtils
 import java.awt.Color
 import java.sql.Connection
 
@@ -14,117 +16,125 @@ class CmdQuote(bot: LilOri) : Command(bot) {
     init {
         name = "Quote"
         category = Category(Category.Type.GAMES)
-        description = "Quote command."
+        description = "Get a quote saved into lil ori"
         aliases = emptyList()
-        arguments = listOf("select", "<quote_id>")
+        arguments = listOf("get", "<id/author>")
     }
 
-
     override fun executeCommand(event: CommandEvent) {
-        val args = event.message.contentRaw.split(" ").toTypedArray()
 
-        if (args.size < 2) {
-            val embedBuilder = EmbedBuilder()
-                    .setAuthor("Lil' Ori Quotes")
-                    .setColor(Color.decode("#33539e"))
-                    .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png")
-                    .setDescription("""To view a quote, type ${event.prefix}quote get <id>
-                            Quote Id Amount: $quoteCount""".trimMargin())
+        // Get the quote manager & quote list
+        val quoteManager = bot.getManager(QuoteManager::class)
+        val quotes = quoteManager.quotes
 
-            event.reply(embedBuilder)
+        // Check if they have the right amount of arguments
+        if (event.args.size < 2) {
+            event.sendEmbedReply("❗ Invalid Arguments", "The correct usage is ${event.prefix}${name.toLowerCase()} ${arguments?.let { BotUtils.formatList(it) }}")
             return
         }
 
 
-        when (args[1].toLowerCase()) {
-            "add" -> {
-                if (event.author.id != Settings.OWNER_ID)
-                    return
+        // Switch case the first argument
+        when (event.args[1].toLowerCase()) {
 
-                if (args.size >= 5) {
-                    val quoteId = args[2].toLowerCase()
-                    val quoteAuthor = args[3].replace("_", " ")
-                    val quote = event.message.contentRaw.substring(args[0].length + args[1].length + args[2].length + args[3].length + 4)
-
-                    bot.dataManager.updateQuote(quoteId, quoteAuthor, quote)
-                    event.reply(event.author.asMention + ", Added quote to the database!")
-                    println("${event.author.asTag} Added a quote to the database." +
-                            quoteId +
-                            quoteAuthor +
-                            quote)
+            // If args[1] is add
+            "add", "update" -> {
+                // Check author id, If they are not Ori, Tell them they cannot do the command.
+                if (event.author.id != Settings.OWNER_ID) {
+                    event.sendEmbedReply("\uD83D\uDC94 Owner Only Sub Command.", "You cannot add a quote to the bot because you are not Ori.")
                     return
                 }
 
-                event.reply("${event.author.asMention}, Correct usage ${event.prefix}quote add <quote_id> <quote_author> <quote>")
-            }
-            "select" -> {
-                if (args.size == 3) {
-                    bot.connector.connect { connection: Connection ->
-                        val query = "SELECT quote FROM quotes WHERE label = ?"
-                        connection.prepareStatement(query).use { statement ->
-                            statement.setString(1, args[2])
-                            val resultSet = statement.executeQuery()
-                            if (resultSet.next()) event.reply(resultSet.getString(1))
-                        }
-                    }
+                // Check if they have the right amount of arguments
+                if (event.args.size >= 4) {
+                    // Define quote author
+                    val quoteAuthor = event.args[2].replace("_", " ")
+
+                    // Define the quote
+                    val quote = event.message.contentRaw.substring(event.args[0].length + event.args[1].length + event.args[2].length + 3)
+
+                    // Add the quote into the database
+                    bot.getManager(QuoteManager::class).updateQuote(quoteAuthor, quote)
+
+                    // Send embed message telling them they have added the quote.
+                    event.sendEmbedReply("\uD83D\uDC96 Added Quote", """You have added a quote to Lil' Ori's Memory!
+                        
+                        **»** Author: $quoteAuthor
+                        
+                        **»** Quote: $quote""".trimIndent())
                     return
                 }
 
-                event.reply("${event.author.asMention}, Correct usage: ${event.prefix}quote select <quote_id>")
+                // Send invalid arguments message if they haven't provided enough arguments
+                event.sendEmbedReply("❗ Invalid Arguments", "The correct usage is ${event.prefix}${name.toLowerCase()} add <author> <quote>")
             }
+
             "remove" -> {
-                if (event.author.id != Settings.OWNER_ID)
-                    return
-
-                if (args.size == 3) {
-                    bot.dataManager.removeQuote(args[2])
-                    event.reply("${event.author.asMention}, Removed a quote from the database!")
-                    println("${event.author.asTag} Removed a quote from the database." +
-                            "Quote Id: ${args[2]}")
+                // Check author id, If they are not Ori, Tell them they cannot do the command.
+                if (event.author.id != Settings.OWNER_ID) {
+                    event.sendEmbedReply("\uD83D\uDC94 Owner Only Sub Command.", "You cannot remove a quote to the bot because you are not Ori.")
                     return
                 }
 
-                event.reply(event.author.asMention + ", Correct Usage: " + event.prefix + "quote remove <QUOTE_ID>")
-            }
-            "get" -> {
-                if (args.size == 3) {
-                    bot.connector.connect { connection: Connection ->
-                        val query = "SELECT * FROM quotes WHERE label = ?"
-                        connection.prepareStatement(query).use { getStatement ->
-                            getStatement.setString(1, args[2])
-                            val resultSet = getStatement.executeQuery()
-                            if (resultSet.next()) {
-                                val embedBuilder = EmbedBuilder()
-                                        .setTitle("Lil' Ori Quotes (ID: ${resultSet.getString(1)})")
-                                        .setColor(Color.decode("#33539e"))
-                                        .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png")
-                                        .setDescription("""**Quote Author:** ${resultSet.getString(2)}
-                                                **Quote:** ${resultSet.getString(3)}""".trimIndent())
-                                event.reply(embedBuilder.build())
-                            }
-                        }
+                // Check if they have the right amount of arguments
+                if (event.args.size >= 3) {
+
+                    // Get a quote based on their provided arguments
+                    val quoteList = quotes.stream().filter { quote -> quote.id == event.args[2].toInt() || quote.author == java.lang.String.join(" ", *event.args).substring(event.args[0].length + event.args[1].length + 2) }.findFirst()
+
+                    // Check if the quote they provided doesn't exist
+                    if (quoteList.isEmpty) {
+                        event.sendEmbedReply("\uD83D\uDC94 Invalid Quote", "I could not find that quote in my memory!.")
+                        return
                     }
+
+                    // Get the quote if it exists
+                    val quote = quoteList.get()
+
+                    // Send quote removed message
+                    event.sendEmbedReply("\uD83D\uDC96 Removed Quote", """You have removed a quote to Lil' Ori's Memory!
+                        
+                        **»** Author: ${quote.author}
+                        
+                        **»** Quote: ${quote.quote}""".trimIndent())
+
+                    // Remove Quote
+                    quoteManager.removeQuote(quote)
                     return
                 }
 
-                event.reply("${event.author.asMention}, Correct usage: ${event.prefix}quote get <quote_id>")
+                // Send invalid arguments message if they haven't provided enough arguments
+                event.sendEmbedReply("❗ Invalid Arguments", "The correct usage is ${event.prefix}${name.toLowerCase()} remove <id/author>")
+
             }
 
-            else -> event.reply("${event.author.asMention} Invalid Args.")
+            "get" -> {
+                if (event.args.size >= 3) {
+                    // Get a quote based on their provided argument
+                    val quoteList = quotes.stream().filter { quote -> quote.id == event.args[2].toInt() || quote.author == java.lang.String.join(" ", *event.args).substring(event.args[0].length + event.args[1].length + 2) }.findFirst()
+
+                    // Check if the quote they provided doesn't exist
+                    if (quoteList.isEmpty) {
+                        event.sendEmbedReply("\uD83D\uDC94 Invalid Quote", "I could not find that quote in my memory!.")
+                        return
+                    }
+
+                    // Get the quote provided
+                    val quote = quoteList.get()
+
+                    // Send quote message
+                    event.sendEmbedReply("\uD83D\uDC96 Found the quote (ID: ${quote.id})", """**»** Author: ${quote.author}
+                        
+                        **»** Quote: ${quote.quote}""".trimIndent())
+                    return
+                }
+
+                // Send invalid arguments message if they haven't provided enough arguments
+                event.sendEmbedReply("❗ Invalid Arguments", "The correct usage is ${event.prefix}${name.toLowerCase()} get <id/author>")
+            }
+
+            // Send invalid arguments message if they haven't provided a correct sub command
+            else -> event.sendEmbedReply("❗ Invalid Arguments", "The correct usage is ${event.prefix}${name.toLowerCase()} ${arguments?.let { BotUtils.formatList(it) }}")
         }
     }
-
-    private var quoteCount = 0
-        get() {
-            bot.connector.connect { connection: Connection ->
-                val query = "SELECT COUNT(*) FROM quotes"
-                connection.prepareStatement(query).use { statement ->
-                    val result = statement.executeQuery()
-                    result.next()
-                    field = result.getInt(1)
-                }
-            }
-
-            return field
-        }
 }

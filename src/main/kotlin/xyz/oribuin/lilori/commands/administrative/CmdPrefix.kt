@@ -6,8 +6,8 @@ import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.handler.Category
 import xyz.oribuin.lilori.handler.Command
 import xyz.oribuin.lilori.handler.CommandEvent
-import xyz.oribuin.lilori.utils.GuildSettings
-import java.awt.Color
+import xyz.oribuin.lilori.managers.GuildSettingsManager
+import xyz.oribuin.lilori.utils.BotUtils
 
 class CmdPrefix(bot: LilOri) : Command(bot) {
     init {
@@ -20,34 +20,22 @@ class CmdPrefix(bot: LilOri) : Command(bot) {
     }
 
     override fun executeCommand(event: CommandEvent) {
-        val args = event.message.contentRaw.split(" ").toTypedArray()
 
-        if (args.size == 1) {
-            event.reply("${event.author.asMention}, Please provide the correct args!")
-            return
-        }
-
-        if (args[0].equals(event.prefix, ignoreCase = true)) {
-            event.reply(event.author.asMention + ", That prefix is already set.")
-            return
-        }
-
-
-        if (event.prefix.length >= 2) {
-            event.reply(event.author.asMention + ", Due to current odd issues, you cannot have a prefix longer than 1 character")
+        if (event.args.size == 1) {
+            event.sendEmbedReply("❗ Invalid Arguments", "The correct usage is ${event.prefix}${name.toLowerCase()} ${arguments?.let { BotUtils.formatList(it) }}")
             return
         }
 
         val embedBuilder = EmbedBuilder()
-                .setTitle("Changed Lil' Ori Prefix")
+                .setTitle("❗ Changed Server Prefix")
                 .setColor(event.color)
                 .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png")
                 .setDescription("""**Old Prefix** ${event.prefix}
                         
-                        **New Prefix** ${args[1]}""".trimMargin())
+                        **New Prefix** ${event.args[1]}""".trimMargin())
 
         event.reply(embedBuilder)
-        bot.guildSettingsManager.updateGuild(event.guild, args[1], event.color)
-        println(event.author.asTag + " Updated \"" + event.guild.name + "\" Prefix to " + args[1])
+        bot.getManager(GuildSettingsManager::class).updateGuild(event.guild, event.args[1], event.color)
+        println(event.author.asTag + " Updated \"" + event.guild.name + "\" Prefix to " + event.args[1])
     }
 }

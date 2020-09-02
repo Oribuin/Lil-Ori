@@ -19,46 +19,57 @@ class CmdBan(bot: LilOri) : Command(bot) {
     }
 
     override fun executeCommand(event: CommandEvent) {
-        // Define all the variables
+        // Delete the command on send for reasons we're not sure of yet
         event.deleteCmd()
 
-        val args = event.message.contentRaw.split(" ").toTypedArray()
+        // Define the message time
         val msgTime = event.message.timeCreated
 
-        if (args.size < 4) {
+        // Check if the user sent the right amount of args
+        if (event.args.size < 4) {
             sendInvalidArgs(event)
             return
         }
 
+        // Check if the user has mentioned anyone
         if (event.message.mentionedMembers.size == 0) {
             sendInvalidUsersMentioned(event)
             return
         }
 
+        // Get the first member they mentioned
         val member = event.message.mentionedMembers[0]
 
+        // Check if the member is null
         if (member == null) {
             sendInvalidUsersMentioned(event)
             return
         }
 
+        // If the user cannot ban the member.
         if (cantBan(event)) {
             sendRankHierarchy(event)
             return
         }
 
         try {
-            val delDays = args[2].toInt()
 
+            // Define the amount of days of messages will be deleted
+            val delDays = event.args[2].toInt()
+
+            // If the delDays is lower than 0 or higher than 100
             if (delDays < 0 || delDays > 100) {
                 sendInvalidNumber(event)
                 return
             }
 
-            val reason = event.message.contentRaw.substring(args[0].length + args[1].length + args[2].length + 3)
+            // Define the ban reason
+            val reason = event.message.contentRaw.substring(event.args[0].length + event.args[1].length + event.args[2].length + 3)
 
+            // Ban User
             member.ban(delDays, reason).queue()
 
+            // Define the embed
             val embedBuilder = EmbedBuilder()
                     .setAuthor("\uD83D\uDC94 Banned User " + member.user.asTag)
                     .setDescription("""Successfully banned ${member.user.asTag} (${member.id}) at
@@ -66,10 +77,13 @@ class CmdBan(bot: LilOri) : Command(bot) {
                     .setColor(event.color)
                     .setFooter("get bonked", "https://img.oribuin.xyz/bot-images/bonk.gif")
 
+            // Send the embed
             event.channel.sendMessage(event.author.asMention).embed(embedBuilder.build()).queue()
 
+            // Catch incorrect number
         } catch (ex: NumberFormatException) {
             sendInvalidNumber(event)
+            // Catch if the user cannot be banned
         } catch (ex: HierarchyException) {
             sendRankHierarchy(event)
         }
@@ -108,6 +122,7 @@ class CmdBan(bot: LilOri) : Command(bot) {
                 .setDescription("Cannot ban this user due to hierarchy!")
                 .setColor(event.color)
                 .setAuthor("~ban @<User> <Delete-Days> <Reason>")
+
         event.channel.sendMessage(event.author.asMention).embed(embed.build()).queue()
     }
 

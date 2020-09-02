@@ -23,7 +23,7 @@ object FileUtils {
 
         if (!file.exists()) {
             if (file.parentFile.exists()) {
-                file.parentFile.mkdirs()
+                file.parentFile.mkdir()
             }
 
             file.createNewFile()

@@ -6,6 +6,7 @@ import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.handler.Category
 import xyz.oribuin.lilori.handler.Command
 import xyz.oribuin.lilori.handler.CommandEvent
+import xyz.oribuin.lilori.managers.TicketManager
 import java.awt.Color
 import java.util.concurrent.TimeUnit
 
@@ -53,6 +54,6 @@ class CmdTicket(bot: LilOri) : Command(bot) {
         println("${event.author.asTag} has created the ticket channel, #$channelName")
 
         // Update User
-        bot.ticketManager.updateUser(event.author, bot.ticketManager.getTicketCount(event.author) + 1)
+        bot.getManager(TicketManager::class).updateUser(event.author, bot.getManager(TicketManager::class).getTicketCount(event.author) + 1)
     }
 }
