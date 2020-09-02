@@ -1,4 +1,4 @@
-package xyz.oribuin.lilori.commands.global.games
+package xyz.oribuin.lilori.commands.games
 
 import net.dv8tion.jda.api.entities.Message
 import xyz.oribuin.lilori.LilOri

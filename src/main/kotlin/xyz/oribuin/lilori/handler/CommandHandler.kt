@@ -1,7 +1,5 @@
 package xyz.oribuin.lilori.handler
 
-import java.util.*
-
 class CommandHandler {
     val commands = mutableListOf<Command>()
 
@@ -24,6 +22,7 @@ class CommandHandler {
 
         return list
     }
+
     fun getCommand(name: String): Command {
         return commands.stream().filter { command: Command -> command.name?.toLowerCase() == name }.findFirst().get()
     }

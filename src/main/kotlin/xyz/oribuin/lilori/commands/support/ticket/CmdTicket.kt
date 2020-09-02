@@ -32,7 +32,7 @@ class CmdTicket(bot: LilOri) : Command(bot) {
         val embedBuilder = EmbedBuilder()
                 .setColor(Color.decode("#687cf9"))
                 .setAuthor("\uD83D\uDC99 Welcome to your ticket channel!")
-                .setDescription("""Welcome to your Ticket channel, ${event.member?.asMention}, Please describe your issue and
+                .setDescription("""Welcome to your Ticket channel, ${event.member.asMention}, Please describe your issue and
                     we will assist you with anything you need.
                     
                     Please put any errors you have inside __https://hasteb.in/__, Please do not type the errors in chat!""".trimMargin())
@@ -42,11 +42,9 @@ class CmdTicket(bot: LilOri) : Command(bot) {
                 .setTopic("🎫 Please explain your issue our support team will be with you soon!").queue { channel ->
                     event.guild.getRoleById("733059033405063298")?.asMention?.let { channel.sendMessage(it).queue { msg -> msg.delete().queue() } }
 
-                    event.member?.let { channel.createPermissionOverride(it).setAllow(Permission.VIEW_CHANNEL).queue() }
-                    event.member?.asMention.let {
-                        if (it != null) {
-                            channel.sendMessage(it).embed(embedBuilder.build()).queue()
-                        }
+                    event.member.let { channel.createPermissionOverride(it).setAllow(Permission.VIEW_CHANNEL).queue() }
+                    event.member.asMention.let {
+                        channel.sendMessage(it).embed(embedBuilder.build()).queue()
                     }
                 }
 
@@ -55,6 +53,6 @@ class CmdTicket(bot: LilOri) : Command(bot) {
         println("${event.author.asTag} has created the ticket channel, #$channelName")
 
         // Update User
-        bot.ticketManager.updateUser(event.author, bot.ticketManager.getTicketCount(event.author))
+        bot.ticketManager.updateUser(event.author, bot.ticketManager.getTicketCount(event.author) + 1)
     }
 }

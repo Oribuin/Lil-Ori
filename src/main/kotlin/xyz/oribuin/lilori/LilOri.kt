@@ -6,19 +6,19 @@ import net.dv8tion.jda.api.OnlineStatus
 import net.dv8tion.jda.api.entities.Activity
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import net.dv8tion.jda.api.requests.GatewayIntent
+import xyz.oribuin.lilori.commands.administrative.CmdPerms
+import xyz.oribuin.lilori.commands.administrative.CmdPrefix
 import xyz.oribuin.lilori.commands.author.CmdEval
 import xyz.oribuin.lilori.commands.author.CmdQuery
 import xyz.oribuin.lilori.commands.author.CmdTest
 import xyz.oribuin.lilori.commands.author.CmdUpdate
-import xyz.oribuin.lilori.commands.global.CmdColor
-import xyz.oribuin.lilori.commands.global.CmdHelp
-import xyz.oribuin.lilori.commands.global.CmdPing
-import xyz.oribuin.lilori.commands.global.administrative.CmdPrefix
-import xyz.oribuin.lilori.commands.global.administrative.CmdPerms
-import xyz.oribuin.lilori.commands.global.games.*
-import xyz.oribuin.lilori.commands.global.moderation.CmdBan
-import xyz.oribuin.lilori.commands.global.moderation.CmdPurge
-import xyz.oribuin.lilori.commands.global.music.*
+import xyz.oribuin.lilori.commands.games.*
+import xyz.oribuin.lilori.commands.general.CmdColor
+import xyz.oribuin.lilori.commands.general.CmdHelp
+import xyz.oribuin.lilori.commands.general.CmdPing
+import xyz.oribuin.lilori.commands.moderation.CmdBan
+import xyz.oribuin.lilori.commands.moderation.CmdPurge
+import xyz.oribuin.lilori.commands.music.*
 import xyz.oribuin.lilori.commands.support.general.CmdAnnounce
 import xyz.oribuin.lilori.commands.support.general.CmdReactionRole
 import xyz.oribuin.lilori.commands.support.ticket.CmdClose
@@ -27,7 +27,6 @@ import xyz.oribuin.lilori.database.DatabaseConnector
 import xyz.oribuin.lilori.database.SQLiteConnector
 import xyz.oribuin.lilori.handler.CommandExecutor
 import xyz.oribuin.lilori.handler.CommandHandler
-import xyz.oribuin.lilori.handler.ConsoleCommandEvent
 import xyz.oribuin.lilori.listeners.GeneralEvents
 import xyz.oribuin.lilori.listeners.support.SupportListeners
 import xyz.oribuin.lilori.managers.DataManager
@@ -36,6 +35,7 @@ import xyz.oribuin.lilori.managers.TicketManager
 import xyz.oribuin.lilori.utils.ConsoleColors
 import xyz.oribuin.lilori.utils.EventWaiter
 import xyz.oribuin.lilori.utils.FileUtils
+import xyz.oribuin.lilori.utils.GuildSettings
 import java.io.File
 import java.util.*
 import javax.security.auth.login.LoginException
@@ -59,7 +59,7 @@ class LilOri : ListenerAdapter() {
     private fun registerCommands() {
         commandHandler.registerCommands(
                 // General Commands
-                CmdHelp(this, eventWaiter), CmdPing(this), CmdPrefix(this),
+                CmdHelp(this), CmdPing(this), CmdPrefix(this),
                 // Music Commands
                 CmdLoop(this), CmdPause(this), CmdPlay(this), CmdQueue(this), CmdStop(this), CmdVolume(this),
                 // Game Commands
@@ -98,7 +98,10 @@ class LilOri : ListenerAdapter() {
         commandHandler = CommandHandler()
         ticketManager = TicketManager(this)
 
+        // Register plugin commands
         this.registerCommands()
+
+        // Enable all the managers
         this.enable()
 
         // Login Bot
@@ -120,11 +123,17 @@ class LilOri : ListenerAdapter() {
 
         val jdaBot = jda.build()
 
+        // Register the statuses
         this.registerStatus(jdaBot)
 
+        // Register the guilds
+        this.registerGuilds(jdaBot)
+
+        // Startup Command Log
         println(ConsoleColors.BLUE_BOLD_BRIGHT + "*=* Loading Lil' Ori Commands *=*" + ConsoleColors.RESET)
         var i = 0
 
+        // Add every command into the console with a number
         for (command in commandHandler.commands)
             if (command.aliases == null)
                 throw IllegalArgumentException(ConsoleColors.RED_BOLD_BRIGHT + "Command aliases does not exists")
@@ -170,5 +179,21 @@ class LilOri : ListenerAdapter() {
             }
         }
         timer.schedule(timerTask, 0, 20000)
+    }
+
+    private fun registerGuilds(jda: JDA) {
+
+        val timer = Timer()
+        val timerTask: TimerTask = object : TimerTask() {
+            override fun run() {
+                for (guild in jda.guilds) {
+                    val guildSettings = GuildSettings(guild)
+                    guildSettingsManager.updateGuild(guild, guildSettings.getPrefix(), guildSettings.getColor())
+
+                }
+            }
+        }
+
+        timer.schedule(timerTask, 5000)
     }
 }

@@ -1,4 +1,4 @@
-package xyz.oribuin.lilori.commands.global.music
+package xyz.oribuin.lilori.commands.music
 
 import net.dv8tion.jda.api.EmbedBuilder
 import xyz.oribuin.lilori.LilOri

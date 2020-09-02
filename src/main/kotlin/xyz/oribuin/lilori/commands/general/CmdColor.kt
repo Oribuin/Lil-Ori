@@ -1,10 +1,11 @@
-package xyz.oribuin.lilori.commands.global
+package xyz.oribuin.lilori.commands.general
 
 import net.dv8tion.jda.api.EmbedBuilder
 import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.handler.Category
 import xyz.oribuin.lilori.handler.Command
 import xyz.oribuin.lilori.handler.CommandEvent
+import xyz.oribuin.lilori.utils.GuildSettings
 import java.awt.Color
 import java.awt.image.BufferedImage
 import java.io.File
@@ -23,11 +24,10 @@ class CmdColor(bot: LilOri) : Command(bot) {
     private lateinit var color: Color
     override fun executeCommand(event: CommandEvent) {
         val args = event.message.contentRaw.split(" ").toTypedArray()
-        println(args.size)
         if (args[1].toLowerCase() == "set") {
 
 
-            if (args.size < 3 ) {
+            if (args.size < 3) {
                 event.reply(event.author.asMention + ", **Usage 1 ${event.prefix}color set 255 0 255**")
                 return
             }
@@ -62,15 +62,8 @@ class CmdColor(bot: LilOri) : Command(bot) {
                             Color: #$hex (${embedColor.red},${embedColor.green},${embedColor.blue})""".trimMargin())
 
                 event.channel.sendFile(file).embed(embedBuilder.build()).queue()
-                bot.connector.connect { connection ->
-                    val getPrefix = "REPLACE INTO guild_settings (guild_id, color) VALUES (?, ?)"
-                    connection.prepareStatement(getPrefix).use { statement ->
-                        statement.setLong(1, event.guild.idLong)
-                        statement.setString(2, hex)
-
-                        statement.executeUpdate()
-                    }
-                }
+                bot.guildSettingsManager.updateGuild(event.guild, event.prefix, Color.decode("#$hex"))
+                println("${event.author.asTag} Updated \"${event.guild.name}\" Color to #$hex")
 
             } catch (ex: NumberFormatException) {
                 event.reply(event.author.asMention + ", Correct usage example " + event.prefix + "color 255 0 255")

@@ -30,7 +30,6 @@ class GuildSettings(var guild: Guild?) {
             connection.prepareStatement(getPrefix).use { statement ->
                 guild?.idLong?.let { statement.setLong(1, it) }
                 statement.setString(2, prefix)
-
                 statement.executeUpdate()
             }
         }

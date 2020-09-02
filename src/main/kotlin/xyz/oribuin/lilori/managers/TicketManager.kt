@@ -16,7 +16,7 @@ class TicketManager(bot: LilOri) : Manager(bot) {
             val updateUser = "REPLACE INTO ticket_count (user_id, count) VALUES (?, ?)"
             connection.prepareStatement(updateUser).use { statement ->
                 statement.setLong(1, user.id.toLong())
-                statement.setInt(2, ticketAmount + 1)
+                statement.setInt(2, ticketAmount)
                 statement.executeUpdate()
             }
         }
@@ -39,8 +39,8 @@ class TicketManager(bot: LilOri) : Manager(bot) {
             connection.prepareStatement(getTicketCount).use { statement ->
                 statement.setLong(1, user.id.toLong())
                 val result = statement.executeQuery()
-                result.next()
-                ticketCount = result.getInt(1)
+                if (result.next())
+                    ticketCount = result.getInt(1)
             }
         }
 

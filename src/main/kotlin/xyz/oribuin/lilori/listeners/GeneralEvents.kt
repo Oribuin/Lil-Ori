@@ -17,15 +17,6 @@ import java.util.*
 import java.util.function.Consumer
 
 class GeneralEvents(private val bot: LilOri) : ListenerAdapter() {
-    override fun onReady(event: ReadyEvent) {
-
-        for (guild in event.jda.guilds) {
-            val guildSettings = GuildSettings(guild)
-
-            bot.guildSettingsManager.updateGuild(guild, guildSettings.getPrefix(), guildSettings.getColor())
-        }
-    }
-
     override fun onDisconnect(event: DisconnectEvent) {
         event.jda.guilds.forEach(Consumer { guild: Guild -> guild.audioManager.closeAudioConnection() })
     }

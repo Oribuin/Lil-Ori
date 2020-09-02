@@ -2,6 +2,7 @@ package xyz.oribuin.lilori.managers
 
 import net.dv8tion.jda.api.entities.Guild
 import xyz.oribuin.lilori.LilOri
+import xyz.oribuin.lilori.Settings
 import xyz.oribuin.lilori.utils.GuildSettings
 import xyz.oribuin.lilori.utils.GuildSettings.Companion.default
 import java.awt.Color
@@ -30,7 +31,7 @@ class GuildSettingsManager(bot: LilOri) : Manager(bot) {
             val settings = default
             guildSettings[guild.idLong] = settings
 
-            val hex: String = String.format("%02x%02x%02x", settings.getColor().red, settings.getColor().green, settings.getColor().blue)
+            val hex: String = String.format("#%02x%02x%02x", settings.getColor().red, settings.getColor().green, settings.getColor().blue)
 
             val query = "REPLACE INTO guild_settings (guild_id, guild_name, prefix, color) VALUES (?, ?, ?, ?)"
             connection.prepareStatement(query).use { statement ->
@@ -85,19 +86,10 @@ class GuildSettingsManager(bot: LilOri) : Manager(bot) {
     }
 
 
-    fun updateGuild(guild: Guild, prefix: String?, color: Color?) {
-        val guildSettings = GuildSettings(guild)
-        if (prefix != null) {
-            guildSettings.setPrefix(prefix)
-        }
-
-        if (color != null) {
-            guildSettings.setColor(String.format("%02x%02x%02x", color.red, color.green, color.blue))
-        }
-
+    fun updateGuild(guild: Guild, prefix: String, color: Color) {
         bot.connector.connect { connection: Connection ->
-            val updateSettings = "REPLACE INTO guild_settings (guild_id, guild_name, prefix, color),  VALUES (?, ?, ?, ?)"
-            val hex = String.format("%02x%02x%02x", color?.red, color?.green, color?.blue)
+            val updateSettings = "REPLACE INTO guild_settings (guild_id, guild_name, prefix, color) VALUES (?, ?, ?, ?)"
+            val hex = String.format("#%02x%02x%02x", color.red, color.green, color.blue)
 
             connection.prepareStatement(updateSettings).use { statement ->
                 statement.setLong(1, guild.idLong)

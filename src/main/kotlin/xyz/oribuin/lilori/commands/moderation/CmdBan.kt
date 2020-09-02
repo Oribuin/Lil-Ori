@@ -1,4 +1,4 @@
-package xyz.oribuin.lilori.commands.global.moderation
+package xyz.oribuin.lilori.commands.moderation
 
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.Permission

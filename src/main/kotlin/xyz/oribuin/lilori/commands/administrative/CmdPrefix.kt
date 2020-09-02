@@ -1,4 +1,4 @@
-package xyz.oribuin.lilori.commands.global.administrative
+package xyz.oribuin.lilori.commands.administrative
 
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.Permission
@@ -6,6 +6,8 @@ import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.handler.Category
 import xyz.oribuin.lilori.handler.Command
 import xyz.oribuin.lilori.handler.CommandEvent
+import xyz.oribuin.lilori.utils.GuildSettings
+import java.awt.Color
 
 class CmdPrefix(bot: LilOri) : Command(bot) {
     init {
@@ -45,7 +47,7 @@ class CmdPrefix(bot: LilOri) : Command(bot) {
                         **New Prefix** ${args[1]}""".trimMargin())
 
         event.reply(embedBuilder)
-        bot.guildSettingsManager.updateGuild(event.guild, args[1], null)
+        bot.guildSettingsManager.updateGuild(event.guild, args[1], event.color)
         println(event.author.asTag + " Updated \"" + event.guild.name + "\" Prefix to " + args[1])
     }
 }

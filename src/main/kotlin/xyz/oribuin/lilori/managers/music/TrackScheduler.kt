@@ -5,7 +5,7 @@ import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason
 import xyz.oribuin.lilori.LilOri
-import xyz.oribuin.lilori.commands.global.music.CmdLoop
+import xyz.oribuin.lilori.commands.music.CmdLoop
 import java.util.*
 
 class TrackScheduler(private val bot: LilOri, private val player: AudioPlayer) : AudioEventAdapter() {

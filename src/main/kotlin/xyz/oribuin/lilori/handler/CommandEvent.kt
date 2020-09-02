@@ -111,7 +111,7 @@ class CommandEvent(private val bot: LilOri, val event: GuildMessageReceivedEvent
     fun sendEmbedReply(authorMessage: String, description: String) {
         val embedBuilder = EmbedBuilder()
                 .setFooter("Created by Ori#0004", "https://img.oribuin.xyz/profile.png")
-                .setColor(Color.PINK)
+                .setColor(color)
                 .setDescription(description)
                 .setAuthor(authorMessage)
 

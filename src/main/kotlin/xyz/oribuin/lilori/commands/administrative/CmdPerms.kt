@@ -1,4 +1,4 @@
-package xyz.oribuin.lilori.commands.global.administrative
+package xyz.oribuin.lilori.commands.administrative
 
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.Permission

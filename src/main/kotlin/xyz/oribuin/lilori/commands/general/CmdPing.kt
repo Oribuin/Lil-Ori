@@ -1,4 +1,4 @@
-package xyz.oribuin.lilori.commands.global
+package xyz.oribuin.lilori.commands.general
 
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.Message

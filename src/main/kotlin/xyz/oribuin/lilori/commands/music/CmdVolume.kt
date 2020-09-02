@@ -1,4 +1,4 @@
-package xyz.oribuin.lilori.commands.global.music
+package xyz.oribuin.lilori.commands.music
 
 import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.handler.Category
