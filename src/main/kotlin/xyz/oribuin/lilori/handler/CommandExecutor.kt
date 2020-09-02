@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter
 import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.Settings
 import xyz.oribuin.lilori.data.GuildSettings
+import java.text.SimpleDateFormat
 
 class CommandExecutor(private val bot: LilOri, private val commandHandler: CommandHandler) : ListenerAdapter() {
 
@@ -73,6 +74,11 @@ class CommandExecutor(private val bot: LilOri, private val commandHandler: Comma
 
                 // Execute this command
                 cmd.executeCommand(CommandEvent(bot, event))
+                println("""$blue${event.author.asTag}$reset ($red${event.author.id}$reset) has executed command $blue${cmd.name}$reset inside guild $blue${event.guild.name}$reset ($red${event.guild.id}$reset)
+
+Time: $blue${SimpleDateFormat("HH:mm:ss dd/m/yyyy").format(System.currentTimeMillis())}$reset
+Message: $blue${event.message.contentRaw}$reset""".trimIndent())
+
             } catch (ex: PermissionException) {
                 // Send permission exception log to console
                 println(("Error Running Command: ${cmd.name} " +
@@ -84,4 +90,7 @@ class CommandExecutor(private val bot: LilOri, private val commandHandler: Comma
         }
     }
 
+    var blue = "\u001b[1;94m"
+    var reset = "\u001B[0m"
+    var red = "\u001B[1;91m"
 }
