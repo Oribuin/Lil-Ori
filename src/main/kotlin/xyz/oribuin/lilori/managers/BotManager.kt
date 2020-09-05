@@ -8,6 +8,10 @@ import xyz.oribuin.lilori.data.GuildSettings
 import java.util.*
 
 class BotManager(bot: LilOri): Manager(bot) {
+    
+    // Define activities list
+    var activities = mutableListOf<String>()
+    
     override fun enable() {
         // Unused
     }
@@ -16,7 +20,7 @@ class BotManager(bot: LilOri): Manager(bot) {
     fun registerStatus(jda: JDA) {
         jda.presence.setStatus(OnlineStatus.DO_NOT_DISTURB)
 
-        val activities = listOf(
+        activities = mutableListOf(
                 Activity.watching("https://oribuin.xyz/"),
                 Activity.watching("#BlackLivesMatter"),
                 Activity.watching("https://jars.oribuin.xyz/"),
