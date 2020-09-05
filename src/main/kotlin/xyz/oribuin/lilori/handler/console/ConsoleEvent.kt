@@ -1,5 +1,6 @@
 package xyz.oribuin.lilori.handler.console
 
+import net.dv8tion.jda.api.JDA
 import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.utils.ConsoleColors
 
@@ -12,4 +13,7 @@ class ConsoleEvent(private val bot: LilOri, private val command: String) {
         get() = command
 
     val args = command.split(" ").toTypedArray()
+
+    val jda: JDA?
+        get() = bot.jdabot
 }

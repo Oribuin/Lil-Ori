@@ -4,14 +4,15 @@ import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.OnlineStatus
 import net.dv8tion.jda.api.entities.Activity
 import xyz.oribuin.lilori.LilOri
+import xyz.oribuin.lilori.commands.console.CmdActivity
 import xyz.oribuin.lilori.data.GuildSettings
 import java.util.*
 
-class BotManager(bot: LilOri): Manager(bot) {
-    
+class BotManager(bot: LilOri) : Manager(bot) {
+
     // Define activities list
-    var activities = mutableListOf<String>()
-    
+    var activities = mutableListOf<Activity>()
+
     override fun enable() {
         // Unused
     }
@@ -19,7 +20,6 @@ class BotManager(bot: LilOri): Manager(bot) {
 
     fun registerStatus(jda: JDA) {
         jda.presence.setStatus(OnlineStatus.DO_NOT_DISTURB)
-
         activities = mutableListOf(
                 Activity.watching("https://oribuin.xyz/"),
                 Activity.watching("#BlackLivesMatter"),
@@ -34,7 +34,9 @@ class BotManager(bot: LilOri): Manager(bot) {
         val timerTask: TimerTask = object : TimerTask() {
             override fun run() {
                 val randomAnswer = Random().nextInt(activities.size)
-                jda.presence.activity = activities[randomAnswer]
+                if (CmdActivity.instance.isLooping) {
+                    jda.presence.activity = activities[randomAnswer]
+                }
             }
         }
         timer.schedule(timerTask, 0, 20000)

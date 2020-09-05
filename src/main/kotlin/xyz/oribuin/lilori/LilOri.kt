@@ -23,10 +23,10 @@ import kotlin.reflect.KClass
 
 class LilOri : ListenerAdapter() {
     private val managers = mutableMapOf<KClass<out Manager>, Manager>()
+    var jdabot: JDA? = null
 
     // Define handlers
     var connector: DatabaseConnector
-
 
     // Define others
     val eventWaiter = EventWaiter()
@@ -71,17 +71,17 @@ class LilOri : ListenerAdapter() {
         for (intent in GatewayIntent.values())
             jda.enableIntents(intent)
 
-        val jdaBot = jda.build()
+        this.jdabot = jda.build()
 
         // Get the BotManager
         val botManager = getManager(BotManager::class)
 
         // Register values specifically
-        botManager.registerGuilds(jdaBot)
-        botManager.registerStatus(jdaBot)
+        botManager.registerGuilds(jdabot!!)
+        botManager.registerStatus(jdabot!!)
 
         // Startup Log
-        this.logStartup(jdaBot)
+        this.logStartup(jdabot!!)
 
         // Register console commands
         ConsoleCmdExecutor(this, getManager(ConsoleCMDHandler::class))

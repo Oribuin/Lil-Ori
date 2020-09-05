@@ -24,10 +24,10 @@ class CmdReactionRole(bot: LilOri) : Command(bot) {
         val embedBuilder = EmbedBuilder()
                 .setAuthor("\uD83D\uDC96 Reaction Roles")
                 .setColor(Color.decode("#70b8ff"))
-                .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png")
+                .setFooter("Created by Ori#0004", "https://img.oribuin.xyz/profile.png")
                 .setDescription("""• <@&733512602725908573> - :warning:""")
 
-        event.channel.sendMessage(embedBuilder.build()).queue { msg: Message ->
+        event.channel.sendMessage(embedBuilder.build()).queue { msg ->
             msg.addReaction("⚠").queue()
         }
     }

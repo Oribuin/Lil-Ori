@@ -20,7 +20,7 @@ class CmdCoinflip(bot: LilOri) : Command(bot) {
     override fun executeCommand(event: CommandEvent) {
         // Define the rates
         val lowerInt = 1
-        val higherInt = 105
+        val higherInt = 10
 
         // Create the first embed.
         val embedBuilder = EmbedBuilder()
