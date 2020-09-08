@@ -74,10 +74,13 @@ class CommandExecutor(private val bot: LilOri, private val commandHandler: Comma
 
                 // Execute this command
                 cmd.executeCommand(CommandEvent(bot, event))
+                /*
                 println("""$blue${event.author.asTag}$reset ($red${event.author.id}$reset) has executed command $blue${cmd.name}$reset inside guild $blue${event.guild.name}$reset ($red${event.guild.id}$reset)
 
 Time: $blue${SimpleDateFormat("HH:mm:ss dd/m/yyyy").format(System.currentTimeMillis())}$reset
 Message: $blue${event.message.contentRaw}$reset""".trimIndent())
+
+                 */
 
             } catch (ex: PermissionException) {
                 // Send permission exception log to console
