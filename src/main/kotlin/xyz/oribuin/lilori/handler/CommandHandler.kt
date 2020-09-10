@@ -1,23 +1,23 @@
 package xyz.oribuin.lilori.handler
 
 import xyz.oribuin.lilori.LilOri
-import xyz.oribuin.lilori.commands.discord.administrative.CmdPerms
-import xyz.oribuin.lilori.commands.discord.administrative.CmdPrefix
-import xyz.oribuin.lilori.commands.discord.author.CmdQuery
-import xyz.oribuin.lilori.commands.discord.author.CmdTest
-import xyz.oribuin.lilori.commands.discord.author.CmdUpdate
-import xyz.oribuin.lilori.commands.discord.games.*
-import xyz.oribuin.lilori.commands.discord.general.CmdColor
-import xyz.oribuin.lilori.commands.discord.general.CmdHelp
-import xyz.oribuin.lilori.commands.discord.general.CmdPing
-import xyz.oribuin.lilori.commands.discord.moderation.CmdBan
-import xyz.oribuin.lilori.commands.discord.moderation.CmdPurge
-import xyz.oribuin.lilori.commands.discord.music.*
-import xyz.oribuin.lilori.commands.discord.support.general.CmdAnnounce
-import xyz.oribuin.lilori.commands.discord.support.general.CmdReactionRole
-import xyz.oribuin.lilori.commands.discord.support.ticket.CmdClose
-import xyz.oribuin.lilori.commands.discord.support.ticket.CmdTicket
-import xyz.oribuin.lilori.managers.Manager
+import xyz.oribuin.lilori.command.discord.administrative.CmdPerms
+import xyz.oribuin.lilori.command.discord.administrative.CmdPrefix
+import xyz.oribuin.lilori.command.discord.author.CmdQuery
+import xyz.oribuin.lilori.command.discord.author.CmdTest
+import xyz.oribuin.lilori.command.discord.author.CmdUpdate
+import xyz.oribuin.lilori.command.discord.game.*
+import xyz.oribuin.lilori.command.discord.general.CmdColor
+import xyz.oribuin.lilori.command.discord.general.CmdHelp
+import xyz.oribuin.lilori.command.discord.general.CmdPing
+import xyz.oribuin.lilori.command.discord.moderation.CmdBan
+import xyz.oribuin.lilori.command.discord.moderation.CmdPurge
+import xyz.oribuin.lilori.command.discord.music.*
+import xyz.oribuin.lilori.command.discord.support.general.CmdAnnounce
+import xyz.oribuin.lilori.command.discord.support.general.CmdReactionRole
+import xyz.oribuin.lilori.command.discord.support.ticket.CmdClose
+import xyz.oribuin.lilori.command.discord.support.ticket.CmdTicket
+import xyz.oribuin.lilori.manager.Manager
 
 class CommandHandler(bot: LilOri): Manager(bot) {
     val commands = mutableListOf<Command>()

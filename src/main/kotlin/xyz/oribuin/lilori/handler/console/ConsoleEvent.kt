@@ -2,7 +2,7 @@ package xyz.oribuin.lilori.handler.console
 
 import net.dv8tion.jda.api.JDA
 import xyz.oribuin.lilori.LilOri
-import xyz.oribuin.lilori.utils.ConsoleColors
+import xyz.oribuin.lilori.util.ConsoleColors
 
 class ConsoleEvent(private val bot: LilOri, private val command: String) {
     fun print(any: Any) {
