@@ -44,6 +44,7 @@ class LilOri : ListenerAdapter() {
         getManager(BotManager::class)
         getManager(CommandHandler::class)
         getManager(ConsoleCMDHandler::class)
+        getManager(EconomyManager::class)
         getManager(GuildSettingsManager::class)
         getManager(QuoteManager::class)
         getManager(TicketManager::class)

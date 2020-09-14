@@ -8,6 +8,7 @@ data class Category(val type: Type) {
         AUTHOR("Author", null),
         ADMIN("Admin", Permission.ADMINISTRATOR),
         GAMES("Games", null),
+        ECONOMY("Economy", null),
         GENERAL("General", null),
         MODERATION("Moderation", null),
         MUSIC("Music", null),

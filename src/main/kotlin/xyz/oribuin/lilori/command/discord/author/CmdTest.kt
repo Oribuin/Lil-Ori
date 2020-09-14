@@ -16,6 +16,6 @@ class CmdTest(bot: LilOri) : Command(bot) {
     }
 
     override fun executeCommand(event: CommandEvent) {
-        event.deleteCmd()
+        event.guild.members.forEach { x -> print(x.user.asTag) }
     }
 }
