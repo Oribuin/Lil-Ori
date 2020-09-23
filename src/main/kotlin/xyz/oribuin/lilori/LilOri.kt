@@ -34,9 +34,7 @@ class LilOri : ListenerAdapter() {
     init {
         instance = this
         // Setup the SQLite Database
-        val file = File("data", "lilori.db")
-        FileUtils.createFile(file)
-        connector = SQLiteConnector(file)
+        connector = SQLiteConnector(FileUtils.createFile("data", "lilori.db"))
 
 
         // Setup Managers
@@ -56,21 +54,9 @@ class LilOri : ListenerAdapter() {
         this.getManager(ConsoleCMDHandler::class).registerCommands()
 
         // Login Bot
-        val jda = JDABuilder.createDefault(
-                Settings.TOKEN,
-                GatewayIntent.GUILD_MEMBERS,
-                GatewayIntent.GUILD_MESSAGES,
-                GatewayIntent.GUILD_BANS,
-                GatewayIntent.GUILD_EMOJIS,
-                GatewayIntent.GUILD_INVITES,
-                GatewayIntent.GUILD_VOICE_STATES,
-                GatewayIntent.GUILD_PRESENCES,
-                GatewayIntent.GUILD_MESSAGE_REACTIONS,
-                GatewayIntent.GUILD_MESSAGE_TYPING
-        ).addEventListeners(CommandExecutor(this, getManager(CommandHandler::class)), GeneralEvents(this), SupportListeners(), eventWaiter, this)
-
-        for (intent in GatewayIntent.values())
-            jda.enableIntents(intent)
+        val jda = JDABuilder.create(Settings.TOKEN, GatewayIntent.values().toList())
+                .addEventListeners(CommandExecutor(this, getManager(CommandHandler::class)), GeneralEvents(this), SupportListeners(), eventWaiter, this)
+                .enableIntents(GatewayIntent.values().toList())
 
         this.jdabot = jda.build()
 

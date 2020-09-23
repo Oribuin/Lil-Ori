@@ -21,6 +21,7 @@ class CmdPerms(bot: LilOri) : Command(bot) {
     override fun executeCommand(event: CommandEvent) {
         val perms = mutableSetOf<String>()
 
+        event.member
         /// Add all the permissions to the set.
         event.selfMember.permissions.forEach(Consumer { permission: Permission -> perms.add(StringUtils.capitalize(permission.getName()).replace("_", " ")) })
 
