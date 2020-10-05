@@ -19,7 +19,7 @@ class CmdColor(bot: LilOri) : Command(bot) {
         name = "Color"
         category = Category(Category.Type.GENERAL)
         description = "See a color in an embed."
-        aliases = emptyList()
+        aliases = listOf("Colour")
         arguments = listOf("[set]", "<#hex>/<r g b>")
     }
 

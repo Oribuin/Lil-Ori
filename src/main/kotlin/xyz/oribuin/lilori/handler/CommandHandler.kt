@@ -7,6 +7,7 @@ import xyz.oribuin.lilori.command.discord.author.CmdQuery
 import xyz.oribuin.lilori.command.discord.author.CmdTest
 import xyz.oribuin.lilori.command.discord.author.CmdUpdate
 import xyz.oribuin.lilori.command.discord.economy.CmdBalance
+import xyz.oribuin.lilori.command.discord.economy.CmdFeed
 import xyz.oribuin.lilori.command.discord.game.*
 import xyz.oribuin.lilori.command.discord.general.CmdColor
 import xyz.oribuin.lilori.command.discord.general.CmdHelp

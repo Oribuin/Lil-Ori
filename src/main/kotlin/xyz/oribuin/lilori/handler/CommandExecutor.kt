@@ -16,6 +16,7 @@ class CommandExecutor(private val bot: LilOri, private val commandHandler: Comma
         // TODO: Create a command client to store owner id
         val guildSettings = GuildSettings(event.guild)
         val content = event.message.contentRaw.toLowerCase()
+        val prefix = guildSettings.getPrefix().toLowerCase()
 
         if (!guildSettings.getPrefix().toLowerCase().let { content.startsWith(it) })
             return
@@ -27,7 +28,7 @@ class CommandExecutor(private val bot: LilOri, private val commandHandler: Comma
                 requireNotNull(cmd.aliases) { "Null Aliases in command " + cmd.name }
 
                 // Check if command name or alias
-                if (!cmd.name.equals(args[0].substring(1), ignoreCase = true) && cmd.aliases?.stream()?.noneMatch { x: String -> x.equals(args[0].substring(1), ignoreCase = true) } == true)
+                if (!cmd.name.equals(args[0].substring(prefix.length), ignoreCase = true) && cmd.aliases?.stream()?.noneMatch { x: String -> x.equals(args[0].substring(prefix.length), ignoreCase = true) } == true)
                     continue
 
                 // Check if command is enabled
@@ -74,13 +75,6 @@ class CommandExecutor(private val bot: LilOri, private val commandHandler: Comma
 
                 // Execute this command
                 cmd.executeCommand(CommandEvent(bot, event))
-                /*
-                println("""$blue${event.author.asTag}$reset ($red${event.author.id}$reset) has executed command $blue${cmd.name}$reset inside guild $blue${event.guild.name}$reset ($red${event.guild.id}$reset)
-
-Time: $blue${SimpleDateFormat("HH:mm:ss dd/m/yyyy").format(System.currentTimeMillis())}$reset
-Message: $blue${event.message.contentRaw}$reset""".trimIndent())
-
-                 */
 
             } catch (ex: PermissionException) {
                 // Send permission exception log to console
@@ -92,8 +86,4 @@ Message: $blue${event.message.contentRaw}$reset""".trimIndent())
             }
         }
     }
-
-    var blue = "\u001b[1;94m"
-    var reset = "\u001B[0m"
-    var red = "\u001B[1;91m"
 }
