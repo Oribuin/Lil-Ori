@@ -74,7 +74,7 @@ class CmdColor(bot: LilOri) : Command(bot) {
                 // Create the embed
                 val embedBuilder = EmbedBuilder()
                         .setTitle("\uD83D\uDD8C Changed Guild Color")
-                        .setFooter("Created by Ori#0004", "https://img.oribuin.xyz/profile.png")
+                        .setFooter("Created by Ori#0004", "http://img.oribuin.xyz/profile.png")
                         .setDescription("""You have changed the guild's embed color, Try it out by tagging ${event.selfMember.asMention} in chat!
                             
                             **»** Color: $hex (${color.red},${color.green},${color.blue})
@@ -129,7 +129,7 @@ class CmdColor(bot: LilOri) : Command(bot) {
             // Create the embed
             val embedBuilder = EmbedBuilder()
                     .setTitle("\uD83D\uDD8C Colour Showcase")
-                    .setFooter("Created by Ori#0004", "https://img.oribuin.xyz/profile.png")
+                    .setFooter("Created by Ori#0004", "http://img.oribuin.xyz/profile.png")
                     .setDescription("""Here is the color you request, ${event.member.asMention}!
                             
                             **»** Color: $hex (${embedColor.red},${embedColor.green},${embedColor.blue})

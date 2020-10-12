@@ -63,13 +63,13 @@ class CmdEightball(bot: LilOri) : Command(bot) {
         // Define the embed.
         val embedBuilder = EmbedBuilder()
                 .setAuthor("\uD83D\uDD2E Lil' Ori's Magic 8Ball")
-                .setThumbnail("https://img.oribuin.xyz/lilori/8ball.png")
+                .setThumbnail("http://img.oribuin.xyz/lilori/8ball.png")
                 .setDescription("""**»** Question
                     $stringBuilder
                     
                     **»** Answer
                     ${ballAnswers[randomAnswer]}""".trimIndent())
-                .setFooter("Created by Ori#0004", "https://img.oribuin.xyz/profile.png")
+                .setFooter("Created by Ori#0004", "http://img.oribuin.xyz/profile.png")
                 .setColor(event.color)
 
 

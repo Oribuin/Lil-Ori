@@ -6,6 +6,7 @@ import xyz.oribuin.lilori.handler.Category
 import xyz.oribuin.lilori.handler.Command
 import xyz.oribuin.lilori.handler.CommandEvent
 import java.awt.Color
+import java.net.InetAddress
 import java.util.concurrent.TimeUnit
 
 class CmdPing(bot: LilOri) : Command(bot) {
@@ -18,32 +19,41 @@ class CmdPing(bot: LilOri) : Command(bot) {
     }
 
     override fun executeCommand(event: CommandEvent) {
+        var ping: Long
+        val embedBuilder = EmbedBuilder()
 
-        // Define the bot ping
-        val ping = event.jda.gatewayPing
-        val embedBuilder = EmbedBuilder().setDescription("Pinging Lil' Ori")
+        if (event.args.size < 2) {
+            embedBuilder.setDescription("Pinging Lil' Ori")
 
-        if (ping < 101) {
-            embedBuilder.setColor(Color.green)
-        }
+            ping = event.jda.gatewayPing
+            // Define the bot ping
+            //val ping = event.jda.gatewayPing
+            if (ping < 101) {
+                embedBuilder.setColor(Color.green)
+            }
 
-        // If Ping is Higher than 100, Do yellow
-        if (ping > 100) {
-            embedBuilder.setColor(Color.decode("#ffff00"))
-        }
+            // If Ping is Higher than 100, Do yellow
+            if (ping > 100) {
+                embedBuilder.setColor(Color.decode("#ffff00"))
+            }
 
-        // If Ping is Higher than 200 Do Orange
-        if (ping > 199) {
-            embedBuilder.setColor(Color.decode("#ffa500"))
-        }
+            // If Ping is Higher than 200 Do Orange
+            if (ping > 199) {
+                embedBuilder.setColor(Color.decode("#ffa500"))
+            }
 
-        // If Ping is higher than 300, Do Red
-        if (ping > 299) {
-            embedBuilder.setColor(Color.red)
+            // If Ping is higher than 300, Do Red
+            if (ping > 299) {
+                embedBuilder.setColor(Color.red)
+            }
+        } else {
+            val address = InetAddress.getByName(event.args[1].toLowerCase())
+
+.
         }
 
         // Send the embed to the channel
-        event.channel.sendMessage(embedBuilder.build()).queue { message  ->
+        event.channel.sendMessage(embedBuilder.build()).queue { message ->
 
             // Define a new embed
             val newEmbed = EmbedBuilder()

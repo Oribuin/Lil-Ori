@@ -30,7 +30,7 @@ class CmdPerms(bot: LilOri) : Command(bot) {
                 .setAuthor("\uD83D\uDCD5 Lil' Ori Permissions")
                 .setColor(event.color)
                 .setDescription(perms.toString().removePrefix("[").removeSuffix("]").replace(",", "\n **»**"))
-                .setFooter("Created by Ori#0004", "https://img.oribuin.xyz/profile.png")
+                .setFooter("Created by Ori#0004", "http://img.oribuin.xyz/profile.png")
 
         event.reply(embedBuilder.build())
     }

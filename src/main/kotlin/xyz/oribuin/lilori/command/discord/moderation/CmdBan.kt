@@ -75,7 +75,7 @@ class CmdBan(bot: LilOri) : Command(bot) {
                     .setDescription("""Successfully banned ${member.user.asTag} (${member.id}) at
                          ${msgTime.hour}h, ${msgTime.minute}m & ${msgTime.second}s on ${msgTime.dayOfMonth} ${msgTime.month.name.toLowerCase()} for $reason""".trimMargin())
                     .setColor(event.color)
-                    .setFooter("get bonked", "https://img.oribuin.xyz/bot-images/bonk.gif")
+                    .setFooter("get bonked", "http://img.oribuin.xyz/bot-images/bonk.gif")
 
             // Send the embed
             event.channel.sendMessage(event.author.asMention).embed(embedBuilder.build()).queue()

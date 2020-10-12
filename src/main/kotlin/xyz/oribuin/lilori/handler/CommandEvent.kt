@@ -47,6 +47,10 @@ class CommandEvent(private val bot: LilOri, val event: GuildMessageReceivedEvent
         }
     }
 
+    fun getMemberFromString(member: String): Member? {
+        return event.guild.getMemberByTag(member) ?: event.guild.getMembersByEffectiveName(member, true)[0] ?: event.guild.getMemberById(member)
+    }
+
     val prefix: String
         get() = GuildSettings(guild).getPrefix()
 
@@ -112,7 +116,7 @@ class CommandEvent(private val bot: LilOri, val event: GuildMessageReceivedEvent
 
     fun sendEmbedReply(authorMessage: String, description: String) {
         val embedBuilder = EmbedBuilder()
-                .setFooter("Created by Ori#0004", "https://img.oribuin.xyz/profile.png")
+                .setFooter("Created by Ori#0004", "http://img.oribuin.xyz/profile.png")
                 .setColor(color)
                 .setDescription(description)
                 .setAuthor(authorMessage)

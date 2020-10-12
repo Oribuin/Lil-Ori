@@ -16,6 +16,42 @@ class CmdTest(bot: LilOri) : Command(bot) {
     }
 
     override fun executeCommand(event: CommandEvent) {
-        event.guild.members.forEach { x -> print(x.user.asTag) }
+        /*
+        if (event.args.size < 2) {
+            event.reply("Invalid arguments.")
+            return
+        }
+
+        val content = java.lang.String.join(" ", *event.args).substring(event.args[0].length)
+
+        event.textChannel.createWebhook("Example Webhook").queue { webhook ->
+
+            val json = JsonObject()
+            json.addProperty("content", content)
+
+            val embedJson = JsonObject()
+            json.addProperty("title", "Title")
+            json.addProperty("description", "Description")
+
+            val embedArray = JsonArray()
+            embedArray.add(embedJson)
+            json.add("embeds", embedArray)
+
+            val url = URL(webhook.url)
+            val connection = url.openConnection() as HttpURLConnection
+            connection.requestMethod = "POST"
+            connection.setRequestProperty("Content-Type", "application/json")
+            connection.setRequestProperty("User-Agent", "Lil' Ori Test")
+            connection.doOutput = true
+            connection.outputStream.use { out ->
+                out.write(json.toString().toByteArray(StandardCharsets.UTF_8))
+                out.flush()
+            }
+            connection.inputStream.close()
+            connection.disconnect()
+        }
+         */
     }
+
+
 }

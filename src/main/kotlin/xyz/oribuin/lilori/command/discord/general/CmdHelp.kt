@@ -85,8 +85,9 @@ class CmdHelp(bot: LilOri) : Command(bot) {
             if (category == Type.AUTHOR && event.author.id != "345406020450779149")
                 continue
 
-            if (category == Type.ECONOMY && event.guild.id != "731659405958971413")
+            if (category == Type.ECONOMY || category == Type.SUPPORT && event.guild.id != "731659405958971413")
                 continue
+
 
             // If the category permission is null or if the category permission is null and user has permission for it
             // Add category to the string builder

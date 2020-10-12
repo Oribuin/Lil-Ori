@@ -49,7 +49,7 @@ class CmdAnnounce(bot: LilOri) : Command(bot) {
                 val embedBuilder = EmbedBuilder()
                         .setColor(Color.BLUE)
                         .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png")
-                        .setAuthor("Announcement By ${event.author.name}", null, "https://img.oribuin.xyz/bot-images/announcement.jpg")
+                        .setAuthor("Announcement By ${event.author.name}", null, "http://img.oribuin.xyz/bot-images/announcement.jpg")
                         .setDescription(announcement)
                         .setTimestamp(OffsetDateTime.now())
 
@@ -78,15 +78,12 @@ class CmdAnnounce(bot: LilOri) : Command(bot) {
 
                 val embedBuilder = EmbedBuilder()
                         .setColor(Color.BLUE)
-                        .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png")
-                        .setAuthor("Plugin Update: ${event.args[2]}", null, "https://img.oribuin.xyz/bot-images/announcement.jpg")
-                        .setDescription("""$changelog
-                            
-                        Find the latest jar file on https://jars.oribuin.xyz/""".trimMargin())
+                        .setFooter("Created by Oribuin", "http://img.oribuin.xyz/profile.png")
+                        .setAuthor("Plugin Update: ${event.args[2]}", null, "http://img.oribuin.xyz/bot-images/announcement.jpg")
+                        .setDescription(changelog)
                         .setTimestamp(OffsetDateTime.now())
 
-                (channel
-                        ?: return).sendMessage(event.guild.getRolesByName("Plugin Updates", true)[0].asMention).embed(embedBuilder.build()).queue()
+                (channel ?: return).sendMessage(event.guild.getRolesByName("Plugin Updates", true)[0].asMention).embed(embedBuilder.build()).queue()
                 event.reply("${event.author.asMention} Successfully sent plugin update to ${channel.asMention}")
             }
         }

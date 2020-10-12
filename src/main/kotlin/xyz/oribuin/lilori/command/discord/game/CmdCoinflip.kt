@@ -25,7 +25,7 @@ class CmdCoinflip(bot: LilOri) : Command(bot) {
         // Create the first embed.
         val embedBuilder = EmbedBuilder()
                 .setAuthor("\uD83D\uDCB0 Flipping the coin")
-                .setFooter("Created by Ori#0004", "https://img.oribuin.xyz/profile.png")
+                .setFooter("Created by Ori#0004", "http://img.oribuin.xyz/profile.png")
                 .setImage("https://media1.tenor.com/images/938e1fc4fcf2e136855fd0e83b1e8a5f/tenor.gif")
                 .setColor(event.color)
                 .build()
@@ -38,7 +38,7 @@ class CmdCoinflip(bot: LilOri) : Command(bot) {
             // Create a new embed
             val embed = EmbedBuilder()
                     .setColor(event.color)
-                    .setFooter("Created by Ori#0004", "https://img.oribuin.xyz/profile.png")
+                    .setFooter("Created by Ori#0004", "http://img.oribuin.xyz/profile.png")
 
             // If the chance is higher than 100, Drop the coin.
             if (randomInt > 100) {

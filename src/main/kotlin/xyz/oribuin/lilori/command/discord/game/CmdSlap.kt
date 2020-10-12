@@ -66,7 +66,7 @@ class CmdSlap(bot: LilOri) : Command(bot) {
         val embedBuilder = EmbedBuilder()
                 .setDescription("${event.author.asMention} **Slapped** ${BotUtils.formatList(userMentions)}**!**")
                 .setImage(gifUrls[randomGif])
-                .setFooter("Created by Ori#0004", "https://img.oribuin.xyz/profile.png")
+                .setFooter("Created by Ori#0004", "http://img.oribuin.xyz/profile.png")
                 .setColor(event.color)
 
         // Send the embed to chat.

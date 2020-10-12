@@ -23,7 +23,7 @@ class CmdBalance (bot: LilOri) : Command(bot) {
                 .setAuthor("You currently have ${bot.getManager(EconomyManager::class).getBalance(event.author)} coins!")
                 .setDescription("Currently these coins can't be obtained or used for like, anything but they should end up having a usage.")
                 .setColor(event.color)
-                .setFooter("Created by Ori#0004", "https://img.oribuin.xyz/profile.png")
+                .setFooter("Created by Ori#0004", "http://img.oribuin.xyz/profile.png")
 
         event.reply(embedBuilder.build())
     }

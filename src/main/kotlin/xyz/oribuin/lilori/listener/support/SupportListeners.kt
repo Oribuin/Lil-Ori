@@ -28,7 +28,7 @@ class SupportListeners : ListenerAdapter() {
         val embedBuilder = EmbedBuilder()
                 .setAuthor("A new member has joined!")
                 .setColor(Color.decode("#49fff6"))
-                .setFooter("Lil' Ori created by Oribuin", "https://img.oribuin.xyz/profile.png")
+                .setFooter("Lil' Ori created by Oribuin", "http://img.oribuin.xyz/profile.png")
                 .setThumbnail(event.member.user.avatarUrl)
                 .addField("Member", "${event.member.asMention} (${event.member.user.asTag})", false)
                 .addField("ID", event.member.user.id, false).build()
@@ -48,7 +48,7 @@ class SupportListeners : ListenerAdapter() {
         val embedBuilder = EmbedBuilder()
                 .setAuthor("A new member has left!")
                 .setColor(Color.decode("#fe4747"))
-                .setFooter("Lil' Ori created by Oribuin", "https://img.oribuin.xyz/profile.png")
+                .setFooter("Lil' Ori created by Oribuin", "http://img.oribuin.xyz/profile.png")
                 .addField("Member", event.user.asTag, false)
                 .addField("ID", event.user.id, false)
 
@@ -72,7 +72,11 @@ class SupportListeners : ListenerAdapter() {
     override fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
         // Ticket channel check
         if (event.channel.id == "733092364771655710") {
-            if (!event.message.contentRaw.toLowerCase().equals(";ticket")) {
+            if (event.author.isBot)
+                return
+
+
+            if (!event.message.contentRaw.toLowerCase().equals(";ticket", true)) {
                 event.message.delete().queue()
             }
         }

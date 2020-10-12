@@ -37,7 +37,7 @@ class CmdStop(bot: LilOri) : Command(bot) {
                 .setAuthor("\uD83C\uDFB5 Stopping music")
                 .setColor(event.color)
                 .setDescription("Successfully stopped playing music, Leaving Voice Channel!")
-                .setFooter("Created by Ori", "https://img.oribuin.xyz/profile.png")
+                .setFooter("Created by Ori", "http://img.oribuin.xyz/profile.png")
 
         // Send embed to channel
         event.channel.sendMessage(event.author.asMention).embed(embedBuilder.build()).queue()
