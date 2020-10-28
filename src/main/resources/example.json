@@ -1,0 +1,25 @@
+{
+  "embed": {
+    "title": "Ori's Report Module",
+    "description": "Welcome to Ori's report module, A player has submitted a report ingame, find information about the report here.\n\nReport module forked from [EternalReports](https://github.com/Oribuin/EternalReports)",
+    "color": 16711680,
+    "footer": {
+      "icon_url": "https://cdn.discordapp.com/embed/avatars/0.png",
+      "text": "ArsenticReports created by Oribuin"
+    },
+    "fields": [
+      {
+        "name": "**`Reported User`**",
+        "value": "<Username>"
+      },
+      {
+        "name": "**`Reported By`**",
+        "value": "<Username>>"
+      },
+      {
+        "name": "**`Reason`**",
+        "value": "They are a nerd."
+      }
+    ]
+  }
+}

@@ -7,6 +7,7 @@ import xyz.oribuin.lilori.handler.Command
 import xyz.oribuin.lilori.handler.CommandEvent
 import xyz.oribuin.lilori.manager.QuoteManager
 import xyz.oribuin.lilori.util.BotUtils
+import java.lang.StringBuilder
 
 class CmdQuote(bot: LilOri) : Command(bot) {
 
@@ -128,6 +129,15 @@ class CmdQuote(bot: LilOri) : Command(bot) {
 
                 // Send invalid arguments message if they haven't provided enough arguments
                 event.sendEmbedReply("❗ Invalid Arguments", "The correct usage is ${event.prefix}${name.toLowerCase()} get <id/author>")
+            }
+
+            "list" -> {
+
+                val stringBuilder = StringBuilder()
+                for (quote in quotes) {
+                    stringBuilder.append("(${quote.id}) **${quote.author}** - ${quote.quote}\n")
+                }
+                event.sendEmbedReply("❤ Quote List (Total ${quotes.size})", stringBuilder.toString())
             }
 
             // Send invalid arguments message if they haven't provided a correct sub command
