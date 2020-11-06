@@ -13,6 +13,10 @@ class QuoteManager(bot: LilOri) : Manager(bot) {
         this.registerQuotes()
     }
 
+    override fun disable() {
+        this.quotes.clear()
+    }
+
     /**
      * Register all the quotes into the quote list for easier quote access.
      */

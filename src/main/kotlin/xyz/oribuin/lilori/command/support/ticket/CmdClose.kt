@@ -1,28 +1,30 @@
 package xyz.oribuin.lilori.command.support.ticket
 
+import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent
 import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.handler.Category
-import xyz.oribuin.lilori.handler.Cmd
+import xyz.oribuin.lilori.handler.CommandInfo
+import xyz.oribuin.lilori.handler.BotCommand
 import xyz.oribuin.lilori.handler.CommandEvent
 import xyz.oribuin.lilori.util.EventWaiter
 import java.util.concurrent.TimeUnit
 
-class CmdClose(bot: LilOri, private val waiter: EventWaiter) : Command(bot) {
+@CommandInfo(
+        name = "Close",
+        description = "Close your ticket.",
+        category = Category.Type.SUPPORT,
+        arguments = [],
+        aliases = [],
+        userPermissions = [Permission.ADMINISTRATOR],
+        botPermissions = [],
+        guildId = "731659405958971413"
+)
+class CmdClose(bot: LilOri, private val waiter: EventWaiter) : BotCommand(bot) {
     var useWaiter: Boolean = true
 
-    init {
-        name = "Close"
-        category = Category(Category.Type.SUPPORT)
-        description = "Close a ticket!"
-        aliases = emptyList()
-        arguments = emptyList()
-        guildId = "731659405958971413"
-
-    }
-
     override fun executeCommand(event: CommandEvent) {
-        if (!event.channel.getAnnotation(javaClass).name.toLowerCase().endsWith("-ticket")) {
+        if (!event.channel.name.toLowerCase().endsWith("-ticket")) {
             event.timedReply("${event.author.asMention}, You cannot close this ticket channel", 30, TimeUnit.SECONDS)
             return
         }

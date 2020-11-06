@@ -4,7 +4,6 @@ import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.OnlineStatus
 import net.dv8tion.jda.api.entities.Activity
 import xyz.oribuin.lilori.LilOri
-import xyz.oribuin.lilori.command.console.CmdActivity
 import xyz.oribuin.lilori.data.GuildSettings
 import java.util.*
 
@@ -15,6 +14,11 @@ class BotManager(bot: LilOri) : Manager(bot) {
 
     override fun enable() {
         // Unused
+    }
+
+    override fun disable() {
+        activities.clear()
+        bot.jdabot?.shutdown()
     }
 
 
@@ -34,9 +38,7 @@ class BotManager(bot: LilOri) : Manager(bot) {
         val timerTask: TimerTask = object : TimerTask() {
             override fun run() {
                 val randomAnswer = Random().nextInt(activities.size)
-                if (CmdActivity.instance.isLooping) {
-                    jda.presence.activity = activities[randomAnswer]
-                }
+                jda.presence.activity = activities[randomAnswer]
             }
         }
         timer.schedule(timerTask, 0, 20000)

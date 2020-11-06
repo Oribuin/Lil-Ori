@@ -2,12 +2,11 @@ package xyz.oribuin.lilori.command.author
 
 import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.handler.Category
-import xyz.oribuin.lilori.handler.Cmd
-import xyz.oribuin.lilori.handler.Command
+import xyz.oribuin.lilori.handler.CommandInfo
+import xyz.oribuin.lilori.handler.BotCommand
 import xyz.oribuin.lilori.handler.CommandEvent
-import java.awt.Color
 
-@Cmd(
+@CommandInfo(
         name = "Test",
         description = "Testing general functions for Ori.",
         category = Category.Type.AUTHOR,
@@ -18,10 +17,10 @@ import java.awt.Color
         guildId = "",
         ownerOnly = true
 )
-class CmdTest(bot: LilOri) : Command(bot) {
+class CmdTest(bot: LilOri) : BotCommand(bot) {
 
     override fun executeCommand(event: CommandEvent) {
-        println(Color.decode("#0ca4ff").rgb and 0xFFFFFF)
+        event.reply("Test")
 
     }
 }

@@ -4,8 +4,8 @@ import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.Permission
 import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.handler.Category
-import xyz.oribuin.lilori.handler.Cmd
-import xyz.oribuin.lilori.handler.Command
+import xyz.oribuin.lilori.handler.CommandInfo
+import xyz.oribuin.lilori.handler.BotCommand
 import xyz.oribuin.lilori.handler.CommandEvent
 import xyz.oribuin.lilori.manager.GuildSettingsManager
 import xyz.oribuin.lilori.util.BotUtils
@@ -15,7 +15,7 @@ import java.io.File
 import java.lang.NumberFormatException
 import javax.imageio.ImageIO
 
-@Cmd(
+@CommandInfo(
         name = "Color",
         description = "View any hex or rgb code or set bot color.",
         category = Category.Type.GENERAL,
@@ -25,7 +25,7 @@ import javax.imageio.ImageIO
         botPermissions = [],
         guildId = ""
 )
-class CmdColor(bot: LilOri) : Command(bot) {
+class CmdColor(bot: LilOri) : BotCommand(bot) {
 
     private lateinit var embedColor: Color
     private lateinit var color: Color

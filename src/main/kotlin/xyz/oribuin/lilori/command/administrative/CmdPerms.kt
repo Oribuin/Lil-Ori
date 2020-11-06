@@ -5,12 +5,12 @@ import net.dv8tion.jda.api.Permission
 import org.apache.commons.lang3.StringUtils
 import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.handler.Category
-import xyz.oribuin.lilori.handler.Cmd
-import xyz.oribuin.lilori.handler.Command
+import xyz.oribuin.lilori.handler.CommandInfo
+import xyz.oribuin.lilori.handler.BotCommand
 import xyz.oribuin.lilori.handler.CommandEvent
 import java.util.function.Consumer
 
-@Cmd(
+@CommandInfo(
         name = "permissions",
         description = "Get all the permissions the bot has access to.",
         category = Category.Type.ADMIN,
@@ -21,7 +21,7 @@ import java.util.function.Consumer
         guildId = "",
 )
 
-class CmdPerms(bot: LilOri) : Command(bot) {
+class CmdPerms(bot: LilOri) : BotCommand(bot) {
 
     override fun executeCommand(event: CommandEvent) {
         val perms = mutableSetOf<String>()

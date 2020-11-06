@@ -6,7 +6,11 @@ import xyz.oribuin.lilori.LilOri
 
 class EconomyManager(bot: LilOri) : Manager(bot) {
     override fun enable() {
-        //
+        // Unused
+    }
+
+    override fun disable() {
+        // Unused
     }
 
     fun updateBalance(user: User, balance: Int) {

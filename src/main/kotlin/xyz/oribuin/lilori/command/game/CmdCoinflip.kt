@@ -3,13 +3,13 @@ package xyz.oribuin.lilori.command.game
 import net.dv8tion.jda.api.EmbedBuilder
 import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.handler.Category
-import xyz.oribuin.lilori.handler.Cmd
-import xyz.oribuin.lilori.handler.Command
+import xyz.oribuin.lilori.handler.CommandInfo
+import xyz.oribuin.lilori.handler.BotCommand
 import xyz.oribuin.lilori.handler.CommandEvent
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-@Cmd(
+@CommandInfo(
         name = "Coinflip",
         description = "Flip a coin.",
         category = Category.Type.GAMES,
@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit
         botPermissions = [],
         guildId = ""
 )
-class CmdCoinflip(bot: LilOri) : Command(bot) {
+class CmdCoinflip(bot: LilOri) : BotCommand(bot) {
 
     override fun executeCommand(event: CommandEvent) {
         // Define the rates

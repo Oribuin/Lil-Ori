@@ -24,11 +24,9 @@ import xyz.oribuin.lilori.command.support.ticket.CmdTicket
 import xyz.oribuin.lilori.manager.Manager
 
 class CommandHandler(bot: LilOri) : Manager(bot) {
-    val commands = mutableListOf<Command>()
+    val commands = mutableListOf<BotCommand>()
 
     fun registerCommands() {
-
-        commands.addAll(listOf(CmdHelp(bot), ))
         commands.addAll(listOf(
                 // General Commands
                 CmdHelp(bot), CmdPing(bot),
@@ -41,7 +39,7 @@ class CommandHandler(bot: LilOri) : Manager(bot) {
                 // Moderation Commands
                 CmdPurge(bot, bot.eventWaiter), CmdBan(bot),
                 // Author Commands
-                CmdQuery(bot), CmdTest(bot), CmdUpdate(bot),
+                CmdQuery(bot), CmdTest(bot),
                 // Admin Commands
                 CmdPerms(bot), CmdPrefix(bot),
                 // Support Discord commands
@@ -53,11 +51,15 @@ class CommandHandler(bot: LilOri) : Manager(bot) {
         ))
     }
 
-    fun getCommand(name: String): Cmd {
-        return commands.stream().filter { command: -> command.getAnnotation(javaClass).name.toLowerCase() == name }.findFirst().get()
+    fun getCommand(name: String): BotCommand {
+        return commands.stream().filter { command -> command.getAnnotation(command.javaClass).name.toLowerCase() == name }.findFirst().get()
     }
 
     override fun enable() {
         // Unused
+    }
+
+    override fun disable() {
+        commands.clear()
     }
 }

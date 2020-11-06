@@ -4,26 +4,29 @@ import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.Permission
 import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.handler.Category
-import xyz.oribuin.lilori.handler.Cmd
+import xyz.oribuin.lilori.handler.CommandInfo
+import xyz.oribuin.lilori.handler.BotCommand
 import xyz.oribuin.lilori.handler.CommandEvent
 import xyz.oribuin.lilori.manager.TicketManager
 import java.awt.Color
 import java.util.concurrent.TimeUnit
 
-class CmdTicket(bot: LilOri) : Command(bot) {
-    init {
-        name = "Ticket"
-        category = Category(Category.Type.SUPPORT)
-        description = "Create a ticket!"
-        aliases = emptyList()
-        arguments = emptyList()
+@CommandInfo(
+        name = "Ticket",
+        description = "Create a support ticket.",
+        category = Category.Type.SUPPORT,
+        arguments = [],
+        aliases = [],
+        userPermissions = [Permission.ADMINISTRATOR],
+        botPermissions = [],
         guildId = "731659405958971413"
-    }
+)
+class CmdTicket(bot: LilOri) : BotCommand(bot) {
 
     override fun executeCommand(event: CommandEvent) {
 
         val username = event.author.name.replace("/[^a-z0-9]/gi", "")
-        val channelName = "${usergetAnnotation(javaClass).name.toLowerCase()}-ticket"
+        val channelName = "${username.toLowerCase()}-ticket"
 
         if (event.guild.getTextChannelsByName(channelName, true).size > 0) {
             event.timedReply("${event.author.asMention}, You already have a ticket channel.", 30, TimeUnit.SECONDS)

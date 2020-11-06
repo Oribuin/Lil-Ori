@@ -4,34 +4,25 @@ import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.Permission
 import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.handler.Category
-import xyz.oribuin.lilori.handler.Cmd
-import xyz.oribuin.lilori.handler.Command
+import xyz.oribuin.lilori.handler.CommandInfo
+import xyz.oribuin.lilori.handler.BotCommand
 import xyz.oribuin.lilori.handler.CommandEvent
 import java.awt.Color
 import java.time.OffsetDateTime
 
 // ;announce #channel true <message>
-@Cmd(
+@CommandInfo(
         name = "Announce",
         description = "Send an announcement to a channel.",
-        category = Category.Type.MUSIC,
-        arguments = ["<Youtube-URL>"],
+        category = Category.Type.SUPPORT,
+        arguments = ["<announcement/plugin>", "<pingEveryone/plugin>", "<message/version>", "<changelog>"],
         aliases = [],
-        userPermissions = [],
+        userPermissions = [Permission.ADMINISTRATOR],
         botPermissions = [],
-        guildId = ""
+        guildId = "731659405958971413"
 )
 
-class CmdAnnounce(bot: LilOri) : Command(bot) {
-    init {
-        name = "Announce"
-        category = Category(Category.Type.SUPPORT)
-        description = "Announce a message into a channel"
-        aliases = emptyList()
-        arguments = emptyList()
-        guildId = "731659405958971413"
-        userPermissions = arrayOf(Permission.ADMINISTRATOR)
-    }
+class CmdAnnounce(bot: LilOri) : BotCommand(bot) {
 
     override fun executeCommand(event: CommandEvent) {
 

@@ -8,6 +8,10 @@ class DataManager(bot: LilOri) : Manager(bot) {
         createTables()
     }
 
+    override fun disable() {
+        bot.connector.closeConnection()
+    }
+
     /**
      * Create all the SQLite Tables if they don't exist.
      */

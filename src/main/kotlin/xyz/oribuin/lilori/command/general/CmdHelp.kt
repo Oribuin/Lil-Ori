@@ -3,15 +3,15 @@ package xyz.oribuin.lilori.command.general
 import net.dv8tion.jda.api.EmbedBuilder
 import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.handler.Category.Type
-import xyz.oribuin.lilori.handler.Cmd
-import xyz.oribuin.lilori.handler.Command
+import xyz.oribuin.lilori.handler.CommandInfo
+import xyz.oribuin.lilori.handler.BotCommand
 import xyz.oribuin.lilori.handler.CommandEvent
 import xyz.oribuin.lilori.handler.CommandHandler
 import xyz.oribuin.lilori.util.BotUtils
 import java.awt.Color
 import kotlin.streams.toList
 
-@Cmd(
+@CommandInfo(
         name = "Help",
         description = "View all bot commands.",
         category = Type.GAMES,
@@ -21,7 +21,7 @@ import kotlin.streams.toList
         botPermissions = [],
         guildId = ""
 )
-class CmdHelp(bot: LilOri) : Command(bot) {
+class CmdHelp(bot: LilOri) : BotCommand(bot) {
     override fun executeCommand(event: CommandEvent) {
 
         // Check if the user has included the right amount of arguments
@@ -53,7 +53,7 @@ class CmdHelp(bot: LilOri) : Command(bot) {
 
         // Create a string builder
         val stringBuilder = StringBuilder("Here are a list of commands in category, ${category.categoryName}\n \n")
-        val commands = mutableListOf<Command>()
+        val commands = mutableListOf<BotCommand>()
 
         // Add all the commands to the mutableList
         bot.getManager(CommandHandler::class).commands.stream().filter { cmd -> getAnnotation(cmd.javaClass).category == category }.toList().toMutableList().forEach { cmd ->

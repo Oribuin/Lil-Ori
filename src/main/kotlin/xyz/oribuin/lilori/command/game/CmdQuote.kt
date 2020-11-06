@@ -3,13 +3,13 @@ package xyz.oribuin.lilori.command.game
 import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.Settings
 import xyz.oribuin.lilori.handler.Category
-import xyz.oribuin.lilori.handler.Cmd
-import xyz.oribuin.lilori.handler.Command
+import xyz.oribuin.lilori.handler.CommandInfo
+import xyz.oribuin.lilori.handler.BotCommand
 import xyz.oribuin.lilori.handler.CommandEvent
 import xyz.oribuin.lilori.manager.QuoteManager
 import xyz.oribuin.lilori.util.BotUtils
 
-@Cmd(
+@CommandInfo(
         name = "Quote",
         description = "Get a quote that is currently saved into Lil' Ori.",
         category = Category.Type.GAMES,
@@ -19,7 +19,7 @@ import xyz.oribuin.lilori.util.BotUtils
         botPermissions = [],
         guildId = ""
 )
-class CmdQuote(bot: LilOri) : Command(bot) {
+class CmdQuote(bot: LilOri) : BotCommand(bot) {
 
     override fun executeCommand(event: CommandEvent) {
 

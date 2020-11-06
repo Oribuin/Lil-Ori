@@ -24,21 +24,19 @@ class CommandExecutor(private val bot: LilOri, private val commandHandler: Comma
         // Filter through each command
         for (cmd in commandHandler.commands) {
             try {
+                val cmdInfo = cmd.getAnnotation(cmd.javaClass)
                 val args = event.message.contentRaw.split(" ").toTypedArray()
-                requireNotNull(cmd.aliases) { "Null Aliases in command " + cmd.name }
 
                 // Check if command name or alias
-                if (!cmd.name.equals(args[0].substring(prefix.length), ignoreCase = true) && cmd.aliases?.stream()?.noneMatch { x: String -> x.equals(args[0].substring(prefix.length), ignoreCase = true) } == true)
+                if (!cmdInfo.name.equals(args[0].substring(prefix.length), ignoreCase = true) && cmdInfo.aliases.toList().stream().noneMatch { x -> x.equals(args[0].toLowerCase().substring(prefix.length), true) })
                     continue
 
-                // Check if command is enabled
-                if (!cmd.isEnabled) return
 
-                if (cmd.guildId != null && !cmd.guildId.equals(event.guild.id))
+                if (cmdInfo.guildId.isNotEmpty() && cmdInfo.guildId != event.guild.id)
                     return
 
                 // Check if the command is owner only and the owner id equals to command author
-                if (cmd.isOwnerOnly && event.author.id != Settings.OWNER_ID) {
+                if (cmdInfo.ownerOnly && event.author.id != Settings.OWNER_ID) {
                     val embed = EmbedBuilder()
                             .setAuthor("\uD83D\uDC94 No Permission!")
                             .setColor(GuildSettings(event.guild).getColor())
@@ -52,7 +50,7 @@ class CommandExecutor(private val bot: LilOri, private val commandHandler: Comma
                 if (event.author.isBot) return
 
                 // Check user permissions
-                if (cmd.botPermissions.isNotEmpty() && !event.guild.selfMember.permissions.containsAll(cmd.botPermissions.toList())) {
+                if (cmdInfo.botPermissions.isNotEmpty() && !event.guild.selfMember.permissions.containsAll(cmdInfo.botPermissions.toList())) {
                     val embed = EmbedBuilder()
                             .setAuthor("\uD83D\uDC94 No Permission!")
                             .setColor(GuildSettings(event.guild).getColor())
@@ -63,7 +61,7 @@ class CommandExecutor(private val bot: LilOri, private val commandHandler: Comma
                 }
 
                 // Check user permissions
-                if (cmd.userPermissions.isNotEmpty() && event.member?.permissions?.containsAll(cmd.userPermissions.toList()) == false) {
+                if (cmdInfo.userPermissions.isNotEmpty() && event.member?.permissions?.containsAll(cmdInfo.userPermissions.toList()) == false) {
                     val embed = EmbedBuilder()
                             .setAuthor("\uD83D\uDC94 No Permission!")
                             .setColor(GuildSettings(event.guild).getColor())
@@ -78,7 +76,7 @@ class CommandExecutor(private val bot: LilOri, private val commandHandler: Comma
 
             } catch (ex: PermissionException) {
                 // Send permission exception log to console
-                println(("Error Running Command: ${cmd.name} " +
+                println(("Error Running Command: ${cmd.getAnnotation(cmd.javaClass).name} " +
                         "Guild: ${event.guild.name} " +
                         "Author: ${event.author.asTag} " +
                         "Permission: ${ex.permission}").trimIndent())

@@ -19,6 +19,10 @@ class GuildSettingsManager(bot: LilOri) : Manager(bot) {
         // Unused
     }
 
+    override fun disable() {
+        guildSettings.clear()
+    }
+
     /**
      * Load the guild settings for the guild
      *

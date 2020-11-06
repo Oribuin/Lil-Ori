@@ -10,6 +10,10 @@ class TicketManager(bot: LilOri) : Manager(bot) {
         // Unused
     }
 
+    override fun disable() {
+        // Unused
+    }
+
     /**
      * Create or update a user's ticket creation count
      *

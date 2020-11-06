@@ -4,13 +4,13 @@ import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.Permission
 import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.handler.Category
-import xyz.oribuin.lilori.handler.Cmd
-import xyz.oribuin.lilori.handler.Command
+import xyz.oribuin.lilori.handler.CommandInfo
+import xyz.oribuin.lilori.handler.BotCommand
 import xyz.oribuin.lilori.handler.CommandEvent
 import xyz.oribuin.lilori.manager.GuildSettingsManager
 import xyz.oribuin.lilori.util.BotUtils
 
-@Cmd(
+@CommandInfo(
         name = "Prefix",
         description = "Change the command prefix for the bot.",
         category = Category.Type.ADMIN,
@@ -21,7 +21,7 @@ import xyz.oribuin.lilori.util.BotUtils
         guildId = ""
 )
 
-class CmdPrefix(bot: LilOri) : Command(bot) {
+class CmdPrefix(bot: LilOri) : BotCommand(bot) {
 
     override fun executeCommand(event: CommandEvent) {
 
