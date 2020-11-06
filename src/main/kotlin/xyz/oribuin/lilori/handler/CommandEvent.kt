@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.exceptions.ErrorResponseException
 import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.data.GuildSettings
 import java.awt.Color
+import java.net.URL
 import java.util.concurrent.TimeUnit
 
 class CommandEvent(private val bot: LilOri, val event: GuildMessageReceivedEvent) {
@@ -122,5 +123,17 @@ class CommandEvent(private val bot: LilOri, val event: GuildMessageReceivedEvent
                 .setAuthor(authorMessage)
 
         event.channel.sendMessage(embedBuilder.build()).queue()
+    }
+
+    fun sendWebhook(url: URL, content: String) {
+        // TODO
+    }
+
+    fun sendWebhook(url: URL, embed: MessageEmbed) {
+        // TODO
+    }
+
+    fun sendWebhook(url: URL, content: String, embed: MessageEmbed) {
+        // TODo
     }
 }

@@ -8,15 +8,12 @@ import xyz.oribuin.lilori.database.DatabaseConnector
 import xyz.oribuin.lilori.database.SQLiteConnector
 import xyz.oribuin.lilori.handler.CommandExecutor
 import xyz.oribuin.lilori.handler.CommandHandler
-import xyz.oribuin.lilori.handler.console.ConsoleCMDHandler
-import xyz.oribuin.lilori.handler.console.ConsoleCmdExecutor
 import xyz.oribuin.lilori.listener.GeneralEvents
 import xyz.oribuin.lilori.listener.support.SupportListeners
 import xyz.oribuin.lilori.manager.*
 import xyz.oribuin.lilori.util.ConsoleColors
 import xyz.oribuin.lilori.util.EventWaiter
 import xyz.oribuin.lilori.util.FileUtils
-import java.io.File
 import javax.security.auth.login.LoginException
 import kotlin.reflect.KClass
 
@@ -41,7 +38,6 @@ class LilOri : ListenerAdapter() {
         getManager(DataManager::class)
         getManager(BotManager::class)
         getManager(CommandHandler::class)
-        getManager(ConsoleCMDHandler::class)
         getManager(EconomyManager::class)
         getManager(GuildSettingsManager::class)
         getManager(QuoteManager::class)
@@ -51,7 +47,6 @@ class LilOri : ListenerAdapter() {
 
         // Register plugin commands
         this.getManager(CommandHandler::class).registerCommands()
-        this.getManager(ConsoleCMDHandler::class).registerCommands()
 
         // Login Bot
         val jda = JDABuilder.create(Settings.TOKEN, GatewayIntent.values().toList())
@@ -69,9 +64,6 @@ class LilOri : ListenerAdapter() {
 
         // Startup Log
         this.logStartup(jdabot!!)
-
-        // Register console commands
-        ConsoleCmdExecutor(this, getManager(ConsoleCMDHandler::class))
     }
 
     companion object {
@@ -114,10 +106,7 @@ class LilOri : ListenerAdapter() {
 
         // Add every command into the console with a number
         for (command in getManager(CommandHandler::class).commands)
-            if (command.aliases == null)
-                throw IllegalArgumentException(ConsoleColors.RED_BOLD_BRIGHT + "Command aliases does not exists")
-            else
-                println(ConsoleColors.BLUE_BRIGHT + "Loaded Command: (${command.category.type.categoryName}) ${command.name} | (${++i}/${getManager(CommandHandler::class).commands.size})" + ConsoleColors.RESET)
+            println(ConsoleColors.BLUE_BRIGHT + "Loaded Command: (${command.getAnnotation(command.javaClass).category.categoryName}) ${command.getAnnotation(command.javaClass).name} | (${++i}/${getManager(CommandHandler::class).commands.size})" + ConsoleColors.RESET)
 
         println(ConsoleColors.GREEN_UNDERLINED + "*=* Loaded Up ${jdaBot.selfUser.name} with ${getManager(CommandHandler::class).commands.size}  Command(s) *=*" + ConsoleColors.RESET)
     }

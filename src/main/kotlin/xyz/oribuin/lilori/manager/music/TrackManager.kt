@@ -101,7 +101,7 @@ class TrackManager private constructor(private val bot: LilOri, guild: Guild) {
     val playlist: AudioPlaylist
         get() = object : AudioPlaylist {
             override fun getName(): String {
-                return guild.name.toLowerCase() + "_playlist"
+                return guild.getAnnotation(javaClass).name.toLowerCase() + "_playlist"
             }
 
             override fun getTracks(): List<AudioTrack> {

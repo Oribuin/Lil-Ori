@@ -1,30 +1,34 @@
 package xyz.oribuin.lilori.handler
 
 import xyz.oribuin.lilori.LilOri
-import xyz.oribuin.lilori.command.discord.administrative.CmdPerms
-import xyz.oribuin.lilori.command.discord.administrative.CmdPrefix
-import xyz.oribuin.lilori.command.discord.author.CmdQuery
-import xyz.oribuin.lilori.command.discord.author.CmdTest
-import xyz.oribuin.lilori.command.discord.author.CmdUpdate
-import xyz.oribuin.lilori.command.discord.economy.CmdBalance
-import xyz.oribuin.lilori.command.discord.economy.CmdFeed
-import xyz.oribuin.lilori.command.discord.game.*
-import xyz.oribuin.lilori.command.discord.general.CmdColor
-import xyz.oribuin.lilori.command.discord.general.CmdHelp
-import xyz.oribuin.lilori.command.discord.general.CmdPing
-import xyz.oribuin.lilori.command.discord.moderation.CmdBan
-import xyz.oribuin.lilori.command.discord.moderation.CmdPurge
-import xyz.oribuin.lilori.command.discord.music.*
-import xyz.oribuin.lilori.command.discord.support.general.CmdAnnounce
-import xyz.oribuin.lilori.command.discord.support.general.CmdReactionRole
-import xyz.oribuin.lilori.command.discord.support.ticket.CmdClose
-import xyz.oribuin.lilori.command.discord.support.ticket.CmdTicket
+import xyz.oribuin.lilori.command.administrative.CmdPerms
+import xyz.oribuin.lilori.command.administrative.CmdPrefix
+import xyz.oribuin.lilori.command.author.CmdQuery
+import xyz.oribuin.lilori.command.author.CmdTest
+import xyz.oribuin.lilori.command.economy.CmdBalance
+import xyz.oribuin.lilori.command.economy.CmdFeed
+import xyz.oribuin.lilori.command.game.CmdCoinflip
+import xyz.oribuin.lilori.command.game.CmdEightball
+import xyz.oribuin.lilori.command.game.CmdQuote
+import xyz.oribuin.lilori.command.game.CmdSlap
+import xyz.oribuin.lilori.command.general.CmdColor
+import xyz.oribuin.lilori.command.general.CmdHelp
+import xyz.oribuin.lilori.command.general.CmdPing
+import xyz.oribuin.lilori.command.moderation.CmdBan
+import xyz.oribuin.lilori.command.moderation.CmdPurge
+import xyz.oribuin.lilori.command.music.*
+import xyz.oribuin.lilori.command.support.general.CmdAnnounce
+import xyz.oribuin.lilori.command.support.general.CmdReactionRole
+import xyz.oribuin.lilori.command.support.ticket.CmdClose
+import xyz.oribuin.lilori.command.support.ticket.CmdTicket
 import xyz.oribuin.lilori.manager.Manager
 
 class CommandHandler(bot: LilOri) : Manager(bot) {
     val commands = mutableListOf<Command>()
 
     fun registerCommands() {
+
+        commands.addAll(listOf(CmdHelp(bot), ))
         commands.addAll(listOf(
                 // General Commands
                 CmdHelp(bot), CmdPing(bot),
@@ -49,8 +53,8 @@ class CommandHandler(bot: LilOri) : Manager(bot) {
         ))
     }
 
-    fun getCommand(name: String): Command {
-        return commands.stream().filter { command: Command -> command.name.toLowerCase() == name }.findFirst().get()
+    fun getCommand(name: String): Cmd {
+        return commands.stream().filter { command: -> command.getAnnotation(javaClass).name.toLowerCase() == name }.findFirst().get()
     }
 
     override fun enable() {
