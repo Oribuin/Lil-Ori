@@ -12,7 +12,7 @@ import xyz.oribuin.lilori.manager.music.TrackManager.Companion.getInstance
         name = "Stop",
         description = "Stop the music entirely.",
         category = Category.Type.MUSIC,
-        arguments = ["<Youtube-URL>"],
+        arguments = [],
         aliases = [],
         userPermissions = [],
         botPermissions = [],

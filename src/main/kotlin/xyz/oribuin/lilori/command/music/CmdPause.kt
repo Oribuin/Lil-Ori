@@ -9,7 +9,7 @@ import xyz.oribuin.lilori.manager.music.TrackManager.Companion.getInstance
 
 @CommandInfo(
         name = "Pause",
-        description = "Purge the music from playing.",
+        description = "Pause the music from playing.",
         category = Category.Type.MUSIC,
         arguments = [],
         aliases = [],
