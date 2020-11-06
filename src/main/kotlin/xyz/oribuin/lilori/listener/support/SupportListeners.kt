@@ -94,7 +94,6 @@ class SupportListeners : ListenerAdapter() {
         if (event.guild.id != "731659405958971413")
             return
 
-
         if (event.channelLeft != null)
             return
 

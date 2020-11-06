@@ -56,7 +56,7 @@ class CmdHelp(bot: LilOri) : BotCommand(bot) {
         val commands = mutableListOf<BotCommand>()
 
         // Add all the commands to the mutableList
-        bot.getManager(CommandHandler::class).commands.stream().filter { cmd -> getAnnotation(cmd.javaClass).category == category }.toList().toMutableList().forEach { cmd ->
+        bot.getManager(CommandHandler::class).commands.stream().filter { cmd -> cmd.getAnnotation(cmd.javaClass).category == category }.toList().toMutableList().forEach { cmd ->
             if (!cmd.getAnnotation(cmd.javaClass).ownerOnly)
                 commands.add(cmd)
         }
@@ -64,8 +64,8 @@ class CmdHelp(bot: LilOri) : BotCommand(bot) {
         // For every command in the list of commands, Append the formatted command text into the string builder
         for (cmd in commands) {
             // Check if the user has permission for the command and the command is enabled
-            if (event.member.permissions.containsAll(getAnnotation(cmd.javaClass).userPermissions.toList()) && event.selfMember.permissions.containsAll(getAnnotation(cmd.javaClass).botPermissions.toList())) {
-                stringBuilder.append("${event.prefix}**${getAnnotation(cmd.javaClass).name}** ${BotUtils.formatList(getAnnotation(javaClass).arguments.toList())} **»** ${getAnnotation(cmd.javaClass).description}\n")
+            if (event.member.permissions.containsAll(cmd.getAnnotation(cmd.javaClass).userPermissions.toList()) && event.selfMember.permissions.containsAll(cmd.getAnnotation(cmd.javaClass).botPermissions.toList())) {
+                stringBuilder.append("${event.prefix}**${cmd.getAnnotation(cmd.javaClass).name}** ${BotUtils.formatList(cmd.getAnnotation(cmd.javaClass).arguments.toList())} **»** ${getAnnotation(cmd.javaClass).description}\n")
             }
         }
 
