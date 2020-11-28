@@ -51,7 +51,7 @@ class CmdAnnounce(bot: LilOri) : BotCommand(bot) {
 
                 val embedBuilder = EmbedBuilder()
                         .setColor(Color.BLUE)
-                        .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png")
+                        .setFooter("Created by Ori#0004", "http://img.oribuin.xyz/profile.png")
                         .setAuthor("Announcement By ${event.author.name}", null, "http://img.oribuin.xyz/bot-images/announcement.jpg")
                         .setDescription(announcement)
                         .setTimestamp(OffsetDateTime.now())
@@ -81,7 +81,7 @@ class CmdAnnounce(bot: LilOri) : BotCommand(bot) {
 
                 val embedBuilder = EmbedBuilder()
                         .setColor(Color.BLUE)
-                        .setFooter("Created by Oribuin", "http://img.oribuin.xyz/profile.png")
+                        .setFooter("Created by Ori#0004", "http://img.oribuin.xyz/profile.png")
                         .setAuthor("Plugin Update: ${event.args[2]}", null, "http://img.oribuin.xyz/bot-images/announcement.jpg")
                         .setDescription(changelog)
                         .setTimestamp(OffsetDateTime.now())

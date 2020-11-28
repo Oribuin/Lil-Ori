@@ -17,7 +17,8 @@ import xyz.oribuin.lilori.util.BotUtils
         aliases = [],
         userPermissions = [],
         botPermissions = [],
-        guildId = ""
+        guildId = "",
+        ownerOnly = true
 )
 class CmdQueue(bot: LilOri) : BotCommand(bot) {
 

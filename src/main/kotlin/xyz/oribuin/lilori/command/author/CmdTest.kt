@@ -34,6 +34,7 @@ class CmdTest(bot: LilOri) : BotCommand(bot) {
         }
 
         val msg = java.lang.String.join(" ", *event.args).substring(event.args[0].length + 1)
+        event.deleteCmd()
 
         event.textChannel.createWebhook(event.author.name)
                 .setAvatar(Icon.from(URL(event.author.avatarUrl ?: event.author.defaultAvatarUrl).openStream()))
@@ -52,7 +53,6 @@ class CmdTest(bot: LilOri) : BotCommand(bot) {
 
                     connection.inputStream.close()
                     connection.disconnect()
-                    event.deleteCmd()
 
                     it.delete().queueAfter(3, TimeUnit.SECONDS)
                 }

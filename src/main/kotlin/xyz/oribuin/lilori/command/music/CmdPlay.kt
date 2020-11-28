@@ -2,14 +2,12 @@ package xyz.oribuin.lilori.command.music
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason
 import xyz.oribuin.lilori.LilOri
-import xyz.oribuin.lilori.handler.Category
-import xyz.oribuin.lilori.handler.CommandInfo
 import xyz.oribuin.lilori.handler.BotCommand
+import xyz.oribuin.lilori.handler.Category
 import xyz.oribuin.lilori.handler.CommandEvent
+import xyz.oribuin.lilori.handler.CommandInfo
 import xyz.oribuin.lilori.manager.music.TrackManager.Companion.getInstance
 import xyz.oribuin.lilori.util.BotUtils
-import java.text.SimpleDateFormat
-import java.util.*
 
 @CommandInfo(
         name = "Play",
@@ -48,14 +46,10 @@ class CmdPlay(bot: LilOri) : BotCommand(bot) {
             event.sendEmbedReply("\uD83C\uDFA7 Unpaused Music", "You have unpaused the music!")
         }
 
-        // Delete command
-        event.deleteCmd()
 
-        // Debugging
-        println(SimpleDateFormat("HH:mm:ss").format(Date(System.currentTimeMillis())))
 
         // Play the song
-        tm.loadAndPlay(event.member, event.textChannel, url, false, false)
+        tm.loadAndPlay(event.member, event.textChannel, url, addPlaylist = false, queued = false)
 
         // Add the bot to a voice channel
         musicManager.getAudioManager(event.guild).openAudioConnection(event.member.voiceState?.channel)

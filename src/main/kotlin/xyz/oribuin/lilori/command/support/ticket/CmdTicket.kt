@@ -40,7 +40,7 @@ class CmdTicket(bot: LilOri) : BotCommand(bot) {
                     we will assist you with anything you need.
                     
                     Please put any errors you have inside __https://hasteb.in/__, Please do not type the errors in chat!""".trimMargin())
-                .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png")
+                .setFooter("Created by Ori#0004", "http://img.oribuin.xyz/profile.png")
 
         (event.guild.getCategoryById("733086484470694018") ?: return).createTextChannel(channelName)
                 .setTopic("🎫 Please explain your issue our support team will be with you soon!").queue { channel ->

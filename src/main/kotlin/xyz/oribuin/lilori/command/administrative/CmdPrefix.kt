@@ -33,7 +33,7 @@ class CmdPrefix(bot: LilOri) : BotCommand(bot) {
         val embedBuilder = EmbedBuilder()
                 .setTitle("❗ Changed Server Prefix")
                 .setColor(event.color)
-                .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png")
+                .setFooter("Created by Ori#0004", "http://img.oribuin.xyz/profile.png")
                 .setDescription("""**Old Prefix** ${event.prefix}
                         
                         **New Prefix** ${event.args[1]}""".trimMargin())

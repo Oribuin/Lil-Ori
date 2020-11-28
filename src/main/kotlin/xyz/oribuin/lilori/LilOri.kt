@@ -53,6 +53,7 @@ class LilOri : ListenerAdapter() {
         this.getManager(CommandHandler::class).registerCommands()
 
         // Login Bot
+
         val jda = JDABuilder.create(Settings.TOKEN, GatewayIntent.values().toList())
                 .addEventListeners(CommandExecutor(this, getManager(CommandHandler::class)), GeneralEvents(this), SupportListeners(), eventWaiter, this)
                 .enableIntents(GatewayIntent.values().toList())

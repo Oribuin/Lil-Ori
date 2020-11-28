@@ -14,7 +14,7 @@ import kotlin.streams.toList
 @CommandInfo(
         name = "Help",
         description = "View all bot commands.",
-        category = Type.GAMES,
+        category = Type.GENERAL,
         arguments = ["<Category>"],
         aliases = [],
         userPermissions = [],

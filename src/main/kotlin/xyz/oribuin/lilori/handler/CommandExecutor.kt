@@ -7,18 +7,17 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter
 import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.Settings
 import xyz.oribuin.lilori.data.GuildSettings
-import java.text.SimpleDateFormat
 
 class CommandExecutor(private val bot: LilOri, private val commandHandler: CommandHandler) : ListenerAdapter() {
 
     override fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
-
         // TODO: Create a command client to store owner id
         val guildSettings = GuildSettings(event.guild)
-        val content = event.message.contentRaw.toLowerCase()
         val prefix = guildSettings.getPrefix().toLowerCase()
 
-        if (!guildSettings.getPrefix().toLowerCase().let { content.startsWith(it) })
+        val content = event.message.contentRaw.toLowerCase()
+        
+        if (!content.startsWith(prefix))
             return
 
         // Filter through each command
@@ -47,7 +46,7 @@ class CommandExecutor(private val bot: LilOri, private val commandHandler: Comma
                 }
 
                 // Check if the command author is a bot
-                if (event.author.isBot) return
+                //if (event.author.isBot) return
 
                 // Check user permissions
                 if (cmdInfo.botPermissions.isNotEmpty() && !event.guild.selfMember.permissions.containsAll(cmdInfo.botPermissions.toList())) {
@@ -55,7 +54,7 @@ class CommandExecutor(private val bot: LilOri, private val commandHandler: Comma
                             .setAuthor("\uD83D\uDC94 No Permission!")
                             .setColor(GuildSettings(event.guild).getColor())
                             .setDescription("I do not have enough permissions for this command!")
-                            .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png")
+                            .setFooter("Created by Ori#0004", "http://img.oribuin.xyz/profile.png")
                     event.channel.sendMessage(event.author.asMention).embed(embed.build()).queue()
                     return
                 }
@@ -66,10 +65,10 @@ class CommandExecutor(private val bot: LilOri, private val commandHandler: Comma
                             .setAuthor("\uD83D\uDC94 No Permission!")
                             .setColor(GuildSettings(event.guild).getColor())
                             .setDescription("You do not have enough permissions for this command!")
-                            .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png")
+                            .setFooter("Created by Ori#0004", "http://img.oribuin.xyz/profile.png")
                     event.channel.sendMessage(event.author.asMention).embed(embed.build()).queue()
+                    return
                 }
-
 
                 // Execute this command
                 cmd.executeCommand(CommandEvent(bot, event))

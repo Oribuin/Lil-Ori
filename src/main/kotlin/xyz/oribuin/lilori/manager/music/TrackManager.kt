@@ -56,7 +56,7 @@ class TrackManager private constructor(private val bot: LilOri, guild: Guild) {
                             .setColor(GuildSettings(guild).getColor())
                             .setDescription("""**Song URL** ${track.info.uri}
                                         **Song Duration** $minutes minutes & $seconds seconds""")
-                            .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png")
+                            .setFooter("Created by Ori#0004", "http://img.oribuin.xyz/profile.png")
 
                     textChannel.sendMessage(author.asMention).embed(embedBuilder.build()).queue()
 
@@ -66,7 +66,7 @@ class TrackManager private constructor(private val bot: LilOri, guild: Guild) {
                             .setColor(Color.RED)
                             .setDescription("""**Song URL** ${track.info.uri}
                                         **Song Duration** $minutes minutes & $seconds seconds""")
-                            .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png")
+                            .setFooter("Created by Ori#0004", "http://img.oribuin.xyz/profile.png")
 
                     textChannel.sendMessage(author.asMention).embed(embedBuilder.build()).queue()
                 }
@@ -104,7 +104,7 @@ class TrackManager private constructor(private val bot: LilOri, guild: Guild) {
                 return guild.name.toLowerCase() + "_playlist"
             }
 
-            override fun getTracks(): List<AudioTrack> {
+            override fun getTracks(): MutableList<AudioTrack> {
                 return trackList
             }
 

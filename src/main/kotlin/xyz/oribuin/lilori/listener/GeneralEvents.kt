@@ -33,13 +33,13 @@ class GeneralEvents(private val bot: LilOri) : ListenerAdapter() {
         val embedBuilder = EmbedBuilder()
                 .setAuthor("Lil' Ori Bot | Prefix: " + GuildSettings(event.guild).getPrefix(), "https://discordapp.com/oauth2/authorize?client_id=581203970203189269&permissions=121498961&scope=bot")
                 .setColor(GuildSettings(event.guild).getColor())
-                .setDescription("""» Discord Utility Bot Created by Oribuin « 
+                .setDescription("""» Discord Utility Bot Created by Ori#0004 « 
                         
                         • Find all my commands using **${GuildSettings(event.guild).getPrefix()}help** 
                         • Find my source code on https://github.com/Oribuin/Lil-Ori/
                         • Website: https://oribuin.xyz/
                         • Donate: https://oribuin.xyz/donate""".trimIndent())
-                .setFooter("Created by Oribuin", "https://imgur.com/ssJcsZg.png")
+                .setFooter("Created by Ori#0004", "http://img.oribuin.xyz/profile.png")
 
         if (event.message.contentRaw == "<@!581203970203189269>")
             event.channel.sendMessage(embedBuilder.build()).queue()

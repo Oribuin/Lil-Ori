@@ -31,7 +31,7 @@ class CommandHandler(bot: LilOri) : Manager(bot) {
                 // General Commands
                 CmdHelp(bot), CmdPing(bot),
                 // Music Commands
-                CmdPause(bot), CmdPlay(bot), CmdQueue(bot), CmdStop(bot), CmdVolume(bot),
+                CmdLoop(bot), CmdPause(bot), CmdPlay(bot), CmdQueue(bot), CmdStop(bot), CmdVolume(bot),
                 // Economy Commands
                 CmdBalance(bot),
                 // Game Commands
@@ -52,7 +52,7 @@ class CommandHandler(bot: LilOri) : Manager(bot) {
     }
 
     fun getCommand(name: String): BotCommand {
-        return commands.stream().filter { command -> command.getAnnotation(command.javaClass).name.toLowerCase() == name }.findFirst().get()
+        return commands.stream().filter { command -> command.getAnnotation(command.javaClass).name.toLowerCase() == name.toLowerCase() }.findFirst().get()
     }
 
     override fun enable() {

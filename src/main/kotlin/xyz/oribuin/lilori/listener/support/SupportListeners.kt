@@ -28,7 +28,7 @@ class SupportListeners : ListenerAdapter() {
         val embedBuilder = EmbedBuilder()
                 .setAuthor("A new member has joined!")
                 .setColor(Color.decode("#49fff6"))
-                .setFooter("Lil' Ori created by Oribuin", "http://img.oribuin.xyz/profile.png")
+                .setFooter("Lil' Ori Created by Ori#0004", "http://img.oribuin.xyz/profile.png")
                 .setThumbnail(event.member.user.avatarUrl)
                 .addField("Member", "${event.member.asMention} (${event.member.user.asTag})", false)
                 .addField("ID", event.member.user.id, false).build()
@@ -48,7 +48,7 @@ class SupportListeners : ListenerAdapter() {
         val embedBuilder = EmbedBuilder()
                 .setAuthor("A new member has left!")
                 .setColor(Color.decode("#fe4747"))
-                .setFooter("Lil' Ori created by Oribuin", "http://img.oribuin.xyz/profile.png")
+                .setFooter("Lil' Ori Created by Ori#0004", "http://img.oribuin.xyz/profile.png")
                 .addField("Member", event.user.asTag, false)
                 .addField("ID", event.user.id, false)
 

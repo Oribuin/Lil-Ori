@@ -74,7 +74,7 @@ class CmdPurge(bot: LilOri, private val waiter: EventWaiter) : BotCommand(bot) {
                     return
                 }
 
-                if (!event.member.hasPermission(channel) || event.selfMember.hasPermission(channel)) {
+                if (!event.member.hasPermission(channel) || !event.selfMember.hasPermission(channel)) {
                     event.sendEmbedReply("❗ Can't Purge", "I cannot purge that channel due to no permission")
                     return
                 }

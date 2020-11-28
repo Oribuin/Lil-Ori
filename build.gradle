@@ -23,8 +23,8 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-reflect:1.4.0"
 
     // JDA Dependencies
-    implementation 'net.dv8tion:JDA:4.2.0_203'
-    implementation 'com.sedmelluq:lavaplayer:1.3.50'
+    implementation 'net.dv8tion:JDA:4.2.0_214'
+    implementation 'com.sedmelluq:lavaplayer:1.3.58'
 
     // Cool stuff
     implementation 'org.slf4j:slf4j-nop:1.7.25'

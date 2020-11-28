@@ -5,6 +5,8 @@ import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason
 import xyz.oribuin.lilori.LilOri
+import xyz.oribuin.lilori.command.music.CmdLoop
+import xyz.oribuin.lilori.handler.CommandHandler
 import java.util.*
 
 class TrackScheduler(private val bot: LilOri, private val player: AudioPlayer) : AudioEventAdapter() {
@@ -20,7 +22,15 @@ class TrackScheduler(private val bot: LilOri, private val player: AudioPlayer) :
     }
 
     override fun onTrackEnd(player: AudioPlayer, audioTrack: AudioTrack, endReason: AudioTrackEndReason) {
-        if (endReason.mayStartNext)
+
+        val command = bot.getManager(CommandHandler::class).getCommand("loop") as CmdLoop
+
+        if (command.isLooping) {
+            player.playTrack(audioTrack)
+            return
+        }
+
+        if (endReason == AudioTrackEndReason.FINISHED)
             nextTrack()
     }
 

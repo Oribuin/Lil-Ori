@@ -39,10 +39,9 @@ class GuildSettings(var guild: Guild?) {
         var color = Settings.EMBED_COLOR
 
         LilOri.instance.connector.connect { connection ->
-            val getColor = "SELECT color FROM guild_settings WHERE guild_id = ?"
-            connection.prepareStatement(getColor).use { statement ->
+            val getPrefix = "SELECT color FROM guild_settings WHERE guild_id = ?"
+            connection.prepareStatement(getPrefix).use { statement ->
                 guild?.idLong?.let { statement.setLong(1, it) }
-
                 val result = statement.executeQuery()
                 if (result.next()) {
                     color = Color.decode(result.getString(1))
