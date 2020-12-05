@@ -43,3 +43,4 @@ src/main/kotlin/xyz/oribuin/lilori/commands/author/CmdTest.kt
 *.png
 images
 images
+src/main/resources/example.json
