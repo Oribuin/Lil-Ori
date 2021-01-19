@@ -3,7 +3,6 @@ package xyz.oribuin.lilori.command.general
 import net.dv8tion.jda.api.EmbedBuilder
 import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.handler.Category.Type
-import xyz.oribuin.lilori.handler.CommandInfo
 import xyz.oribuin.lilori.handler.BotCommand
 import xyz.oribuin.lilori.handler.CommandEvent
 import xyz.oribuin.lilori.handler.CommandHandler
@@ -11,7 +10,7 @@ import xyz.oribuin.lilori.util.BotUtils
 import java.awt.Color
 import kotlin.streams.toList
 
-@CommandInfo(
+@BotCommand.CommandInfo(
         name = "Help",
         description = "View all bot commands.",
         category = Type.GENERAL,
@@ -21,7 +20,7 @@ import kotlin.streams.toList
         botPermissions = [],
         guildId = ""
 )
-class CmdHelp(bot: LilOri) : BotCommand(bot) {
+class CmdHelp(bot: LilOri) : BotCommand(bot, bot.eventWaiter) {
     override fun executeCommand(event: CommandEvent) {
 
         // Check if the user has included the right amount of arguments

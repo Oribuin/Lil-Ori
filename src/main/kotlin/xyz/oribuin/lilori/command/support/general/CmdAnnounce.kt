@@ -4,14 +4,13 @@ import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.Permission
 import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.handler.Category
-import xyz.oribuin.lilori.handler.CommandInfo
 import xyz.oribuin.lilori.handler.BotCommand
 import xyz.oribuin.lilori.handler.CommandEvent
 import java.awt.Color
 import java.time.OffsetDateTime
 
 // ;announce #channel true <message>
-@CommandInfo(
+@BotCommand.CommandInfo(
         name = "Announce",
         description = "Send an announcement to a channel.",
         category = Category.Type.SUPPORT,
@@ -22,7 +21,7 @@ import java.time.OffsetDateTime
         guildId = "731659405958971413"
 )
 
-class CmdAnnounce(bot: LilOri) : BotCommand(bot) {
+class CmdAnnounce(bot: LilOri) : BotCommand(bot, bot.eventWaiter) {
 
     override fun executeCommand(event: CommandEvent) {
 

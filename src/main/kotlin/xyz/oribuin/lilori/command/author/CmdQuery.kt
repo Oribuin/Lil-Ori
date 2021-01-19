@@ -2,14 +2,13 @@ package xyz.oribuin.lilori.command.author
 
 import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.handler.Category
-import xyz.oribuin.lilori.handler.CommandInfo
 import xyz.oribuin.lilori.handler.BotCommand
 import xyz.oribuin.lilori.handler.CommandEvent
 import xyz.oribuin.lilori.util.BotUtils
 import java.sql.ResultSet
 import kotlin.math.max
 
-@CommandInfo(
+@BotCommand.CommandInfo(
         name = "Query",
         description = "Execute an SQL Statement into the database.",
         category = Category.Type.AUTHOR,
@@ -20,7 +19,7 @@ import kotlin.math.max
         guildId = "",
         ownerOnly = true
 )
-class CmdQuery(bot: LilOri) : BotCommand(bot) {
+class CmdQuery(bot: LilOri) : BotCommand(bot, bot.eventWaiter) {
     override fun executeCommand(event: CommandEvent) {
 
         // Check arguments

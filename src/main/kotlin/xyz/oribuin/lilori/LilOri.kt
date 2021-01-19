@@ -77,7 +77,6 @@ class LilOri : ListenerAdapter() {
     }
 
     companion object {
-        @JvmStatic
         lateinit var instance: LilOri
 
         @JvmStatic

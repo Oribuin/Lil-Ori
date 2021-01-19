@@ -1,5 +1,6 @@
 package xyz.oribuin.lilori.handler
 
+import org.reflections.Reflections
 import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.command.administrative.CmdPerms
 import xyz.oribuin.lilori.command.administrative.CmdPrefix
@@ -27,32 +28,40 @@ class CommandHandler(bot: LilOri) : Manager(bot) {
     val commands = mutableListOf<BotCommand>()
 
     fun registerCommands() {
-        commands.addAll(listOf(
-                // General Commands
-                CmdHelp(bot), CmdPing(bot),
-                // Music Commands
-                CmdLoop(bot), CmdPause(bot), CmdPlay(bot), CmdQueue(bot), CmdStop(bot), CmdVolume(bot),
-                // Economy Commands
-                CmdBalance(bot),
-                // Game Commands
-                CmdCoinflip(bot), CmdColor(bot), CmdEightball(bot), CmdFeed(bot), CmdQuote(bot), CmdSlap(bot),
-                // Moderation Commands
-                CmdPurge(bot, bot.eventWaiter), CmdBan(bot),
-                // Author Commands
-                CmdQuery(bot), CmdTest(bot),
-                // Admin Commands
-                CmdPerms(bot), CmdPrefix(bot),
-                // Support Discord commands
-                // General
-                CmdAnnounce(bot), CmdReactionRole(bot),
-                // Ticket
-                CmdTicket(bot), CmdClose(bot, bot.eventWaiter)
+        this.commands.clear()
+        val reflection = Reflections("xyz.oribuin.lilori.command")
 
-        ))
+        reflection.getSubTypesOf(BotCommand::class.java)
+            .forEach {
+                commands.add(it.getConstructor(bot.javaClass).newInstance(bot))
+            }
+
+//        commands.addAll(listOf(
+//                // General Commands
+//                CmdHelp(bot), CmdPing(bot),
+//                // Music Commands
+//                CmdLoop(bot), CmdPause(bot), CmdPlay(bot), CmdQueue(bot), CmdStop(bot), CmdVolume(bot),
+//                // Economy Commands
+//                CmdBalance(bot),
+//                // Game Commands
+//                CmdCoinflip(bot), CmdColor(bot), CmdEightball(bot), CmdFeed(bot), CmdQuote(bot), CmdSlap(bot),
+//                // Moderation Commands
+//                CmdPurge(bot), CmdBan(bot),
+//                // Author Commands
+//                CmdQuery(bot), CmdTest(bot),
+//                // Admin Commands
+//                CmdPerms(bot), CmdPrefix(bot),
+//                // Support Discord commands
+//                // General
+//                CmdAnnounce(bot), CmdReactionRole(bot),
+//                // Ticket
+//                CmdTicket(bot), CmdClose(bot)
+//
+//        ))
     }
 
     fun getCommand(name: String): BotCommand {
-        return commands.stream().filter { command -> command.getAnnotation(command.javaClass).name.toLowerCase() == name.toLowerCase() }.findFirst().get()
+        return commands.stream().filter { command -> command.getAnnotation(command.javaClass).name.equals(name, ignoreCase = true) }.findFirst().get()
     }
 
     override fun enable() {

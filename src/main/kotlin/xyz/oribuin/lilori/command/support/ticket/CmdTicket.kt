@@ -4,14 +4,13 @@ import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.Permission
 import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.handler.Category
-import xyz.oribuin.lilori.handler.CommandInfo
 import xyz.oribuin.lilori.handler.BotCommand
 import xyz.oribuin.lilori.handler.CommandEvent
 import xyz.oribuin.lilori.manager.TicketManager
 import java.awt.Color
 import java.util.concurrent.TimeUnit
 
-@CommandInfo(
+@BotCommand.CommandInfo(
         name = "Ticket",
         description = "Create a support ticket.",
         category = Category.Type.SUPPORT,
@@ -21,7 +20,7 @@ import java.util.concurrent.TimeUnit
         botPermissions = [],
         guildId = "731659405958971413"
 )
-class CmdTicket(bot: LilOri) : BotCommand(bot) {
+class CmdTicket(bot: LilOri) : BotCommand(bot, bot.eventWaiter) {
 
     override fun executeCommand(event: CommandEvent) {
 

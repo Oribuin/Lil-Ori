@@ -3,12 +3,11 @@ package xyz.oribuin.lilori.command.music
 import net.dv8tion.jda.api.EmbedBuilder
 import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.handler.Category
-import xyz.oribuin.lilori.handler.CommandInfo
 import xyz.oribuin.lilori.handler.BotCommand
 import xyz.oribuin.lilori.handler.CommandEvent
 import xyz.oribuin.lilori.manager.music.TrackManager.Companion.getInstance
 
-@CommandInfo(
+@BotCommand.CommandInfo(
         name = "Stop",
         description = "Stop the music entirely.",
         category = Category.Type.MUSIC,
@@ -19,7 +18,7 @@ import xyz.oribuin.lilori.manager.music.TrackManager.Companion.getInstance
         guildId = ""
 )
 
-class CmdStop(bot: LilOri) : BotCommand(bot) {
+class CmdStop(bot: LilOri) : BotCommand(bot, bot.eventWaiter) {
     override fun executeCommand(event: CommandEvent) {
 
         val tm = getInstance(event.guild)?: return

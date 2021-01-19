@@ -23,7 +23,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-reflect:1.4.0"
 
     // JDA Dependencies
-    implementation 'net.dv8tion:JDA:4.2.0_214'
+    implementation 'net.dv8tion:JDA:4.2.0_225'
     implementation 'com.sedmelluq:lavaplayer:1.3.58'
 
     // Cool stuff
@@ -31,6 +31,7 @@ dependencies {
     implementation 'org.apache.commons:commons-lang3:3.0'
     implementation 'commons-net:commons-net:3.6'
     implementation 'com.jcraft:jsch:0.1.55'
+    implementation 'org.reflections:reflections:0.9.12'
 
     // SQL
     implementation 'org.xerial:sqlite-jdbc:3.30.1'
@@ -50,8 +51,8 @@ sourceSets {
 }
 
 shadowJar {
+    archiveClassifier.set(null)
     mergeServiceFiles()
-    archiveFileName = 'LilOri-' + project.property("version") + '.jar'
 }
 
 compileKotlin {

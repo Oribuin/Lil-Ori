@@ -5,11 +5,10 @@ import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.exceptions.HierarchyException
 import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.handler.Category
-import xyz.oribuin.lilori.handler.CommandInfo
 import xyz.oribuin.lilori.handler.BotCommand
 import xyz.oribuin.lilori.handler.CommandEvent
 
-@CommandInfo(
+@BotCommand.CommandInfo(
         name = "Ban",
         description = "Ban a member from the server.",
         category = Category.Type.MODERATION,
@@ -19,7 +18,7 @@ import xyz.oribuin.lilori.handler.CommandEvent
         botPermissions = [Permission.BAN_MEMBERS],
         guildId = ""
 )
-class CmdBan(bot: LilOri) : BotCommand(bot) {
+class CmdBan(bot: LilOri) : BotCommand(bot, bot.eventWaiter) {
 
     override fun executeCommand(event: CommandEvent) {
         // Delete the command on send for reasons we're not sure of yet

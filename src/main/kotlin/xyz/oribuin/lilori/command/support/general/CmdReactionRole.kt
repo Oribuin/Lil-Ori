@@ -4,12 +4,11 @@ import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.Permission
 import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.handler.Category
-import xyz.oribuin.lilori.handler.CommandInfo
 import xyz.oribuin.lilori.handler.BotCommand
 import xyz.oribuin.lilori.handler.CommandEvent
 import java.awt.Color
 
-@CommandInfo(
+@BotCommand.CommandInfo(
         name = "Reaction",
         description = "Send reaction roles message",
         category = Category.Type.SUPPORT,
@@ -20,7 +19,7 @@ import java.awt.Color
         guildId = "731659405958971413",
         ownerOnly = true
 )
-class CmdReactionRole(bot: LilOri) : BotCommand(bot) {
+class CmdReactionRole(bot: LilOri) : BotCommand(bot, bot.eventWaiter) {
 
     override fun executeCommand(event: CommandEvent) {
         event.deleteCmd()

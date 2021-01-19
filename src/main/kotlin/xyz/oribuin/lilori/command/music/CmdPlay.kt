@@ -5,11 +5,10 @@ import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.handler.BotCommand
 import xyz.oribuin.lilori.handler.Category
 import xyz.oribuin.lilori.handler.CommandEvent
-import xyz.oribuin.lilori.handler.CommandInfo
 import xyz.oribuin.lilori.manager.music.TrackManager.Companion.getInstance
 import xyz.oribuin.lilori.util.BotUtils
 
-@CommandInfo(
+@BotCommand.CommandInfo(
         name = "Play",
         description = "Play audio from a youtube video.",
         category = Category.Type.MUSIC,
@@ -19,7 +18,7 @@ import xyz.oribuin.lilori.util.BotUtils
         botPermissions = [],
         guildId = ""
 )
-class CmdPlay(bot: LilOri) : BotCommand(bot) {
+class CmdPlay(bot: LilOri) : BotCommand(bot, bot.eventWaiter) {
 
     override fun executeCommand(event: CommandEvent) {
         val tm = getInstance(event.guild)?: return

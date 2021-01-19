@@ -4,13 +4,11 @@ import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent
 import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.handler.Category
-import xyz.oribuin.lilori.handler.CommandInfo
 import xyz.oribuin.lilori.handler.BotCommand
 import xyz.oribuin.lilori.handler.CommandEvent
-import xyz.oribuin.lilori.util.EventWaiter
 import java.util.concurrent.TimeUnit
 
-@CommandInfo(
+@BotCommand.CommandInfo(
         name = "Close",
         description = "Close your ticket.",
         category = Category.Type.SUPPORT,
@@ -20,8 +18,8 @@ import java.util.concurrent.TimeUnit
         botPermissions = [],
         guildId = "731659405958971413"
 )
-class CmdClose(bot: LilOri, private val waiter: EventWaiter) : BotCommand(bot) {
-    var useWaiter: Boolean = true
+class CmdClose(bot: LilOri) : BotCommand(bot, bot.eventWaiter) {
+    var useWaiter = true
 
     override fun executeCommand(event: CommandEvent) {
         if (!event.channel.name.toLowerCase().endsWith("-ticket")) {

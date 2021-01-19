@@ -5,10 +5,9 @@ import xyz.oribuin.lilori.Settings
 import xyz.oribuin.lilori.handler.BotCommand
 import xyz.oribuin.lilori.handler.Category
 import xyz.oribuin.lilori.handler.CommandEvent
-import xyz.oribuin.lilori.handler.CommandInfo
 import xyz.oribuin.lilori.manager.music.TrackManager
 
-@CommandInfo(
+@BotCommand.CommandInfo(
         name = "Loop",
         description = "Set the bot to loop",
         category = Category.Type.MUSIC,
@@ -19,7 +18,7 @@ import xyz.oribuin.lilori.manager.music.TrackManager
         guildId = ""
 )
 
-class CmdLoop(bot: LilOri) : BotCommand(bot) {
+class CmdLoop(bot: LilOri) : BotCommand(bot, bot.eventWaiter) {
 
     var isLooping = false
 

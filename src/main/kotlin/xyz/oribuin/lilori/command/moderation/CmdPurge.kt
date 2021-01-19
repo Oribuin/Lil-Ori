@@ -7,13 +7,11 @@ import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEve
 import org.apache.commons.lang3.StringUtils
 import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.handler.Category
-import xyz.oribuin.lilori.handler.CommandInfo
 import xyz.oribuin.lilori.handler.BotCommand
 import xyz.oribuin.lilori.handler.CommandEvent
 import xyz.oribuin.lilori.util.BotUtils
-import xyz.oribuin.lilori.util.EventWaiter
 
-@CommandInfo(
+@BotCommand.CommandInfo(
         name = "Purge",
         description = "Purge messages from the server.",
         category = Category.Type.MODERATION,
@@ -23,7 +21,7 @@ import xyz.oribuin.lilori.util.EventWaiter
         botPermissions = [Permission.MESSAGE_MANAGE, Permission.MANAGE_PERMISSIONS, Permission.MANAGE_CHANNEL],
         guildId = ""
 )
-class CmdPurge(bot: LilOri, private val waiter: EventWaiter) : BotCommand(bot) {
+class CmdPurge(bot: LilOri) : BotCommand(bot, bot.eventWaiter) {
 
     // ignore all of this
     override fun executeCommand(event: CommandEvent) {

@@ -3,13 +3,12 @@ package xyz.oribuin.lilori.command.general
 import net.dv8tion.jda.api.EmbedBuilder
 import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.handler.Category
-import xyz.oribuin.lilori.handler.CommandInfo
 import xyz.oribuin.lilori.handler.BotCommand
 import xyz.oribuin.lilori.handler.CommandEvent
 import java.awt.Color
 import java.util.concurrent.TimeUnit
 
-@CommandInfo(
+@BotCommand.CommandInfo(
         name = "Ping",
         description = "Get all the bot's latency.",
         category = Category.Type.GENERAL,
@@ -19,7 +18,7 @@ import java.util.concurrent.TimeUnit
         botPermissions = [],
         guildId = ""
 )
-class CmdPing(bot: LilOri) : BotCommand(bot) {
+class CmdPing(bot: LilOri) : BotCommand(bot, bot.eventWaiter) {
 
     override fun executeCommand(event: CommandEvent) {
         val embedBuilder = EmbedBuilder()

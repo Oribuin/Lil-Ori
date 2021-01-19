@@ -2,13 +2,12 @@ package xyz.oribuin.lilori.command.economy
 
 import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.handler.Category
-import xyz.oribuin.lilori.handler.CommandInfo
 import xyz.oribuin.lilori.handler.BotCommand
 import xyz.oribuin.lilori.handler.CommandEvent
 import xyz.oribuin.lilori.manager.EconomyManager
 import java.util.*
 
-@CommandInfo(
+@BotCommand.CommandInfo(
         name = "Feed",
         description = "Feed Lil' Ori cookies for coins.",
         category = Category.Type.ECONOMY,
@@ -18,8 +17,10 @@ import java.util.*
         botPermissions = [],
         guildId = "731659405958971413"
 )
-class CmdFeed(bot: LilOri) : BotCommand(bot) {
+class CmdFeed(bot: LilOri) : BotCommand(bot, bot.eventWaiter) {
     var feedCooldownMap = mutableMapOf<String, Long>()
+
+
     override fun executeCommand(event: CommandEvent) {
 
         if (feedCooldownMap.contains(event.author.id)) {

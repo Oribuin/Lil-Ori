@@ -2,12 +2,11 @@ package xyz.oribuin.lilori.command.music
 
 import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.handler.Category
-import xyz.oribuin.lilori.handler.CommandInfo
 import xyz.oribuin.lilori.handler.BotCommand
 import xyz.oribuin.lilori.handler.CommandEvent
 import xyz.oribuin.lilori.manager.music.TrackManager.Companion.getInstance
 
-@CommandInfo(
+@BotCommand.CommandInfo(
         name = "Pause",
         description = "Pause the music from playing.",
         category = Category.Type.MUSIC,
@@ -17,7 +16,7 @@ import xyz.oribuin.lilori.manager.music.TrackManager.Companion.getInstance
         botPermissions = [],
         guildId = ""
 )
-class CmdPause(bot: LilOri) : BotCommand(bot) {
+class CmdPause(bot: LilOri) : BotCommand(bot, bot.eventWaiter) {
     override fun executeCommand(event: CommandEvent) {
         val tm = getInstance(event.guild)?: return
 

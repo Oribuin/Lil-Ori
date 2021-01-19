@@ -3,13 +3,12 @@ package xyz.oribuin.lilori.command.game
 import net.dv8tion.jda.api.EmbedBuilder
 import xyz.oribuin.lilori.LilOri
 import xyz.oribuin.lilori.handler.Category
-import xyz.oribuin.lilori.handler.CommandInfo
 import xyz.oribuin.lilori.handler.BotCommand
 import xyz.oribuin.lilori.handler.CommandEvent
 import xyz.oribuin.lilori.util.BotUtils
 import java.util.*
 
-@CommandInfo(
+@BotCommand.CommandInfo(
         name = "Slap",
         description = "Slap all your friends in weeb style.",
         category = Category.Type.GAMES,
@@ -19,7 +18,7 @@ import java.util.*
         botPermissions = [],
         guildId = ""
 )
-class CmdSlap(bot: LilOri) : BotCommand(bot) {
+class CmdSlap(bot: LilOri) : BotCommand(bot, bot.eventWaiter) {
 
     override fun executeCommand(event: CommandEvent) {
 
